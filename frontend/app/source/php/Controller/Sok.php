@@ -59,22 +59,15 @@ class Sok Extends BaseController {
   }
 
   private function searchPerson($pnr) {
-    $curl = new Curl('POST', MS_NAVET . '/lookUpAddress', 
-      [
-        "personNumber"=> Sanitize::number($pnr)
-      ],
-      'json',
-      [
-        'X-ApiKey' => MS_NAVET_AUTH,
-        'accept' => 'application/json'
-      ]
-    );
+    $request = new Curl(MS_NAVET . '/lookUpAddress', false);
+    $request->setHeaders([
+        'X-ApiKey' => MS_NAVET_AUTH
+    ]);
+    $response = $request->post([
+      "personNumber"=> Sanitize::number($pnr)
+    ]);
 
-    if($curl->isValid) {
-      return $curl->response;
-    }
-
-    return false;
+    return (object) $response;
   }
 
   private function createReadableText($data, $pnr) {

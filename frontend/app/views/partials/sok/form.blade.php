@@ -3,34 +3,27 @@
   Du får bara göra uppslag på personer som du behöver ha information om i ditt arbete.
 @endtypography
 
-@includeIf('notices.' . $action)
+<div class="u-display--flex u-flex-direction--column u-flex--gridgap">
+    
+    @includeIf('notices.' . $action)
 
-@form([
-    'method' => 'POST',
-    'action' => '/sok/?action=sok',
-    'classList' => ['u-margin__top--2']
-])
-    <div class="o-grid o-grid--half-gutter u-margin__top--4">
-
-        <div class="o-grid-12">
+    @form([
+        'method' => 'POST',
+        'action' => '/sok/?action=sok',
+        'classList' => ['u-margin__top--2']
+    ])
+        <div class="u-display--flex u-flex-direction--column u-flex--gridgap">
             @field([
                 'type' => 'number',
                 'name' => 'pnr',
                 'label' => "Personnummer",
                 'required' => true,
                 'placeholder' => "T.ex: 1900000000",
-                'value' => isset($_GET['pnr']) ? $_GET['pnr'] : '194107086995'
+                'value' => isset($_GET['pnr']) ? $_GET['pnr'] : '194107086995',
+                'helperText' => "Notera att samtliga uppslag som du (" . $user->displayname . ") gör registreras."
             ])
             @endfield
 
-            @typography(['element' => 'p', 'variant' => 'meta'])
-                <strong>Inloggad som:</strong> {{$user->displayname}}. Samtliga uppslag som du gör registreras för spårbarhet av uppgifter. 
-            @endtypography
-        </div>
-    </div>
-
-    <div class="o-grid o-grid--no-gutter">
-        <div class="o-grid-12">
             @button([
                 'text' => 'Sök',
                 'color' => 'primary',
@@ -41,7 +34,5 @@
             ])
             @endbutton
         </div>
-    </div>
-    
-@endform
-
+    @endform
+</div>

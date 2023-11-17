@@ -10,6 +10,7 @@ class Curl
     private $cache;
     private $cacheEnabled;
     private $cacheTTL = 300; // Cache TTL in seconds (adjust as needed)
+    public  $errors = [];
 
     public function __construct($url, $cacheEnabled = false)
     {
@@ -80,13 +81,9 @@ class Curl
 
         curl_setopt_array($ch, $options);
 
-        $this->response = curl_exec($ch);
+        $this->response = json_decode(curl_exec($ch));
 
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        if (curl_errno($ch)) {
-            $this->response = (object) ['error' => curl_error($ch)];
-        }
 
         curl_close($ch);
 
@@ -94,7 +91,7 @@ class Curl
             $this->cache->setex($cacheKey, $this->cacheTTL, json_encode($this->response));
         }
 
-        return $this->handleResponse($statusCode);
+        return $this->handleResponse($statusCode, $this->response);
     }
 
     private function generateCacheKey($method, $url, $data)
@@ -109,17 +106,17 @@ class Curl
             array_map(fn($key, $value) => "$key: $value", array_keys($header), $header) : false;
     }
 
-    private function handleResponse($statusCode)
+    private function handleResponse($statusCode, $response)
     {
         if ($statusCode >= 400) {
             return [
                 'staus' => $statusCode,
                 'error' => "Request failed with status code: $statusCode", 
-                'response' => $this->response
+                'response' => json_decode($this->response)
             ];
         }
 
-        return json_decode($this->response, false);
+        return $this->response;
     }
 
     public function __destruct()

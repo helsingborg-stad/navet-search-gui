@@ -14,7 +14,7 @@
         'element' => 'p',
         'classList' => ['u-color__text--primary', 'u-margin__bottom--2']
     ])
-        Vänligen logga in nedan med ditt datorkonto, för att göra<br/> uppslag mot Navet personuppgiftsdatabas.
+        Vänligen logga in nedan med ditt datorkonto, för att göra uppslag mot Navet personuppgiftsdatabas.
     @endtypography
 
     @includeIf('notices.' . $action)
@@ -24,9 +24,8 @@
         'action' => '/?action=login',
         'classList' => ['u-margin__top--2']
     ])
-        <div class="o-grid o-grid--half-gutter u-margin__top--4">
+        <div class="u-display--flex u-flex-direction--column u-flex--gridgap">
 
-            <div class="o-grid-12">
                 @field([
                     'type' => 'text',
                     'name' => 'username',
@@ -37,9 +36,8 @@
                     'value' => isset($_GET['username']) ? $_GET['username'] : ''
                 ])
                 @endfield
-            </div>
 
-            <div class="o-grid-12">
+
                 @field([
                     'label' => 'Password',
                     'type' => 'password',
@@ -50,22 +48,18 @@
                     'label' => "Lösenord"
                 ])
                 @endfield
-            </div>
-        </div>
 
-        <div class="o-grid o-grid--no-gutter">
-            <div class="o-grid-12">
                 @button([
                     'text' => 'Logga in',
                     'color' => 'primary',
                     'type' => 'basic',
                     'classList' => [
-                        'u-width--100'
+                        'u-width--100',
+                        'u-margin__top--2'
                     ]
                 ])
                 @endbutton
-            </div>
-            <div class="o-grid-12">
+
                 @button([
                     'text' => 'Glömt lösenord?',
                     'href' => '/glomt-losenord',
@@ -73,11 +67,11 @@
                     'style' => 'basic',
                     'classList' => [
                         'u-width--100',
-                        'u-margin__top--2'
+                        'u-margin--0'
                     ]
                 ])
                 @endbutton
-            </div>
+
         </div>
         
     @endform

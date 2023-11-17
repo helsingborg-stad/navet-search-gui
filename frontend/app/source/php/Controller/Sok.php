@@ -60,8 +60,12 @@ class Sok Extends BaseController {
       );
   
       $this->data['adressData'] = $this->createAdressDataList($person);
+
     } else {
-      new Redirect('/sok/', ['action' => 'search-no-hit']); 
+      new Redirect('/sok/', [
+        'action' => 'search-no-hit',
+        'pnr' => Sanitize::number($req->pnr) 
+      ]); 
     }
   }
 
@@ -73,12 +77,11 @@ class Sok Extends BaseController {
     $response = $request->post([
       "personNumber"=> Sanitize::number($pnr)
     ]);
-
     return (object) $response;
   }
 
   private function createReadableText($data, $pnr) {
-    return $data->givenName . " " . $data->additionalName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och är bosatt på " . Format::capitalize($data->address->streetAddress) . " i ". Format::capitalize($data->address->addressLocality) . " kommun."; 
+    return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och är bosatt på " . Format::capitalize($data->address->streetAddress) . " i ". Format::capitalize($data->address->addressLocality) . " kommun."; 
   }
 
   private function createBasicDataList($data, $pnr) {
@@ -88,17 +91,17 @@ class Sok Extends BaseController {
         $pnr ?? ''
       ]],
       ['columns' => [
-        'Namn:', 
+        'Förnamn:', 
         $data->givenName ?? ''
-      ]],
-      ['columns' => [
-        'Mellannamn:', 
-        $data->additionalName ?? ''
       ]],
       ['columns' => [
         'Efternamn:', 
         $data->familyName ?? ''
-      ]]
+      ]],
+      ['columns' => [
+        'Övriga namn:', 
+        $data->additionalName ?? ''
+      ]],
     ]; 
   }
 

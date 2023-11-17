@@ -1,7 +1,7 @@
 @notice([
     'type' => 'warning',
     'message' => [
-        'text' => 'Det angivna använarnamnet är av ett felaktigt format.',
+        'text' => 'Det angivna användarnamnet är i ett felaktigt format.',
         'size' => 'sm'
     ],
     'icon' => [

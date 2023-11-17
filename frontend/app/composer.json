@@ -1,0 +1,32 @@
+{
+    "name": "helsingborg-stad/styleguide",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Sebastian Thulin",
+            "email": "sebastian.thulin@helsingborg.se"
+        }
+    ],
+    "minimum-stability" : "dev",
+    "repositories": [
+        {
+            "type":"composer",
+            "url":"https://packagist.org"
+        },
+        {
+            "type":"composer",
+            "url":"https://wpackagist.org"
+        }
+    ],
+    "require": {
+        "erusev/parsedown": "^1.7",
+        "helsingborg-stad/blade-engine-wrapper": "dev-master",
+        "jumbojett/openid-connect-php": "dev-master"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "sh setup.sh"
+        ]
+    }
+}

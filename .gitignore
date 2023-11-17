@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+.vscode
+
+/frontend/app/assets/dist/*
+/frontend/app/config/*
+/frontend/app/vendor/*
+/frontend/app/source/library
+/frontend/vendor/*

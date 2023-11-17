@@ -21,7 +21,6 @@ class Sok Extends BaseController {
     
     //Get current user
     $this->data['user'] = User::get();
-    
   }
 
   public function actionSok(array $req) {
@@ -36,26 +35,34 @@ class Sok Extends BaseController {
     }
 
     //Sanitize pnr
-    $this->data['searchFor']      = Format::socialSecuriyNumber(
+    $this->data['searchFor'] = Format::socialSecuriyNumber(
       Sanitize::number($req->pnr)
     );
 
     //Get data
-    $this->data['searchResult'] = (bool) $person = $this->searchPerson(
+    $person = $this->searchPerson(
       $this->data['searchFor']
     );
 
-    $this->data['readableResult'] = $this->createReadableText(
-      $person, 
-      Format::socialSecuriyNumber($req->pnr)
-    );
+    $this->data['searchResult'] = !Validate::isErrorResponse($person);
 
-    $this->data['basicData']  = $this->createBasicDataList(
-      $person, 
-      Format::socialSecuriyNumber($req->pnr)
-    );
+    //Validate, if ok. Parse data
+    if($this->data['searchResult']) {
 
-    $this->data['adressData'] = $this->createAdressDataList($person);
+      $this->data['readableResult'] = $this->createReadableText(
+        $person, 
+        Format::socialSecuriyNumber($req->pnr)
+      );
+  
+      $this->data['basicData']  = $this->createBasicDataList(
+        $person, 
+        Format::socialSecuriyNumber($req->pnr)
+      );
+  
+      $this->data['adressData'] = $this->createAdressDataList($person);
+    } else {
+      new Redirect('/sok/', ['action' => 'search-no-hit']); 
+    }
   }
 
   private function searchPerson($pnr) {

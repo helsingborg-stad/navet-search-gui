@@ -39,4 +39,8 @@ class Validate
     {   
         return self::empty($string);
     }
+
+    public static function isErrorResponse($response) {
+        return isset($response->error); 
+    }
 }

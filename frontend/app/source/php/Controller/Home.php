@@ -64,28 +64,19 @@ class Home Extends BaseController {
   }
 
   private function fetchUser($username, $password) {
-      //Create login post data
-      $data = array(
-          'username' => $username,
-          'password' => Sanitize::password($password)
-      );
-
-      //Call auth API
-      $curl = new Curl(
-        'POST', 
-        rtrim(MS_AUTH, "/") . '/user/current', 
-        $data, 
-        'json', 
-        array('Content-Type: application/json')
-      ); 
+      $request = new Curl(rtrim(MS_AUTH, "/") . '/user/current', false);
+      $response = $request->post([
+        'username' => $username,
+        'password' => Sanitize::password($password)
+      ]);
 
       //Check if is valid response
-      if(!$curl->isValid && isset($curl->response->{0})) {
+      if(isset($response->error)) {
         new Redirect('/', ['action' => 'login-error']); 
       }
 
       //Return login response
-      return $curl->response->{0};
+      return array_pop($response);
   }
     
   private function isAuthorized() {

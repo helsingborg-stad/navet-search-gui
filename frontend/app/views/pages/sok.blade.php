@@ -8,7 +8,6 @@
         @endicon
         Sök person
     @endtypography
-
     @includeWhen(!isset($searchResult), 'partials.sok.form')
-    @includeWhen(isset($searchResult), 'partials.sok.result')
+    @includeWhen(isset($searchResult) && $searchResult, 'partials.sok.result')
 @endsection

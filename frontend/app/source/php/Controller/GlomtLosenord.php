@@ -1,6 +1,6 @@
 <?php 
 
-namespace HbgStyleGuide\Controller;
+namespace NavetSearch\Controller;
 
 class GlomtLosenord Extends BaseController {
   public function __construct() {

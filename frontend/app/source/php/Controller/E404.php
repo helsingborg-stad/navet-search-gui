@@ -1,6 +1,6 @@
 <?php 
 
-namespace HbgStyleGuide\Controller;
+namespace NavetSearch\Controller;
 
 class E404 Extends BaseController {
   public function __construct() {

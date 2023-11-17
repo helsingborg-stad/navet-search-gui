@@ -1,9 +1,9 @@
 <?php 
 
-namespace HbgStyleGuide\Controller;
+namespace NavetSearch\Controller;
 
-use \HbgStyleGuide\Helper\Redirect as Redirect; 
-use \HbgStyleGuide\Helper\User as User;
+use \NavetSearch\Helper\Redirect as Redirect; 
+use \NavetSearch\Helper\User as User;
 
 abstract class BaseController {
 

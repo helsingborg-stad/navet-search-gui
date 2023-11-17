@@ -1,12 +1,12 @@
 <?php 
 
-namespace HbgStyleGuide\Controller;
+namespace NavetSearch\Controller;
 
-use \HbgStyleGuide\Helper\Redirect as Redirect; 
-use \HbgStyleGuide\Helper\Curl as Curl;
-use HbgStyleGuide\Helper\Sanitize;
-use \HbgStyleGuide\Helper\User as User;
-use \HbgStyleGuide\Helper\Validate as Validate;
+use \NavetSearch\Helper\Redirect as Redirect; 
+use \NavetSearch\Helper\Curl as Curl;
+use NavetSearch\Helper\Sanitize;
+use \NavetSearch\Helper\User as User;
+use \NavetSearch\Helper\Validate as Validate;
 
 class Home Extends BaseController {
   public function __construct() {

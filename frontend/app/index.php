@@ -97,5 +97,5 @@ if($endpoint == 'topnav' && isset($_GET['pageID'])){
 
 //Run application
 require_once 'Bootstrap.php';
-new \HbgStyleGuide\App($blade);
+new \NavetSearch\App($blade);
 

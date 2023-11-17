@@ -16,13 +16,13 @@ require_once BASEPATH . 'source/php/Vendor/Psr4ClassLoader.php';
 require_once BASEPATH . 'config.php';
 
 // Instantiate and register the autoloader
-$loader = new HbgStyleGuide\Vendor\Psr4ClassLoader();
-$loader->addPrefix('HbgStyleGuide', BASEPATH);
-$loader->addPrefix('HbgStyleGuide', BASEPATH . 'source/php/');
+$loader = new NavetSearch\Vendor\Psr4ClassLoader();
+$loader->addPrefix('NavetSearch', BASEPATH);
+$loader->addPrefix('NavetSearch', BASEPATH . 'source/php/');
 $loader->addPrefix('BladeComponentLibrary', BASEPATH . 'source/library/src');
 $loader->register();
 
 //Register view path
 
 //Load component library
-$blade = \HbgStyleGuide\Helper\Enviroment::loadInstalledComponentLibrary();
+$blade = \NavetSearch\Helper\Enviroment::loadInstalledComponentLibrary();

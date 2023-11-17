@@ -1,11 +1,11 @@
 <?php
 
 
-namespace HbgStyleGuide\Helper;
+namespace NavetSearch\Helper;
 
 /**
  * Class Documentation
- * @package HbgStyleGuide\Helper
+ * @package NavetSearch\Helper
  */
 class Documentation
 {

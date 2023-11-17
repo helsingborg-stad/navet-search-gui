@@ -1,6 +1,6 @@
 <?php
 
-namespace HbgStyleGuide\Helper;
+namespace NavetSearch\Helper;
 
 use \HelsingborgStad\GlobalBladeEngine as Blade; 
 

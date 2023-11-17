@@ -1,7 +1,7 @@
 <?php
 
-namespace HbgStyleGuide\Helper;
-use \HbgStyleGuide\Helper\Secure as Secure;
+namespace NavetSearch\Helper;
+use \NavetSearch\Helper\Secure as Secure;
 
 class User
 {

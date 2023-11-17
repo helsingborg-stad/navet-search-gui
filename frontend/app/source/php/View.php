@@ -1,6 +1,6 @@
 <?php
 
-namespace HbgStyleGuide;
+namespace NavetSearch;
 
 class View
 {
@@ -8,7 +8,7 @@ class View
 
         $view = ucfirst(trim(str_replace(' ', '', ucwords(str_replace(array("-","/"), ' ', $view))), "/"));
         if(file_exists(__DIR__ . "/Controller/" . $view . ".php")) {
-            $class = "HbgStyleGuide\\Controller\\".$view; 
+            $class = "NavetSearch\\Controller\\".$view; 
             $obj = new $class;
             return $obj->data; 
         }

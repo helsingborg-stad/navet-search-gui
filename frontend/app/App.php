@@ -1,12 +1,12 @@
 <?php
 
-namespace HbgStyleGuide;
+namespace NavetSearch;
 
-use \HbgStyleGuide\View;
+use \NavetSearch\View;
 
 /**
  * Class App
- * @package HbgStyleGuide
+ * @package NavetSearch
  */
 class App
 {
@@ -57,11 +57,11 @@ class App
         $data['action']                         = $action; 
 
         //Component library
-        $data['componentLibraryIsInstalled']    = \HbgStyleGuide\Helper\Enviroment::componentLibraryIsInstalled();
-        $data['isLocalDomain']                  = \HbgStyleGuide\Helper\Enviroment::isLocalDomain();
+        $data['componentLibraryIsInstalled']    = \NavetSearch\Helper\Enviroment::componentLibraryIsInstalled();
+        $data['isLocalDomain']                  = \NavetSearch\Helper\Enviroment::isLocalDomain();
         
         //Render page 
-        $view = new \HbgStyleGuide\View();
+        $view = new \NavetSearch\View();
 
         return $view->show(
             $page,

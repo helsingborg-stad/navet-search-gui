@@ -1,13 +1,13 @@
 <?php 
 
-namespace HbgStyleGuide\Controller;
+namespace NavetSearch\Controller;
 
-use \HbgStyleGuide\Helper\Redirect as Redirect; 
-use \HbgStyleGuide\Helper\Curl as Curl;
-use \HbgStyleGuide\Helper\User as User;
-use \HbgStyleGuide\Helper\Sanitize as Sanitize;
-use \HbgStyleGuide\Helper\Validate as Validate;
-use \HbgStyleGuide\Helper\Format as Format;
+use \NavetSearch\Helper\Redirect as Redirect; 
+use \NavetSearch\Helper\Curl as Curl;
+use \NavetSearch\Helper\User as User;
+use \NavetSearch\Helper\Sanitize as Sanitize;
+use \NavetSearch\Helper\Validate as Validate;
+use \NavetSearch\Helper\Format as Format;
 
 class Sok Extends BaseController {
   

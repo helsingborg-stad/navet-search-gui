@@ -1,8 +1,8 @@
 <?php
 
-namespace HbgStyleGuide\Helper;
+namespace NavetSearch\Helper;
 
-use \HbgStyleGuide\Helper\Sanitize as Sanitize;
+use \NavetSearch\Helper\Sanitize as Sanitize;
 
 class Validate
 {

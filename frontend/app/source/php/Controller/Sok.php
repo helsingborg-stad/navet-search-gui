@@ -24,7 +24,6 @@ class Sok Extends BaseController {
   }
 
   public function actionSok(array $req) {
-
     $req = (object) array_merge([
       'pnr' => false
     ], $req);
@@ -75,7 +74,8 @@ class Sok Extends BaseController {
         'X-ApiKey' => MS_NAVET_AUTH
     ]);
     $response = $request->post([
-      "personNumber"=> Sanitize::number($pnr)
+      "personNumber"=> Sanitize::number($pnr),
+      "searchedBy"  => User::get()->samaccountname
     ]);
     return (object) $response;
   }

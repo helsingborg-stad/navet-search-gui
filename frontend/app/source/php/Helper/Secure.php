@@ -13,8 +13,8 @@ namespace NavetSearch\Helper;
 class Secure
 {
     private static $ciphering = "AES-128-CTR";
-    private static $vector = "2af8deebf4685c85"; //Change to env var, only test key
-    private static $key = "QIUKEzIb6k"; //Change to env var, only test key
+    private static $vector = ENCRYPT_VECTOR; //Change to env var, only test key
+    private static $key = ENCRYPT_KEY; //Change to env var, only test key
 
     /**
      * Encrypts the provided data using AES-128-CTR encryption.

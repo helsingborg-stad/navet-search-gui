@@ -46,7 +46,9 @@ class App
         $env = array(
           'MS_AUTH' => getenv('MS_AUTH'), 
           'MS_NAVET' => getenv('MS_NAVET'),
-          'MS_NAVET_AUTH' => getenv('MS_NAVET_AUTH')
+          'MS_NAVET_AUTH' => getenv('MS_NAVET_AUTH'),
+          'ENCRYPT_VECTOR' => getenv('ENCRYPT_VECTOR'),
+          'ENCRYPT_KEY' => getenv('ENCRYPT_KEY')
         );
         
         //Fallback to default
@@ -57,7 +59,7 @@ class App
         }
 
         //Validate
-        if(count(array_filter($env)) != 3) {
+        if(count(array_filter($env)) > 5) {
             die("Configuration incomplete, please define env-variables or via config.json according to documentation."); 
         }
 

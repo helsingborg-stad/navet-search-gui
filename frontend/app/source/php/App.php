@@ -42,24 +42,28 @@ class App
      * @return void
      */
     private function configure($config) {
-
         //Get env vars
         $env = array(
           'MS_AUTH' => getenv('MS_AUTH'), 
           'MS_NAVET' => getenv('MS_NAVET'),
           'MS_NAVET_AUTH' => getenv('MS_NAVET_AUTH')
         );
-
+        
         //Fallback to default
         foreach($env as $key => $item) {
           if($item === false) {
-            $env[$key] = $config[$key];
+            $env[$key] = $config[$key] ?? false;
           }
         }
-      
+
+        //Validate
+        if(count(array_filter($env)) != 3) {
+            die("Configuration incomplete, please define env-variables or via config.json according to documentation."); 
+        }
+
         //Set
         foreach($env as $key => $item) {
-          define($key, $item); 
+            define($key, $item); 
         }
     }
 

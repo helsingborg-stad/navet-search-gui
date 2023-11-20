@@ -27,5 +27,8 @@
         "post-install-cmd": [
             "sh setup.sh"
         ]
+    },
+    "psr-4": {
+        "NavetSearch\\": "source/php/"
     }
 }

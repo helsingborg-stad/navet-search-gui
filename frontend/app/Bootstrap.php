@@ -11,16 +11,20 @@
 
 define('BASEPATH', dirname(__FILE__) . '/');
 
-require_once BASEPATH . 'vendor/autoload.php';
-require_once BASEPATH . 'source/php/Vendor/Psr4ClassLoader.php';
+
 require_once BASEPATH . 'config.php';
 
+// Register the autoloader
+if (file_exists(BASEPATH . 'vendor/autoload.php')) {
+  require BASEPATH . '/vendor/autoload.php';
+}
+
 // Instantiate and register the autoloader
-$loader = new NavetSearch\Vendor\Psr4ClassLoader();
+/*$loader = new NavetSearch\Vendor\Psr4ClassLoader();
 $loader->addPrefix('NavetSearch', BASEPATH);
 $loader->addPrefix('NavetSearch', BASEPATH . 'source/php/');
 $loader->addPrefix('BladeComponentLibrary', BASEPATH . 'source/library/src');
-$loader->register();
+$loader->register();*/ 
 
 //Register view path
 

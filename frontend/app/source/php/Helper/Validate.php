@@ -41,6 +41,12 @@ class Validate
     }
 
     public static function isErrorResponse(object $response): bool {
-        return isset($response->error);
+        if(isset($response->error)) {
+            return true;
+        }
+        if(isset($response->scalar->errors)) {
+            return true;
+        }
+        return false;
     }
 }

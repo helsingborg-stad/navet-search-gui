@@ -11,7 +11,6 @@ use \NavetSearch\View;
 class App
 {
     protected $default = 'home'; //Home
-    private   $blade; // Blade
 
     /**
      * App constructor.

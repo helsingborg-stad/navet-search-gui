@@ -88,7 +88,7 @@ class Curl
         curl_close($ch);
 
         if ($this->cacheEnabled) {
-            $x = $this->cache->set(
+            $this->cache->set(
                 $cacheKey, 
                 json_encode($this->response)
             );

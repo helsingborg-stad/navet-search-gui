@@ -99,10 +99,6 @@ class App
         $data['pageNow']                        = $page;
         $data['action']                         = $action; 
 
-        //Component library
-        $data['componentLibraryIsInstalled']    = \NavetSearch\Helper\Enviroment::componentLibraryIsInstalled();
-        $data['isLocalDomain']                  = \NavetSearch\Helper\Enviroment::isLocalDomain();
-        
         //Render page 
         $view = new \NavetSearch\View();
 

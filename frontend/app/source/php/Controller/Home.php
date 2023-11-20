@@ -14,10 +14,24 @@ class Home Extends BaseController {
   }
 
   /**
-   * Login action
+   * Action method for user login.
    *
-   * @param array $req
-   * @return void
+   * This method handles user login based on the provided username and password. It sets
+   * default values for the required parameters and performs basic validation for the 
+   * username and password. If the validation fails, it redirects to the home page with 
+   * appropriate error actions. It then fetches the user using the provided credentials 
+   * and validates the login response. If the login is unsuccessful, it redirects to the 
+   * home page with a 'login-error' action and the username. It checks whether the user 
+   * is authorized to access the application and, if not, redirects with a 'login-error-no-access'
+   * action. If the user is authorized, it sets a cookie, logs in the user, and redirects 
+   * to the search page. If setting the cookie fails, it redirects to the home page with 
+   * a 'login-error' action.
+   *
+   * @param array $req An associative array of request parameters including username and password.
+   *
+   * @throws RedirectException If validation fails, login is unsuccessful, user is not authorized, 
+   *                           or setting the cookie fails, a RedirectException is thrown to redirect
+   *                           the user to the appropriate page with relevant error actions.
    */
   public function actionLogin(array $req) {
     //Alwasy set vars that should be used
@@ -63,6 +77,23 @@ class Home Extends BaseController {
     new Redirect('/', ['action' => 'login-error']); 
   }
 
+  /**
+   * Fetches user information from the authentication server.
+   *
+   * This private method sends a POST request to the authentication server with the provided
+   * username and sanitized password to fetch user information. It then checks if the response
+   * is a valid user object. If an error occurs during the request, it redirects to the home 
+   * page with a 'login-error' action. The method returns the fetched user information.
+   *
+   * @param string $username The username used for authentication.
+   * @param string $password The sanitized password used for authentication.
+   *
+   * @return array The user information fetched from the authentication server.
+   *
+   * @throws RedirectException If there is an error in the response during the request,
+   *                           a RedirectException is thrown to redirect the user to the home page
+   *                           with a 'login-error' action.
+   */
   private function fetchUser($username, $password) {
       $request = new Curl(rtrim(MS_AUTH, "/") . '/user/current', true);
       $response = $request->post([
@@ -79,13 +110,33 @@ class Home Extends BaseController {
       return array_pop($response);
   }
     
+  /**
+   * Checks if the user is authorized to access the application.
+   *
+   * This private method is a placeholder and always returns true. It should be
+   * replaced with the actual logic for determining whether the user is authorized
+   * based on your application's authorization requirements.
+   *
+   * @return bool The result indicating whether the user is authorized.
+   */
   private function isAuthorized() {
     return true;
   }
 
   /**
-   * Validate that this is a true callback
-   * @return bool / null
+   * Validates the login response data.
+   *
+   * This private method validates the login response data by checking if it is an object,
+   * if it contains an error, and if the 'samaccountname' matches the provided username.
+   * If the response data is not an object or contains an error, the validation fails.
+   * If the 'samaccountname' matches the provided username, the validation succeeds.
+   * If none of these conditions are met, the validation result is null.
+   *
+   * @param mixed $data The response data received from the authentication server.
+   * @param string $username The username used for authentication.
+   *
+   * @return bool|null Returns true if the validation succeeds, false if it fails,
+   *                   and null if the validation result is inconclusive.
    */
   private function validateLogin($data, $username)
   {

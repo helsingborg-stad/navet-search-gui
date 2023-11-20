@@ -69,7 +69,7 @@ class Sok Extends BaseController {
   }
 
   private function searchPerson($pnr) {
-    $request = new Curl(MS_NAVET . '/lookUpAddress', false);
+    $request = new Curl(MS_NAVET . '/lookUpAddress', true);
     $request->setHeaders([
         'X-ApiKey' => MS_NAVET_AUTH
     ]);

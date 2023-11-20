@@ -64,7 +64,7 @@ class Home Extends BaseController {
   }
 
   private function fetchUser($username, $password) {
-      $request = new Curl(rtrim(MS_AUTH, "/") . '/user/current', false);
+      $request = new Curl(rtrim(MS_AUTH, "/") . '/user/current', true);
       $response = $request->post([
         'username' => $username,
         'password' => Sanitize::password($password)

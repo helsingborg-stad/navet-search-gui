@@ -2,6 +2,8 @@
 
 namespace NavetSearch\Helper;
 
+use \Predis\Client as PredisClient;
+
 class Curl
 {
     private $url;
@@ -12,15 +14,14 @@ class Curl
     private $cacheTTL = 300; // Cache TTL in seconds (adjust as needed)
     public  $errors = [];
 
-    public function __construct($url, $cacheEnabled = false)
+    public function __construct($url, $cacheEnabled = true)
     {
         $this->url = $url;
         $this->headers = [];
         $this->cacheEnabled = $cacheEnabled;
 
         if ($this->cacheEnabled) {
-            $this->cache = new Redis();
-            $this->cache->connect('127.0.0.1', 6379); // Replace with your Redis server details
+            $this->cache = new PredisClient();
         }
     }
 
@@ -58,9 +59,8 @@ class Curl
     private function sendRequest($method, $url, $data = null)
     {
         $cacheKey = $this->generateCacheKey($method, $url, $data);
-
-        if ($this->cacheEnabled && $this->cache->exists($cacheKey)) {
-            $this->response = json_decode($this->cache->get($cacheKey), false);
+        if ($this->cacheEnabled && $cached = $this->cache->get($cacheKey)) {
+            $this->response = json_decode($cached, false);
             return $this->response;
         }
 
@@ -88,7 +88,14 @@ class Curl
         curl_close($ch);
 
         if ($this->cacheEnabled) {
-            $this->cache->setex($cacheKey, $this->cacheTTL, json_encode($this->response));
+            $x = $this->cache->set(
+                $cacheKey, 
+                json_encode($this->response)
+            );
+            $this->cache->expire(
+                $cacheKey, 
+                $this->cacheTTL
+            );
         }
 
         return $this->handleResponse($statusCode, $this->response);
@@ -115,14 +122,13 @@ class Curl
                 'response' => json_decode($this->response)
             ];
         }
-
         return $this->response;
     }
 
     public function __destruct()
     {
         if ($this->cacheEnabled) {
-            $this->cache->close();
+            $this->cache->disconnect();
         }
     }
 }

@@ -28,7 +28,12 @@
             "sh setup.sh"
         ]
     },
-    "psr-4": {
-        "NavetSearch\\": "source/php/"
+    "autoload": {
+        "psr-4": {"NavetSearch\\": "source/php/"}
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }

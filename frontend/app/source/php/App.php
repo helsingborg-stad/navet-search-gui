@@ -18,9 +18,6 @@ class App
      */
     public function __construct($blade)
     {
-        //Load config
-        require __DIR__ . '/config/microservice.php'; 
-
         //Load current page
         $this->loadPage(
             $blade, 

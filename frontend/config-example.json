@@ -1,0 +1,5 @@
+{
+  "MS_AUTH": "https://domain.com/ad-api/", 
+  "MS_NAVET": "https://domain-com/api/v1/kontaktcenter",
+  "MS_NAVET_AUTH": "AUTH_KEY"
+}

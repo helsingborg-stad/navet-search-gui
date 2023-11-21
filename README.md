@@ -1,2 +1,2 @@
-# datatorget-poc
-Poc for datatorget
+# Navet Search
+Frontend application for searching Navet personal information database.

@@ -1,18 +1,16 @@
 {
     "name": "navet-lookup",
-    "version": "3.41.1",
-    "description": "The official wordpress theme of Helsingborg Stad",
+    "version": "1.0.0",
+    "description": "Navet search GUI",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "cross-env NODE_ENV=development webpack --watch",
         "build:dev": "cross-env NODE_ENV=development webpack && mkdir -p ./assets/dist/data/ && cp ./node_modules/@helsingborg-stad/styleguide/assets/data/icons.json ./assets/dist/data/ico.json",
-        "build": "cross-env NODE_ENV=production webpack && mkdir -p ./assets/dist/data/ && cp ./node_modules/@helsingborg-stad/styleguide/assets/data/icons.json ./assets/dist/data/ico.json",
-        "i18n:update": "wp i18n make-pot . languages/municipio.pot --domain=municipio --location=false && wp i18n update-po languages/municipio.pot languages/sv_SE.po",
-        "i18n:build": "wp i18n make-mo languages/sv_SE.po"
+        "build": "cross-env NODE_ENV=production webpack && mkdir -p ./assets/dist/data/ && cp ./node_modules/@helsingborg-stad/styleguide/assets/data/icons.json ./assets/dist/data/ico.json"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/helsingborg-stad/Municipio.git"
+        "url": "git+https://github.com/helsingborg-stad/navet-search-gui.git"
     },
     "files": [
         "assets/3.0/js/*",
@@ -25,7 +23,7 @@
     "author": "HBG Works, Helsingborg Stad",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/helsingborg-stad/Municipio/issues"
+        "url": "https://github.com/helsingborg-stad/navet-search-gui/issues"
     },
     "browserslist": [
         "> 1%",

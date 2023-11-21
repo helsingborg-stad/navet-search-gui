@@ -175,13 +175,13 @@
 @font-face {
   font-display: swap;
   font-family: "helsingborg-sans-medium";
-  src: url("/source/fonts/helsingborg-sans/helsingborg-sans-medium.woff");
+  src: url("/assets/fonts/helsingborg-sans/helsingborg-sans-medium.woff");
   format("woff");
 }
 @font-face {
   font-display: swap;
   font-family: "helsingborg-sans-regular";
-  src: url("/source/fonts/helsingborg-sans/helsingborg-sans-regular.woff");
+  src: url("/assets/fonts/helsingborg-sans/helsingborg-sans-regular.woff");
   format("woff");
 }
 @font-face {
@@ -189,12 +189,12 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(/source/fonts/google-roboto/roboto-regular.woff) format('woff');
+  src: url(/assets/fonts/google-roboto/roboto-regular.woff) format('woff');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: bold;
   font-weight: 700;
   font-display: swap;
-  src: url(/source/fonts/google-roboto/roboto-bold.woff) format('woff');
+  src: url(/assets/fonts/google-roboto/roboto-bold.woff) format('woff');
 }

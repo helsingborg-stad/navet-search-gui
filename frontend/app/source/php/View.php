@@ -79,7 +79,7 @@ class View
 
         } catch (\Throwable $e) {
             echo $blade->make(
-                'pages.E404',
+                'pages.e404',
                 array_merge(
                     $data,
                     $this->loadControllerData("E404"),

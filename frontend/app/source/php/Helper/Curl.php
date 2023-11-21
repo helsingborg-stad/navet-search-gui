@@ -21,13 +21,10 @@ class Curl
         $this->headers = [];
         $this->cacheEnabled = $cacheEnabled;
 
-        if ($this->cacheEnabled) {
-            try {
-                $this->cache = new PredisClient();
-            } catch (Exception $e) {
-                error_log("Could not connect to redis server.");
-                $this->cacheEnabled = false;
-            }
+        if ($this->cacheEnabled && is_array(PREDIS)) {
+            $this->cache = new PredisClient(PREDIS);
+        } else {
+            $this->cacheEnabled = false;
         }
     }
 

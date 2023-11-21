@@ -9,3 +9,4 @@ MS_NAVET       Navet endpoint
 MS_NAVET_AUTH  Navet auth key key
 ENCRYPT_VECTOR Encryption vector
 ENCRYPT_KEY    Encryption key
+PREDIS         Redis connection details according to: https://github.com/predis/predis

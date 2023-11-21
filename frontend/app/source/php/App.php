@@ -48,19 +48,18 @@ class App
           'MS_NAVET' => getenv('MS_NAVET'),
           'MS_NAVET_AUTH' => getenv('MS_NAVET_AUTH'),
           'ENCRYPT_VECTOR' => getenv('ENCRYPT_VECTOR'),
-          'ENCRYPT_KEY' => getenv('ENCRYPT_KEY')
+          'ENCRYPT_KEY' => getenv('ENCRYPT_KEY'),
+          'PREDIS' => getenv('PREDIS'),
         );
         
         //Fallback to default
         foreach($env as $key => $item) {
           if($item === false) {
+            if(isset($config[$key]) && is_object($config[$key])) {
+                $config[$key] = (array) $config[$key];
+            }
             $env[$key] = $config[$key] ?? false;
           }
-        }
-
-        //Validate
-        if(count(array_filter($env)) > 5) {
-            die("Configuration incomplete, please define env-variables or via config.json according to documentation."); 
         }
 
         //Set

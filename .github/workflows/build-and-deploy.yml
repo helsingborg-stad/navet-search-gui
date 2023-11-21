@@ -23,7 +23,7 @@ jobs:
         tools: composer:v2
 
     - name: Execute buildscript.
-      run: php ./build.php --cleanup
+      run: php ./frontend/app/build.php --cleanup
 
     - name: rsync deploy files and set www-data user.
       uses: burnett01/rsync-deployments@4.1

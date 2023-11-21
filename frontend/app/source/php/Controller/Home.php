@@ -113,14 +113,15 @@ class Home Extends BaseController {
   /**
    * Checks if the user is authorized to access the application.
    *
-   * This private method is a placeholder and always returns true. It should be
-   * replaced with the actual logic for determining whether the user is authorized
-   * based on your application's authorization requirements.
+   * Matches if member of contains required key.
    *
    * @return bool The result indicating whether the user is authorized.
    */
-  private function isAuthorized() {
-    return true;
+  private function isAuthorized($login) {
+    if(isset($login->memberof) && strpos($login->memberof, 'OU=O365Writeback') !== false) {
+      return true; 
+    }
+    return false;
   }
 
   /**

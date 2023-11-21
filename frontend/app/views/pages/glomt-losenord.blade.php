@@ -4,7 +4,7 @@
         'element' => 'h1',
         'classList' => ['u-color__text--primary', 'u-margin__bottom--2']
     ])
-        @icon(['icon' => 'help', 'size' => 'xl'])
+        @icon(['icon' => 'help', 'size' => 'inherit'])
         @endicon
         Glömt lösenord
     @endtypography

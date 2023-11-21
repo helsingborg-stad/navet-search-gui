@@ -1,1 +1,7 @@
-/* Custom css here */ 
+h1.c-typography {
+  display: flex;
+  gap: .3em;
+  .c-icon {
+    align-self: center;
+  }
+}

@@ -5,7 +5,7 @@
         'element' => 'h1',
         'classList' => ['u-color__text--primary', 'u-margin__bottom--2']
     ])
-        @icon(['icon' => 'lock_person', 'size' => 'xl'])
+        @icon(['icon' => 'lock_person', 'size' => 'inherit'])
         @endicon
         Logga in
     @endtypography

@@ -22,7 +22,12 @@ class Curl
         $this->cacheEnabled = $cacheEnabled;
 
         if ($this->cacheEnabled && is_array(PREDIS)) {
-            $this->cache = new PredisClient(PREDIS);
+            try {
+                $this->cache = new PredisClient(PREDIS);
+                $this->cache->connect();
+            } catch(Predis\Connection\ConnectionException $e) {
+                echo $e->getMessage();
+            }
         } else {
             $this->cacheEnabled = false;
         }

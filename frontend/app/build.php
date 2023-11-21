@@ -35,6 +35,12 @@ $removables = [
     'setup.sh',
     'webpack.config.js',
     'webpack.dev.config.js',
+    '.vscode',
+    './app/.eslint.js',
+    './app/readme.md',
+    '.gitignore',
+    'README.md',
+    'Dockerfile'
 ];
 
 $dirName = basename(dirname(__FILE__));

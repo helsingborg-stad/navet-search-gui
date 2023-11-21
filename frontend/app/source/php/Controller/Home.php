@@ -4,13 +4,18 @@ namespace NavetSearch\Controller;
 
 use \NavetSearch\Helper\Redirect as Redirect; 
 use \NavetSearch\Helper\Curl as Curl;
-use NavetSearch\Helper\Sanitize;
+use \NavetSearch\Helper\Sanitize;
 use \NavetSearch\Helper\User as User;
 use \NavetSearch\Helper\Validate as Validate;
 
 class Home Extends BaseController {
   public function __construct() {
     parent::__construct(__CLASS__);
+
+    //You shall pass
+    if(User::isAuthenticated()) {
+      new Redirect('/sok'); 
+    }
   }
 
   /**

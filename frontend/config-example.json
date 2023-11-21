@@ -7,8 +7,6 @@
   "PREDIS": {
     "scheme": "tcp",
     "host": "10.0.0.1",
-    "port": "6379",
-    "username": "admin",
-    "password": "password"
+    "port": "6379"
   }
 }

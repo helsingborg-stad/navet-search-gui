@@ -21,11 +21,10 @@ class Curl
         $this->headers = [];
         $this->cacheEnabled = $cacheEnabled;
 
-        if ($this->cacheEnabled && is_array(PREDIS)) {
+        if ($this->cacheEnabled && PREDIS) {
             try {
                 $this->cache = new PredisClient(PREDIS);
-                $this->cache->connect();
-            } catch(Predis\Connection\ConnectionException $e) {
+            } catch(\Predis\Connection\ConnectionException $e) {
                 echo $e->getMessage();
             }
         } else {
@@ -79,7 +78,8 @@ class Curl
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => $this->headers,
-            CURLOPT_SSL_VERIFYPEER => false, // Adjust this based on your needs
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_TIMEOUT => 3000
         ];
 
         if ($method === 'POST' && !empty($data)) {

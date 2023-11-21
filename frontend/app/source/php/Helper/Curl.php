@@ -2,6 +2,7 @@
 
 namespace NavetSearch\Helper;
 
+use Exception;
 use \Predis\Client as PredisClient;
 
 class Curl
@@ -21,7 +22,12 @@ class Curl
         $this->cacheEnabled = $cacheEnabled;
 
         if ($this->cacheEnabled) {
-            $this->cache = new PredisClient();
+            try {
+                $this->cache = new PredisClient();
+            } catch (Exception $e) {
+                error_log("Could not connect to redis server.");
+                $this->cacheEnabled = false;
+            }
         }
     }
 

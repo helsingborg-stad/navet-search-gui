@@ -21,6 +21,10 @@ jobs:
       with:
         php-version: '7.4'
         tools: composer:v2
+    
+    - name: Inject access token in .npmrc
+      run: | 
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/frontend/app/.npmrc
 
     - name: Execute buildscript.
       run: cd ./frontend/app/ && php ./build.php --cleanup

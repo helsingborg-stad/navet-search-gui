@@ -79,7 +79,8 @@ class Curl
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => $this->headers,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_TIMEOUT => 3000
+            CURLOPT_TIMEOUT => 3000,
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4 //User authentication api misconfigured. Remove when ipv6 is working.
         ];
 
         if ($method === 'POST' && !empty($data)) {

@@ -1,3 +1,7 @@
+<IfModule mod_headers.c>
+	Header set X-Frame-Options ALLOW-FROM *
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On 
     RewriteCond %{HTTPS} off 

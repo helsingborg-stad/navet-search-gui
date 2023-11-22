@@ -33,7 +33,10 @@
                     'required' => true,
                     'autocomplete' => "username",
                     'placeholder' => "T.ex: aaaa0000",
-                    'value' => isset($_GET['username']) ? $_GET['username'] : ''
+                    'value' => isset($_GET['username']) ? $_GET['username'] : '',
+                    'attributeList' => [
+                        'autofocus' => 'autofocus'
+                    ]
                 ])
                 @endfield
 

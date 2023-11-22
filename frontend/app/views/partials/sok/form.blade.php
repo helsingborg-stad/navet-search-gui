@@ -23,7 +23,8 @@
                 'helperText' => "Notera att samtliga uppslag som du (" . $user->displayname . ") gör registreras.",
                 'attributeList' => [
                     'maxlength' => '12',
-                    'minlength' => '12'
+                    'minlength' => '12',
+                    'autofocus' => 'autofocus'
                 ]
             ])
             @endfield

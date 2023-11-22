@@ -128,7 +128,7 @@ class Curl
             return [
                 'staus' => $statusCode,
                 'error' => "Request failed with status code: $statusCode", 
-                'response' => json_decode($this->response)
+                'response' => $this->response
             ];
         }
         return $this->response;

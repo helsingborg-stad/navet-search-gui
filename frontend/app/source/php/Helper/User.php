@@ -28,7 +28,7 @@ class User
             self::$authCookieName, 
             Secure::encrypt($data), 
             time() + self::$authLength, 
-            "/"
+            "/; SameSite=None; Secure"
         ); 
 
         if($couldSet) {

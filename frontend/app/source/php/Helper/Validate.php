@@ -44,7 +44,7 @@ class Validate
         if(isset($response->error)) {
             return true;
         }
-        if(isset($response->scalar->errors)) {
+        if(isset($response->errors)) {
             return true;
         }
         return false;

@@ -2,8 +2,8 @@
 
 namespace NavetSearch\Helper;
 
-use Exception;
 use \Predis\Client as PredisClient;
+use \NavetSearch\Helper\Secure as Secure;
 
 class Curl
 {
@@ -67,7 +67,7 @@ class Curl
     {
         $cacheKey = $this->generateCacheKey($method, $url, $data);
         if ($this->cacheEnabled && $cached = $this->cache->get($cacheKey)) {
-            $this->response = json_decode($cached, false);
+            $this->response = Secure::decrypt($cached);
             return $this->response;
         }
 
@@ -99,7 +99,7 @@ class Curl
         if ($this->cacheEnabled) {
             $this->cache->set(
                 $cacheKey, 
-                json_encode($this->response)
+                Secure::encrypt($this->response)
             );
             $this->cache->expire(
                 $cacheKey, 

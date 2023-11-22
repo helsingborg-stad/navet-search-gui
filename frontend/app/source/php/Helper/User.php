@@ -83,6 +83,17 @@ class User
      * Logs out the user by deleting the authentication cookie.
      */
     public static function logout() {
-        setCookie(self::$authCookieName, null, -1, "/"); 
+        setcookie(
+            self::$authCookieName, 
+            null, 
+            [
+                'expires' => -1,
+                'path' => '/',
+                'domain' => $_SERVER['SERVER_NAME'] ?? '',
+                'secure' => true,
+                'httponly' => false,
+                'samesite' => 'None'
+            ]
+        );
     }
 }

@@ -27,8 +27,14 @@ class User
         $couldSet = setcookie(
             self::$authCookieName, 
             Secure::encrypt($data), 
-            time() + self::$authLength, 
-            "/; SameSite=None; Secure"
+            [
+                'expires' => time() + self::$authLength,
+                'path' => '/',
+                'domain' => $_SERVER['SERVER_NAME'] ?? '',
+                'secure' => true,
+                'httponly' => false,
+                'samesite' => 'None'
+            ]
         ); 
 
         if($couldSet) {

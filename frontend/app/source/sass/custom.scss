@@ -5,3 +5,40 @@
     align-self: center;
   }
 }
+
+.c-avatar {
+  --color-secondary: var(--color-primary);
+}
+
+.c-logout {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+  text-align: right;
+
+  .c-logout__logout,
+  .c-logout__name {
+    height: 20px;
+    line-height: 20px;
+  }
+
+  .c-logout__name {
+    font-weight: bold;
+  }
+
+  .c-link {
+    line-height: 1;
+    display: inline-flex;
+    justify-content: flex-end;
+    gap: 4px;
+    transition: all 100ms;
+  }
+
+  .c-link:hover {
+    gap: 8px;
+  }
+}

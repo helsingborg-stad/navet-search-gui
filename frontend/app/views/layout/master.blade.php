@@ -52,22 +52,32 @@
         @include('notices.assets')
     @endif
 
+    @if($isAuthenticated)
+        <div class="c-logout u-padding__y--2 u-padding__x--3">
+            @avatar([
+                'name' => $formattedUser->firstname . " " . $formattedUser->lastname,
+                'size' => 'sm'
+            ])
+            @endavatar
+            <div>
+                <div class="c-logout__name">
+                    {{ $formattedUser->firstname }} {{ $formattedUser->lastname }}
+                </div>
+                <div class="c-logout__logout">
+                    @typography(["variant" => "meta", "classList" => ["u-margin__top--0"]])
+                        @link(['href' => '/?action=logout', 'classList' => ['u-no-decoration', 'u-color__text--darker']])
+                            @icon(['icon' => 'logout', 'size' => 'inherit'])
+                            @endicon
+                            Logga ut
+                        @endbutton
+                    @endtypography
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Main content --}}
     @yield('content')
-
-    <!-- Logout -->
-    @if($isAuthenticated)
-        @button([
-            'icon' => 'logout',
-            'size' => 'md',
-            'color' => 'primary',
-            'text' => 'Logga ut',
-            'reversePositions' => true,
-            'href' => '/?action=logout',
-            'classList' => ['u-fixed--bottom-right', 'u-margin--2']
-        ])
-        @endbutton
-    @endif
 
     <footer class="u-display--flex u-align-content--center u-flex-direction--column">
         @logotype([

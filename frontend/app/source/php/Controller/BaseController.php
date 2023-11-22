@@ -41,6 +41,8 @@ abstract class BaseController {
 
     //Is authenticated user
     $this->data['isAuthenticated'] = User::isAuthenticated();
+
+    $this->data['formattedUser']   = User::getFormattedUser();
   }
 
   /**

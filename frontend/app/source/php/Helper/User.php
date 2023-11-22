@@ -2,6 +2,7 @@
 
 namespace NavetSearch\Helper;
 use \NavetSearch\Helper\Secure as Secure;
+use \NavetSearch\Helper\Format as Format;
 
 /**
  * Class User
@@ -58,6 +59,18 @@ class User
             return $data;            
         }
         return false; 
+    }
+
+    /**
+     * Retrieve and format the user data.
+     *
+     * @return array|false Formatted user data or false if user data is not available.
+     */
+    public static function getFormattedUser() {
+        if($user = self::get()) {
+            return Format::user($user);
+        }
+        return false;
     }
 
     /**

@@ -3,7 +3,7 @@
 @section('content')
 <div class="page">
     <div class="o-container">
-        <section class="u-margin__top--8">
+        <section class="u-margin__top--10">
             <article class="article u-display--flex u-align-content--center u-flex-direction--column">
                 @paper([
                     'padding'=> 4, 

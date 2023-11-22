@@ -32,4 +32,52 @@ class Format
     return ucwords(mb_strtolower($string)); 
   }
 
+  /* User object */
+  public static function user($user) {
+    if($user) {
+      $userObject = [
+        'firstname' => '', 
+        'lastname' => '', 
+        'administration' => $user->company ?? ''
+      ]; 
+      $userObject = array_merge(
+        $userObject, 
+        self::displayName($user->displayname, $user)
+      );
+      return (object) $userObject;
+    }
+    return false;  
+  }
+
+ /**
+  * Parse display name to extract user firstname & lastname
+  * @return array
+  */
+  public static function displayName($string, $data)
+  {
+      $response = ['firstname' => '', 'lastname' => ''];
+
+      if (isset($data->sn) && !empty($data->sn)) {
+          $names = explode(" - ", $string, 2);
+          $response['firstname'] = trim(str_replace($data->sn, "", $names[0]));
+          $response['lastname'] = $data->sn;
+      } elseif (isset($data->mail) && strpos($data->mail, ".")) {
+          list($response['firstname'], $response['lastname']) = explode(".", strtok($data->mail, "@"), 2);
+      } else {
+          $tempData = trim(explode(" - ", $string, 2)[0]);
+
+          if (!empty($tempData)) {
+              $tempData = explode(" ", $tempData);
+              $response['lastname'] = $tempData[0];
+              unset($tempData[0]);
+              $response['firstname'] = implode(" ", $tempData);
+          }
+      }
+
+      // Uppercase first letters
+      $response['firstname'] = ucfirst($response['firstname']);
+      $response['lastname'] = ucfirst($response['lastname']);
+
+      return $response;
+  }
 }

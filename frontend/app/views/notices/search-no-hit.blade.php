@@ -15,6 +15,21 @@
         'classList' => ['u-margin__top--2']
     ])
     @endnotice
+@elseif($code == 500)
+    @notice([
+        'type' => 'info',
+        'message' => [
+            'text' => 'Ett okänt fel inträffade.',
+            'size' => 'sm'
+        ],
+        'icon' => [
+            'name' => 'report',
+            'size' => 'md',
+            'color' => 'white'
+        ],
+        'classList' => ['u-margin__top--2']
+    ])
+    @endnotice
 @else
     @notice([
         'type' => 'info',

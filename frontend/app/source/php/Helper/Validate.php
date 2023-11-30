@@ -49,4 +49,11 @@ class Validate
         }
         return false;
     }
+
+    public static function getStatusCode(object $response): int {
+        if(isset($response->status)) {
+            return $response->status;
+        }
+        return 500;
+    }
 }

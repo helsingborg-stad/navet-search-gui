@@ -96,7 +96,8 @@ class Sok Extends BaseController {
     } else {
       new Redirect('/sok/', [
         'action' => 'search-no-hit',
-        'pnr' => Sanitize::number($req->pnr) 
+        'pnr' => Sanitize::number($req->pnr),
+        'code' => Validate::getStatusCode($person)
       ]); 
     }
   }

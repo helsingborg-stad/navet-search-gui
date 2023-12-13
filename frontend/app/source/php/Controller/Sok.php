@@ -144,7 +144,7 @@ class Sok Extends BaseController {
    * @return string The constructed readable text string with person's name, age, and address.
    */
   private function createReadableText($data, $pnr) {
-    return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och är bosatt på " . Format::capitalize($data->address->streetAddress) . " i ". Format::capitalize($data->address->addressLocality) . " kommun."; 
+    return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och är bosatt på " . Format::capitalize($data->address->streetAddress) . " i ". Format::capitalize($data->address->addressLocality) . "."; 
   }
 
   /**
@@ -194,7 +194,7 @@ class Sok Extends BaseController {
   private function createAdressDataList($data) {
     return [
       ['columns' => [
-        'Kommun:', 
+        'Postort:', 
         Format::capitalize($data->address->addressLocality) ?? ''
       ]],
       ['columns' => [

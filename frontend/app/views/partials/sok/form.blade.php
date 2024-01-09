@@ -19,7 +19,7 @@
                 'name' => 'pnr',
                 'label' => "Personnummer",
                 'required' => true,
-                'placeholder' => "T.ex: 1900000000",
+                'placeholder' => "T.ex: 19000000-0000",
                 'value' => isset($_GET['pnr']) ? $_GET['pnr'] : '',
                 'helperText' => "Notera att samtliga uppslag som du (" . $user->displayname . ") gör registreras.",
                 'attributeList' => [

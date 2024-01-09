@@ -14,7 +14,8 @@
     ])
         <div class="u-display--flex u-flex-direction--column u-flex--gridgap">
             @field([
-                'type' => 'number',
+                'id' => 'pnr-search-field',
+                'type' => 'text',
                 'name' => 'pnr',
                 'label' => "Personnummer",
                 'required' => true,
@@ -22,12 +23,50 @@
                 'value' => isset($_GET['pnr']) ? $_GET['pnr'] : '',
                 'helperText' => "Notera att samtliga uppslag som du (" . $user->displayname . ") gör registreras.",
                 'attributeList' => [
-                    'maxlength' => '12',
-                    'minlength' => '12',
+                    'maxlength' => '17',
+                    'minlength' => '17',
                     'autofocus' => 'autofocus'
                 ]
             ])
             @endfield
+
+            <script type="text/javascript">
+                class PnrFormatting {
+                    constructor(inputField) {
+                        this.inputField = inputField;
+                        this.setupEventListeners();
+                    }
+                    applyFormat() {
+                        let value = this.inputField.value.replaceAll(/[^\d]/g, '');
+                        value = value.replace(/^(\d{4})(\d{2})(\d{2})?(\d{0,4})?$/, (_, year, month, day, rest) => {
+                            if (year && month && day && rest && rest.length >= 4) {
+                                return `${year} ${month} ${day} - ${rest}`;
+                            }
+                            return `${year}${month ? ` ${month}` : ''}${day ? ` ${day}` : ''}${rest ? ` - ${rest}` : ''}`;
+                        });
+                        this.inputField.value = value.trim();
+                    }
+
+                    shouldApplyFormat(event) {
+                        return event.inputType !== 'deleteContentBackward' && event.inputType !== 'deleteContentForward';
+                    }
+
+                    setupEventListeners() {
+                        if (this.inputField) {
+                            this.inputField.addEventListener('input', () => {
+                                if(this.shouldApplyFormat(event)) {
+                                    this.applyFormat();
+                                }
+                            });
+                        }
+                    }
+                }
+                
+                const inputField = document.getElementById('input_pnr-search-field');
+                if (inputField) {
+                    new PnrFormatting(inputField);
+                }
+            </script>
 
             @button([
                 'text' => 'Sök',

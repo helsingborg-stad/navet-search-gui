@@ -56,7 +56,7 @@ class Sok Extends BaseController {
     ], $req);
 
     //Validate that pnr is correct format
-    if(!Validate::pnr($req->pnr)) {
+    if(!Validate::pnr(Sanitize::number($req->pnr))) {
       new Redirect(
         '/sok/', 
         [

@@ -23,8 +23,8 @@
                 'value' => isset($_GET['pnr']) ? $_GET['pnr'] : '',
                 'helperText' => "Notera att samtliga uppslag som du (" . $user->displayname . ") gör registreras.",
                 'attributeList' => [
-                    'maxlength' => '17',
-                    'minlength' => '17',
+                    'maxlength' => '13',
+                    'minlength' => '13',
                     'autofocus' => 'autofocus'
                 ]
             ])
@@ -38,13 +38,17 @@
                     }
                     applyFormat() {
                         let value = this.inputField.value.replaceAll(/[^\d]/g, '');
-                        value = value.replace(/^(\d{4})(\d{2})(\d{2})?(\d{0,4})?$/, (_, year, month, day, rest) => {
-                            if (year && month && day && rest && rest.length >= 4) {
-                                return `${year} ${month} ${day} - ${rest}`;
+                        if (value.length >= 8) {
+                            const birthdate = value.substring(0, 8);
+                            const rest = value.substring(8);
+                            
+                            let formattedPersonnummer = birthdate;
+                            if (rest.length > 0) {
+                                formattedPersonnummer += `-${rest}`;
                             }
-                            return `${year}${month ? ` ${month}` : ''}${day ? ` ${day}` : ''}${rest ? ` - ${rest}` : ''}`;
-                        });
-                        this.inputField.value = value.trim();
+
+                            this.inputField.value = formattedPersonnummer;
+                        }
                     }
 
                     shouldApplyFormat(event) {

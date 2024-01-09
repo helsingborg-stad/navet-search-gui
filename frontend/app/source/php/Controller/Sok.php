@@ -84,6 +84,12 @@ class Sok Extends BaseController {
     //Validate, if ok. Parse data
     if($this->data['searchResult']) {
 
+      $relations = $this->searchFamilyRelations(
+        $this->data['searchFor']
+      );
+
+      var_dump($relations);
+
       $this->data['readableResult'] = $this->createReadableText(
         $person, 
         Format::socialSecuriyNumber($req->pnr)
@@ -124,6 +130,18 @@ class Sok Extends BaseController {
    */
   private function searchPerson($pnr) {
     $request = new Curl(MS_NAVET . '/lookUpAddress', true);
+    $request->setHeaders([
+        'X-ApiKey' => MS_NAVET_AUTH
+    ]);
+    $response = $request->post([
+      "personNumber"=> Sanitize::number($pnr),
+      "searchedBy"  => User::get()->samaccountname
+    ]);
+    return (object) $response;
+  }
+
+  private function searchFamilyRelations($pnr) {
+    $request = new Curl(MS_NAVET . '/lookUpFamilyRelations', true);
     $request->setHeaders([
         'X-ApiKey' => MS_NAVET_AUTH
     ]);
@@ -207,6 +225,10 @@ class Sok Extends BaseController {
       ['columns' => [
         'Gatuadress:', 
         Format::capitalize($data->address->streetAddress) ?? ''
+      ]],
+      ['columns' => [
+        'Kommunkod:', 
+        Format::capitalize($data->address->municipalityCode) ?? ''
       ]]
     ]; 
   }

@@ -228,7 +228,7 @@ class Sok Extends BaseController {
       ]],
       ['columns' => [
         'Kommunkod:', 
-        Format::capitalize($data->address->municipalityCode) ?? ''
+        Format::municipalityCode($data->address->municipalityCode) ?? ''
       ]]
     ]; 
   }

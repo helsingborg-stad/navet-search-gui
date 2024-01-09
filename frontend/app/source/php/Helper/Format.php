@@ -27,6 +27,20 @@ class Format
     return substr($postalCode, 0, 3) . " " . substr($postalCode, 3, 2); 
   }
 
+  /* MunicipalityCode */
+  public static function municipalityCode($municipalityCode) {
+
+    $codes = [
+      '25' => 'Helsingborg'
+    ];
+
+    if(isset($codes[$municipalityCode])) {
+      return $codes[$municipalityCode] . " (" . $municipalityCode . ")";
+    }
+
+    return $municipalityCode; 
+  }
+
   /* Capitalized Word */
   public static function capitalize($string) {
     return ucwords(mb_strtolower($string)); 

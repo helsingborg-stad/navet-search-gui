@@ -148,8 +148,6 @@ class Sok Extends BaseController {
       "searchedBy"  => User::get()->samaccountname
     ]);
 
-    var_dump($response);
-
     $stack = false;
     $predefinedCodes = ['FA', 'MO', 'VF', 'B', 'M'];
 

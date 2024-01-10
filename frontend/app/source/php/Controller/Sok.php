@@ -103,7 +103,7 @@ class Sok Extends BaseController {
     } else {
       new Redirect('/sok/', [
         'action' => 'search-no-hit',
-        'pnr' => Sanitize::number($req->pnr),
+        'pnr' => Format::socialSecuriyNumber($req->pnr),
         'code' => Validate::getStatusCode($person)
       ]); 
     }
@@ -282,7 +282,7 @@ class Sok Extends BaseController {
     foreach($data as $identityNumber => $relations) {
       $stack[] = [
         'columns' => [
-          '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . $identityNumber . '</a>',
+          '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . Format::socialSecuriyNumber($identityNumber) . '</a>',
           $relations['FA'] ? '<span class="c-icon material-icons">check</span>' : '',
           $relations['MO'] ? '<span class="c-icon material-icons">check</span>' : '',
           $relations['VF'] ? '<span class="c-icon material-icons">check</span>' : '',

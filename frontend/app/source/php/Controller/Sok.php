@@ -87,9 +87,6 @@ class Sok Extends BaseController {
       $relations = $this->searchFamilyRelations(
         $this->data['searchFor']
       );
-
-      var_dump($relations);
-
       $this->data['readableResult'] = $this->createReadableText(
         $person, 
         Format::socialSecuriyNumber($req->pnr)
@@ -149,6 +146,9 @@ class Sok Extends BaseController {
       "personNumber"=> Sanitize::number($pnr),
       "searchedBy"  => User::get()->samaccountname
     ]);
+
+    echo json_encode($response);
+
     return (object) $response;
   }
 

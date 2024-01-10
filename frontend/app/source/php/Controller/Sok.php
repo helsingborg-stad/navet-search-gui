@@ -154,7 +154,7 @@ class Sok Extends BaseController {
     if (!empty($response->{$relevantKey}) && is_array($response->{$relevantKey})) {
         $stack = [];
 
-        foreach ($response[$relevantKey] as $item) {
+        foreach ($response->{$relevantKey} as $item) {
             $identityNumber = $item['identityNumber'];
 
             // Initialize an empty array for the identity number

@@ -31,7 +31,8 @@ class Format
   public static function municipalityCode($municipalityCode) {
 
     $codes = [
-      '25' => 'Helsingborg'
+      '25' => 'Helsingborg',
+      '84' => 'Höganäs'
     ];
 
     if(isset($codes[$municipalityCode])) {

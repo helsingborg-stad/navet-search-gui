@@ -16,13 +16,25 @@
     ])
     @endtable
 
-    @table([
-        'title'         => "Adress",
-        'headings'      => false,
-        'showHeader'    => false,
-        'list'          => $adressData
-    ])
-    @endtable
+    @if($adressData)
+        @table([
+            'title'         => "Adress",
+            'headings'      => false,
+            'showHeader'    => false,
+            'list'          => $adressData
+        ])
+        @endtable
+    @endif
+
+    @if($searchResultFamilyRelations)
+        @table([
+            'title'         => "Familjerelationer",
+            'headings'      => ['Personnummer', 'Far', 'Mor', 'Vårdnadshavare', 'Barn'],
+            'showHeader'    => true,
+            'list'          => $searchResultFamilyRelations
+        ])
+        @endtable
+    @endif
 
     @button([
         'text' => 'Tillbaka till sök',

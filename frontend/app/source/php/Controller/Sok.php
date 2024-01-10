@@ -84,9 +84,10 @@ class Sok Extends BaseController {
     //Validate, if ok. Parse data
     if($this->data['searchResult']) {
 
-      $relations = $this->searchFamilyRelations(
+      $this->data['searchResultFamilyRelations'] = $this->searchFamilyRelations(
         $this->data['searchFor']
       );
+
       $this->data['readableResult'] = $this->createReadableText(
         $person, 
         Format::socialSecuriyNumber($req->pnr)
@@ -137,7 +138,7 @@ class Sok Extends BaseController {
     return (object) $response;
   }
 
-  private function searchFamilyRelations($pnr) {
+  private function searchFamilyRelations($pnr, $relevantKey = 'relationsToFolkbokforda') {
     $request = new Curl(MS_NAVET . '/lookUpFamilyRelations', true);
     $request->setHeaders([
         'X-ApiKey' => MS_NAVET_AUTH
@@ -147,9 +148,32 @@ class Sok Extends BaseController {
       "searchedBy"  => User::get()->samaccountname
     ]);
 
-    echo json_encode($response);
+    $stack = false;
+    $predefinedCodes = ['FA', 'MO', 'VF', 'B'];
 
-    return (object) $response;
+    if (!empty($response->{$relevantKey}) && is_array($response->{$relevantKey})) {
+        $stack = [];
+
+        foreach ($response[$relevantKey] as $item) {
+            $identityNumber = $item['identityNumber'];
+
+            // Initialize an empty array for the identity number
+            if(!isset($stack[$identityNumber])) {
+              $stack[$identityNumber] = array_fill_keys($predefinedCodes, false);
+            }
+            
+            // Set the value to true for the corresponding code
+            $stack[$identityNumber][
+              $item['type']['code']
+            ] = true;
+        }
+    }
+
+    if($stack === false) {
+      return false;
+    }
+ 
+    return (object) $this->createRelationsDataList($stack);
   }
 
   /**
@@ -231,5 +255,35 @@ class Sok Extends BaseController {
         Format::municipalityCode($data->address->municipalityCode) ?? ''
       ]]
     ]; 
+  }
+
+  /**
+   * Creates an address data list based on the provided data.
+   *
+   * This private method takes in data representing a person and constructs an address data list.
+   * The resulting list includes key-value pairs for essential address information such as municipality,
+   * postal code, and street address. The address information is formatted for consistency.
+   *
+   * @param object $data An object containing information about the person's address.
+   *
+   * @return array An array representing an address data list with key-value pairs.
+   */
+  private function createRelationsDataList($data) {
+    $stack = []; 
+    foreach($data as $identityNumber => $relations) {
+var_dump($relations);
+
+      $stack[] = [
+        'columns' => [
+          '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . $identityNumber . '</a>',
+          $relations['FA'] ? '<span class="c-icon material-icons">check</span>' : '',
+          $relations['MO'] ? '<span class="c-icon material-icons">check</span>' : '',
+          $relations['VF'] ? '<span class="c-icon material-icons">check</span>' : '',
+          $relations['B'] ? '<span class="c-icon material-icons">check</span>' : ''
+        ] 
+      ];
+    }
+
+    return $stack;
   }
 }

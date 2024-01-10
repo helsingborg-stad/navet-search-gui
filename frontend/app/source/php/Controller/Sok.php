@@ -193,6 +193,12 @@ class Sok Extends BaseController {
    * @return string The constructed readable text string with person's name, age, and address.
    */
   private function createReadableText($data, $pnr) {
+    if(empty((array) $data->address) && Format::getCurrentAge($pnr) >= 102) {
+      return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och har ingen registrerad bostadsadress. Med tanke på personens höga ålder, kan personen vara avliden."; 
+    }
+    if(empty((array) $data->address)) {
+      return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och har ingen registrerad bostadsadress."; 
+    }
     return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och är bosatt på " . Format::capitalize($data->address->streetAddress) . " i ". Format::capitalize($data->address->addressLocality) . "."; 
   }
 
@@ -241,8 +247,7 @@ class Sok Extends BaseController {
    * @return array An array representing an address data list with key-value pairs.
    */
   private function createAdressDataList($data) {
-
-    if(empty($data->address)) {
+    if(empty((array) $data->address)) {
       return false;
     }
 

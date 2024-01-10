@@ -135,6 +135,7 @@ class Sok Extends BaseController {
       "personNumber"=> Sanitize::number($pnr),
       "searchedBy"  => User::get()->samaccountname
     ]);
+
     return (object) $response;
   }
 
@@ -240,6 +241,11 @@ class Sok Extends BaseController {
    * @return array An array representing an address data list with key-value pairs.
    */
   private function createAdressDataList($data) {
+
+    if(empty($data->address)) {
+      return false;
+    }
+
     return [
       ['columns' => [
         'Postort:', 

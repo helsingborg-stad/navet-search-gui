@@ -54,6 +54,9 @@ class Validate
         if(isset($response->status)) {
             return $response->status;
         }
+        if(isset($response->staus)) {
+            return $response->staus;
+        }
         return 500;
     }
 }

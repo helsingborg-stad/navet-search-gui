@@ -148,8 +148,10 @@ class Sok Extends BaseController {
       "searchedBy"  => User::get()->samaccountname
     ]);
 
+    var_dump($response);
+
     $stack = false;
-    $predefinedCodes = ['FA', 'MO', 'VF', 'B'];
+    $predefinedCodes = ['FA', 'MO', 'VF', 'B', 'M'];
 
     if (!empty($response->{$relevantKey}) && is_array($response->{$relevantKey})) {
         $stack = [];
@@ -280,7 +282,8 @@ class Sok Extends BaseController {
           $relations['FA'] ? '<span class="c-icon material-icons">check</span>' : '',
           $relations['MO'] ? '<span class="c-icon material-icons">check</span>' : '',
           $relations['VF'] ? '<span class="c-icon material-icons">check</span>' : '',
-          $relations['B'] ? '<span class="c-icon material-icons">check</span>' : ''
+          $relations['B'] ? '<span class="c-icon material-icons">check</span>' : '',
+          $relations['M'] ? '<span class="c-icon material-icons">check</span>' : ''
         ] 
       ];
     }

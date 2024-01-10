@@ -29,7 +29,7 @@
     @if($searchResultFamilyRelations)
         @table([
             'title'         => "Familjerelationer",
-            'headings'      => ['Personnummer', 'Far', 'Mor', 'Vårdnadshavare', 'Barn'],
+            'headings'      => ['Personnummer', 'Far', 'Mor', 'Vårdnadshavare', 'Barn', 'Make/Maka'],
             'showHeader'    => true,
             'list'          => $searchResultFamilyRelations
         ])

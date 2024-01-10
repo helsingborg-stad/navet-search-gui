@@ -95,4 +95,17 @@ class Format
 
       return $response;
   }
+
+  /**
+   * Convert the given data to an associative array.
+   *
+   * This method uses JSON encoding and decoding to convert the data to an array.
+   *
+   * @param mixed $data The data to be converted.
+   *
+   * @return array|null The converted data as an associative array, or null on failure.
+   */
+  public static function convertToArray($data) {
+    return json_decode(json_encode($data), true);
+  }
 }

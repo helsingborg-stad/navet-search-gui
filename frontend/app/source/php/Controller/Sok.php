@@ -155,6 +155,9 @@ class Sok Extends BaseController {
         $stack = [];
 
         foreach ($response->{$relevantKey} as $item) {
+
+            $item = Format::convertToArray($item);
+
             $identityNumber = $item['identityNumber'];
 
             // Initialize an empty array for the identity number
@@ -271,8 +274,6 @@ class Sok Extends BaseController {
   private function createRelationsDataList($data) {
     $stack = []; 
     foreach($data as $identityNumber => $relations) {
-var_dump($relations);
-
       $stack[] = [
         'columns' => [
           '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . $identityNumber . '</a>',

@@ -9,7 +9,7 @@
                     'padding'=> 4, 
                     'classList' => ['o-grid-12', 'o-grid-4@md', 'o-grid-4@lg', 'u-width--100', 'u-align-self--center'],
                     'attributeList' => [
-                        'style' => 'max-width: 700px;'
+                        'style' => 'max-width: 900px;'
                     ]
                 ])
                     @yield('article')

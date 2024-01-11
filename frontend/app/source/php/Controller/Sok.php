@@ -135,10 +135,19 @@ class Sok Extends BaseController {
       "personNumber"=> Sanitize::number($pnr),
       "searchedBy"  => User::get()->samaccountname
     ]);
-
     return (object) $response;
   }
 
+  /**
+   * Search for family relations using the specified personal number (PNR) and retrieve relevant information.
+   *
+   * @param string $pnr The personal number for which family relations are to be searched.
+   * @param string $relevantKey The key in the API response containing relevant family relation data. Default is 'relationsToFolkbokforda'.
+   *
+   * @return false|object Returns false if no relevant data is found, otherwise returns an object with processed family relations data.
+   *
+   * @throws \Exception If there is an issue with the Curl request or processing the API response.
+   */
   private function searchFamilyRelations($pnr, $relevantKey = 'relationsToFolkbokforda') {
     $request = new Curl(MS_NAVET . '/lookUpFamilyRelations', true);
     $request->setHeaders([

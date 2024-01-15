@@ -2,10 +2,25 @@
     
     @includeIf('notices.' . $action)
 
-    @if($readableResult)
-        @typography(['element' => 'p', 'classList' => ['u-margin__top--0']])
-            {{ $readableResult }}
-        @endtypography
+    @if($isDeregistered)
+        @notice([
+            'type' => 'info',
+            'message' => [
+                'text' => $deregistrationReason
+            ],
+            'icon' => [
+                'name' => 'report',
+                'size' => 'md',
+                'color' => 'white'
+            ]
+        ])
+        @endnotice
+    @else
+        @if($readableResult)
+            @typography(['element' => 'p', 'classList' => ['u-margin__top--0']])
+                {{ $readableResult }}
+            @endtypography
+        @endif
     @endif
 
     @table([
@@ -16,7 +31,7 @@
     ])
     @endtable
 
-    @if($adressData)
+    @if(!$isDeregistered && $adressData)
         @table([
             'title'         => "Adress",
             'headings'      => false,
@@ -46,5 +61,4 @@
         ]
     ])
     @endbutton
-
 </div>

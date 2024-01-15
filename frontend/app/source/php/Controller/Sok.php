@@ -88,17 +88,26 @@ class Sok Extends BaseController {
         $this->data['searchFor']
       );
 
-      $this->data['readableResult'] = $this->createReadableText(
-        $person, 
-        Format::socialSecuriyNumber($req->pnr)
-      );
-  
       $this->data['basicData']  = $this->createBasicDataList(
         $person, 
         Format::socialSecuriyNumber($req->pnr)
       );
-  
-      $this->data['adressData'] = $this->createAdressDataList($person);
+
+      if($this->isDeregistered($person)) {
+        $this->data['isDeregistered'] = true;
+        $this->data['deregistrationReason'] = $this->getDeristrationSentence(
+          $person->deregistrationReason
+        );
+      } else {
+        $this->data['isDeregistered'] = false;
+
+        $this->data['readableResult'] = $this->createReadableText(
+          $person, 
+          Format::socialSecuriyNumber($req->pnr)
+        );
+
+        $this->data['adressData'] = $this->createAdressDataList($person);
+      }
 
     } else {
       new Redirect('/sok/', [
@@ -107,6 +116,17 @@ class Sok Extends BaseController {
         'code' => Validate::getStatusCode($person)
       ]); 
     }
+  }
+
+  public function isDeregistered($person) {
+    if(isset($person->deregistrationCode)) {
+      return true;
+    }
+    return false;
+  }
+
+  public function getDeristrationSentence($reason) {
+    return "Personen är avregistrerad och har fått statusen: " . $reason; 
   }
 
   /**
@@ -135,6 +155,7 @@ class Sok Extends BaseController {
       "personNumber"=> Sanitize::number($pnr),
       "searchedBy"  => User::get()->samaccountname
     ]);
+
     return (object) $response;
   }
 
@@ -202,9 +223,6 @@ class Sok Extends BaseController {
    * @return string The constructed readable text string with person's name, age, and address.
    */
   private function createReadableText($data, $pnr) {
-    if(empty((array) $data->address) && Format::getCurrentAge($pnr) >= 102) {
-      return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och har ingen registrerad bostadsadress. Med tanke på personens höga ålder, kan personen vara avliden."; 
-    }
     if(empty((array) $data->address)) {
       return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr). " år gammal och har ingen registrerad bostadsadress."; 
     }

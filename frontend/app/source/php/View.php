@@ -44,7 +44,7 @@ class View
      * @throws \Throwable If an error occurs during the rendering process, it catches the
      *                    exception and displays an error page with relevant information.
      */
-    public function show($view, $data = array(), $blade)
+    public function show(string $view, array $data, $blade)
     {
         //Run view
         try {

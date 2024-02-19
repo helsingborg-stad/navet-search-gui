@@ -227,7 +227,7 @@ class Sok Extends BaseController {
             // Set the value to true for the corresponding code
             $stack[$identityNumber][
               $item['type']['code']
-            ] = true;
+            ] = !empty($item['custodyDate']) ? Format::date($item['custodyDate']) : true;
         }
     }
 
@@ -355,17 +355,18 @@ class Sok Extends BaseController {
     foreach($response->{$relevantKey} as $property) {
       $list[] = [
         'columns' => [
-          'Fastighetsbeteckning' => $property->property->designation ?? '',
-          'Registreringsdatum' => Format::date($property->registrationDate) ?? '',
-          'Kommunkod' => $property->municipalityCode ?? '',
-          'Län' => $property->countyCode ?? '',
+          $property->property->designation ?? '',
+          $property->type->description ?? '',
+          Format::date($property->registrationDate) ?? '',
+          $property->municipalityCode ?? '',
+          $property->countyCode ?? '',
         ]
       ];
     }
 
     return [
-      'title' => "Fastighetshistorik",
-      'headings' => ['Fastighetsbeteckning', 'Förvärvsdatyn', 'Kommunkod', 'Län'],
+      'title' => "Adresshistorik",
+      'headings' => ['Fastighetsbeteckning', 'Händelse', 'Datum', 'Kommunkod', 'Län'],
       'list' => $list
     ]; 
   }
@@ -382,16 +383,17 @@ class Sok Extends BaseController {
    * @return array An array representing an address data list with key-value pairs.
    */
   private function createRelationsDataList($data) {
+
     $stack = []; 
     foreach($data as $identityNumber => $relations) {
       $stack[] = [
         'columns' => [
           '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . Format::socialSecuriyNumber($identityNumber) . '</a>',
-          $relations['FA'] ? '<span class="c-icon material-icons">check</span>' : '',
-          $relations['MO'] ? '<span class="c-icon material-icons">check</span>' : '',
-          $relations['VF'] ? '<span class="c-icon material-icons">check</span>' : '',
-          $relations['B'] ? '<span class="c-icon material-icons">check</span>' : '',
-          $relations['M'] ? '<span class="c-icon material-icons">check</span>' : ''
+          $relations['FA'] ? '<span class="c-icon material-icons" title="' . $relations['FA'] . '">check</span>' : '',
+          $relations['MO'] ? '<span class="c-icon material-icons" title="' . $relations['MO'] . '">check</span>' : '',
+          $relations['VF'] ? '<span class="c-icon material-icons" title="' . $relations['VF'] . '">check</span>' : '',
+          $relations['B'] ? '<span class="c-icon material-icons"  title="' . $relations['B'] . '">check</span>' : '',
+          $relations['M'] ? '<span class="c-icon material-icons"  title="' . $relations['M'] . '">check</span>' : ''
         ] 
       ];
     }

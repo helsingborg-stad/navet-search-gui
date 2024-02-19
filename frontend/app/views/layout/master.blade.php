@@ -83,6 +83,12 @@
     {{-- Main content --}}
     @yield('content')
 
+    @paper(["attributeList" => ["style"=> 'max-width: 900px; margin: 5em auto;'], "classList" => ['u-width--100', 'u-text-align--center', 'u-padding--4', 'u-margin__top--4']])
+        <pre style="overflow: auto; text-align: left; margin: 0;">
+        {{ $debugResponse }}
+        </pre>
+    @endpaper()
+
     <footer class="u-display--flex u-align-content--center u-flex-direction--column">
         @logotype([
             'src'=> "/assets/img/logotype-grey.svg",

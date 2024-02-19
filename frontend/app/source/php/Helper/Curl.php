@@ -7,6 +7,8 @@ use \NavetSearch\Helper\Secure as Secure;
 
 class Curl
 {
+    public static $responses = [];
+
     private $url;
     private $headers;
     private $response;
@@ -131,7 +133,7 @@ class Curl
                 'response' => $this->response
             ];
         }
-        return $this->response;
+        return self::$responses[] = $this->response;
     }
 
     public function __destruct()

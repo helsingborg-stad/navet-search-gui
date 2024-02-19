@@ -4,6 +4,7 @@ namespace NavetSearch\Controller;
 
 use \NavetSearch\Helper\Redirect as Redirect; 
 use \NavetSearch\Helper\User as User;
+use \NavetSearch\Helper\Curl as Curl;
 
 abstract class BaseController {
 
@@ -42,7 +43,14 @@ abstract class BaseController {
     //Is authenticated user
     $this->data['isAuthenticated'] = User::isAuthenticated();
 
+    //Formatted user
     $this->data['formattedUser']   = User::getFormattedUser();
+
+    //Debugging
+    $this->data['debugResponse'] = print_r(
+      Curl::$responses,
+      true
+    );
   }
 
   /**

@@ -6,7 +6,6 @@ const webpack = require('webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScripts = require('webpack-remove-empty-scripts');
@@ -14,6 +13,7 @@ const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
+
 const { ifProduction, ifNotProduction } = getIfUtils(process.env.NODE_ENV);
 
 module.exports = {
@@ -24,9 +24,7 @@ module.exports = {
     entry: {
         'css/styleguide': './source/sass/styleguide.scss',
         'css/custom': './source/sass/custom.scss',
-        //'js/styleguide': './assets/source/3.0/js/styleguide.js',
-        /*'css/municipio': './assets/source/3.0/sass/main.scss',
-        'js/municipio': './assets/source/3.0/js/municipio.js'*/
+        'js/navet': './source/js/app.js'
     },
     /**
      * Output settings  
@@ -92,7 +90,7 @@ module.exports = {
                         loader: 'postcss-loader',
                         options: {
                             postcssOptions: {
-                                plugins: [autoprefixer, require('postcss-object-fit-images')],
+                                plugins: [autoprefixer],
                             }
                         },
                     },
@@ -142,52 +140,6 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: removeEmpty([
-
-        /**
-         * BrowserSync
-         */
-        typeof process.env.BROWSER_SYNC_PROXY_URL !== 'undefined' ? new BrowserSyncPlugin(
-            // BrowserSync options
-            {
-                // browse to http://localhost:3000/ during development
-                host: 'localhost',
-                port: process.env.BROWSER_SYNC_PORT ? process.env.BROWSER_SYNC_PORT : 3000,
-                // proxy the Webpack Dev Server endpoint
-                // (which should be serving on http://localhost:3100/)
-                // through BrowserSync
-                proxy: process.env.BROWSER_SYNC_PROXY_URL,
-                injectCss: true,
-                injectChanges: true,
-                files: [{
-                  // Reload page
-                  match: ['views/**/*.blade.php', 'library/**/*.php', 'assets/dist/js/**/*.js'],
-                  fn: function(event, file) {
-                    if (event === "change") {
-                      const bs = require('browser-sync').get('bs-webpack-plugin');
-                      bs.reload();
-                    }
-                  }
-                },
-                {
-                  // Inject CSS
-                  match: ['assets/dist/css/**/*.css'],
-                  fn: function(event, file) {
-                    if (event === "change") {
-                      const bs = require('browser-sync').get('bs-webpack-plugin');
-                      bs.reload("*.css");
-                    }
-                  }
-                }],
-              },
-              // plugin options
-              {
-                // prevent BrowserSync from reloading the page
-                // and let Webpack Dev Server take care of this
-                reload: false
-              }
-        ) : null
-        ,
-
         /**
          * Fix CSS entry chunks generating js file
          */
@@ -210,7 +162,7 @@ module.exports = {
          */
         new WebpackManifestPlugin({
             // Filter manifest items
-            filter: function(file) {
+            filter(file) {
                 // Don't include source maps
                 if (file.path.match(/\.(map)$/)) {
                     return false;
@@ -218,7 +170,7 @@ module.exports = {
                 return true;
             },
             // Custom mapping of manifest item goes here
-            map: function(file) {
+            map(file) {
                 // Fix incorrect key for fonts
                 if (
                     file.isAsset &&

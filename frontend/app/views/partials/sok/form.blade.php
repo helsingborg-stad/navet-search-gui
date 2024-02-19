@@ -30,48 +30,6 @@
             ])
             @endfield
 
-            <script type="text/javascript">
-                class PnrFormatting {
-                    constructor(inputField) {
-                        this.inputField = inputField;
-                        this.setupEventListeners();
-                    }
-                    applyFormat() {
-                        let value = this.inputField.value.replaceAll(/[^\d]/g, '');
-                        if (value.length >= 8) {
-                            const birthdate = value.substring(0, 8);
-                            const rest = value.substring(8);
-                            
-                            let formattedPersonnummer = birthdate;
-                            if (rest.length > 0) {
-                                formattedPersonnummer += `-${rest}`;
-                            }
-
-                            this.inputField.value = formattedPersonnummer;
-                        }
-                    }
-
-                    shouldApplyFormat(event) {
-                        return event.inputType !== 'deleteContentBackward' && event.inputType !== 'deleteContentForward';
-                    }
-
-                    setupEventListeners() {
-                        if (this.inputField) {
-                            this.inputField.addEventListener('input', () => {
-                                if(this.shouldApplyFormat(event)) {
-                                    this.applyFormat();
-                                }
-                            });
-                        }
-                    }
-                }
-                
-                const inputField = document.getElementById('input_pnr-search-field');
-                if (inputField) {
-                    new PnrFormatting(inputField);
-                }
-            </script>
-
             @button([
                 'text' => 'Sök',
                 'color' => 'primary',

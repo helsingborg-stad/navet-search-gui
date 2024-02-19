@@ -8,12 +8,16 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
     <title>Navet Personuppslag</title>
-
-    @if($assets) 
-        @foreach($assets as $assetKey => $asset)
-            <link rel='stylesheet' id='{{$assetKey}}' href='/assets/dist/{{$asset}}' media='all'>
+    @if($assets)
+        @foreach($assets as $asset)
+            @if($asset['type'] === 'js')
+                <script src="/assets/dist/{{ $asset['file'] }}"></script>
+            @elseif($asset['type'] === 'css')
+                <link rel='stylesheet' id='{{  $asset['id'] }}' href='/assets/dist/{{ $asset['file'] }}' media='all'>
+            @endif
         @endforeach
     @endif
+    
 
     <style type="text/css">
         @font-face {

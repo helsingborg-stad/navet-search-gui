@@ -102,13 +102,21 @@ abstract class BaseController {
    *                   file, or false if the file doesn't exist or cannot be decoded.
    */
   public function getAssets() {
-
     $revManifest = rtrim(BASEPATH,"/") . "/assets/dist/manifest.json";
 
     if(file_exists($revManifest)) {
       $revManifestContents = file_get_contents($revManifest);
       if($revManifestContentsDecoded = json_decode($revManifestContents)) {
-        return $revManifestContentsDecoded;
+        $assets = [];
+        foreach ($revManifestContentsDecoded as $id => $file) {
+          $fileType = pathinfo($file, PATHINFO_EXTENSION);
+          $assets[$id] = [
+            'file' => $file,
+            'type' => $fileType,
+            'id' => md5($file)
+          ];
+        }
+        return $assets;
       }
     }
     return false;

@@ -84,29 +84,45 @@ class Sok Extends BaseController {
     //Validate, if ok. Parse data
     if($this->data['searchResult']) {
 
+      //Get family relations
       $this->data['searchResultFamilyRelations'] = $this->searchFamilyRelations(
         $this->data['searchFor']
       );
 
-      $this->data['basicData']  = $this->createBasicDataList(
-        $person, 
-        Format::socialSecuriyNumber($req->pnr)
+      //Get property data
+      $this->data['searchResultPropertyData'] = $this->getPropertyData(
+        $this->data['searchFor']
       );
 
       if($this->isDeregistered($person)) {
+
+        //Create deregistration state
         $this->data['isDeregistered'] = true;
         $this->data['deregistrationReason'] = $this->getDeristrationSentence(
           $person->deregistrationReason
         );
+
       } else {
+
+        //Is not deregistered
         $this->data['isDeregistered'] = false;
 
+        //Request basic data table
+        $this->data['basicData']  = $this->createBasicDataList(
+          $person, 
+          Format::socialSecuriyNumber($req->pnr)
+        );
+
+        //Request the readable string
         $this->data['readableResult'] = $this->createReadableText(
           $person, 
           Format::socialSecuriyNumber($req->pnr)
         );
 
-        $this->data['adressData'] = $this->createAdressDataList($person);
+        //Request adress data table
+        $this->data['adressData'] = $this->createAdressDataList(
+          $person
+        );
       }
 
     } else {
@@ -118,6 +134,12 @@ class Sok Extends BaseController {
     }
   }
 
+  /**
+   * Checks if a person is deregistered.
+   *
+   * @param object $person The person object to check.
+   * @return bool Returns true if the person is deregistered, false otherwise.
+   */
   public function isDeregistered($person) {
     if(isset($person->deregistrationCode)) {
       return true;
@@ -125,6 +147,12 @@ class Sok Extends BaseController {
     return false;
   }
 
+  /**
+   * Returns a sentence indicating that a person has been deregistered and their status.
+   *
+   * @param string $reason The reason for deregistration.
+   * @return string The sentence indicating the deregistration status.
+   */
   public function getDeristrationSentence($reason) {
     return "Personen är avregistrerad och har fått statusen: " . $reason; 
   }
@@ -248,6 +276,10 @@ class Sok Extends BaseController {
         $pnr ?? ''
       ]],
       ['columns' => [
+        'Kön:', 
+        Format::sex($pnr, true) ?? ''
+      ]],
+      ['columns' => [
         'Förnamn:', 
         $data->givenName ?? ''
       ]],
@@ -290,11 +322,51 @@ class Sok Extends BaseController {
       ['columns' => [
         'Gatuadress:', 
         Format::capitalize($data->address->streetAddress) ?? ''
-      ]]/*,
-      ['columns' => [
-        'Kommunkod:', 
-        Format::municipalityCode($data->address->municipalityCode) ?? ''
-      ]]*/ 
+      ]]
+    ]; 
+  }
+
+  /**
+   * Creates a property data list based on the provided data.
+   *
+   * @param object $data The data containing property registration history.
+   * @return array|false The property data list or false if the data is invalid or empty.
+   */
+  private function getPropertyData($pnr, $relevantKey = 'propertyRegistrationHistory') {
+
+    $request = new Curl(MS_NAVET . '/lookUpFamilyRelations', true);
+    $request->setHeaders([
+        'X-ApiKey' => MS_NAVET_AUTH
+    ]);
+    $response = $request->post([
+      "personNumber"=> Sanitize::number($pnr),
+      "searchedBy"  => User::get()->samaccountname
+    ]);
+
+    if(!isset($response->{$relevantKey})) {
+      return false;
+    }
+
+    if(empty((array) $response->{$relevantKey})) {
+      return false;
+    }
+
+    $list = [];
+    foreach($response->{$relevantKey} as $property) {
+      $list[] = [
+        'columns' => [
+          'Fastighetsbeteckning' => $property->property->designation ?? '',
+          'Registreringsdatum' => Format::date($property->registrationDate) ?? '',
+          'Kommunkod' => $property->municipalityCode ?? '',
+          'Län' => $property->countyCode ?? '',
+        ]
+      ];
+    }
+
+    return [
+      'title' => "Fastighetshistorik",
+      'headings' => ['Fastighetsbeteckning', 'Förvärvsdatyn', 'Kommunkod', 'Län'],
+      'list' => $list
     ]; 
   }
 

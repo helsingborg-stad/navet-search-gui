@@ -51,6 +51,11 @@
         @endtable
     @endif
 
+    @if(!$isDeregistered && $searchResultPropertyData)
+        @table($searchResultPropertyData)
+        @endtable
+    @endif
+
     @button([
         'text' => 'Tillbaka till sök',
         'href' => '/sok',

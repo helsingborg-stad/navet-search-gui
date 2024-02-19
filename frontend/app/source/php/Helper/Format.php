@@ -15,6 +15,16 @@ class Format
     return false;
   }
 
+  /* Get the sex from a social security numer */
+  public static function sex($number, $readable = false) {
+    $number = Sanitize::number($number);
+    if(strlen($number) == 12) {
+      $sexDigit = substr($number, 10, 1);
+      return ($sexDigit % 2 == 0) ? ($readable ? 'Kvinna' : 'F') : ($readable ? 'Man' : 'M');
+    }
+    return false;
+  }
+
   /* Age */
   public static function getCurrentAge($pnr) {
     return (new DateTime(substr($pnr, 0, 4) . "-" . substr($pnr, 4, 2) . "-" . substr($pnr, 6, 2)))->diff(
@@ -108,4 +118,19 @@ class Format
   public static function convertToArray($data) {
     return json_decode(json_encode($data), true);
   }
+
+  /**
+   * Format the given date to the specified format.
+   *
+   * This method uses the `date` function to format the given date to the specified format.
+   *
+   * @param string $date The date to be formatted.
+   * @param string $format The format to be used for the date.
+   *
+   * @return string The formatted date.
+   */
+  public static function date($date, $format = 'Y-m-d') {
+    return date($format, strtotime($date));
+  }
+  
 }

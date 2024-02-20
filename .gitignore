@@ -2,6 +2,7 @@
 node_modules
 .vscode
 
+/frontend/app/cache/*
 /frontend/app/assets/dist/*
 /frontend/app/config/*
 /frontend/app/vendor/*

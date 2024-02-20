@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "helsingborg-stad/blade-engine-wrapper": "dev-master",
+        "helsingborg-stad/blade-engine-wrapper": "1.0.0",
         "predis/predis": "v3.x-dev"
     },
     "scripts": {

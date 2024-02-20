@@ -2,13 +2,18 @@
 
 namespace NavetSearch\Helper;
 
-use \HelsingborgStad\GlobalBladeEngine as Blade; 
+use HelsingborgStad\GlobalBladeService\GlobalBladeService;
+use ComponentLibrary\Init as ComponentLibraryInit;
 
 class Enviroment
 {
-    public static function componentLibraryIsInstalled()
+
+    private static $loader = BASEPATH . "vendor/helsingborg-stad/component-library/load.php";
+    private static $blade;
+
+    public static function componentLibraryIsInstalled(): bool
     {
-        if (file_exists(BASEPATH . "source/library/source/php/Init.php")) {
+        if (file_exists(self::$loader)) {
             return true; 
         }
         return false;
@@ -16,14 +21,16 @@ class Enviroment
 
     public static function loadInstalledComponentLibrary()
     {
-        if (file_exists(BASEPATH . "source/library/source/php/Init.php")) {
-            require_once BASEPATH . "source/library/load.php";
-            
-            $init = new \ComponentLibrary\Init([BASEPATH . 'views']);
-            
-            return $init->getEngine();
-
+        self::initBladeEngine();
+        if (self::componentLibraryIsInstalled()) {
+            require_once self::$loader;
+            new ComponentLibraryInit([]);
+            return self::$blade; 
         }
         return false;
+    }
+
+    public static function initBladeEngine(): void {
+        self::$blade = GlobalBladeService::getInstance([BASEPATH . 'views'], BASEPATH . 'cache');
     }
 }

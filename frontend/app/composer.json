@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "helsingborg-stad/component-library": "~4.0.1",
+        "helsingborg-stad/component-library": "~4.0.2",
         "predis/predis": "~2.2.2"
     },
     "autoload": {
@@ -30,11 +30,6 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true
-        }
-    },
-    "extra": {
-        "installer-paths": {
-            "source/library/{$name}/": ["helsingborg-stad/component-library"]
         }
     }
 }

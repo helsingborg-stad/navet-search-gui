@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c77cb57f1b6a91c84f3cb720e3e0649",
+    "content-hash": "ce3f2b12ee4d936556ec313f9dfafb19",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -222,16 +222,16 @@
         },
         {
             "name": "helsingborg-stad/component-library",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/helsingborg-stad/component-library.git",
-                "reference": "69a39d6c09fa84f528a58cfe4ecc87f82f99d28d"
+                "reference": "85dc48a25c7f6882e7d7f4f6764d6796d72b3b9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/helsingborg-stad/component-library/zipball/69a39d6c09fa84f528a58cfe4ecc87f82f99d28d",
-                "reference": "69a39d6c09fa84f528a58cfe4ecc87f82f99d28d",
+                "url": "https://api.github.com/repos/helsingborg-stad/component-library/zipball/85dc48a25c7f6882e7d7f4f6764d6796d72b3b9b",
+                "reference": "85dc48a25c7f6882e7d7f4f6764d6796d72b3b9b",
                 "shasum": ""
             },
             "require": {
@@ -260,9 +260,9 @@
             "description": "A library of components for use in WordPress",
             "support": {
                 "issues": "https://github.com/helsingborg-stad/component-library/issues",
-                "source": "https://github.com/helsingborg-stad/component-library/tree/4.0.1"
+                "source": "https://github.com/helsingborg-stad/component-library/tree/4.0.2"
             },
-            "time": "2024-02-20T09:31:33+00:00"
+            "time": "2024-02-20T11:54:34+00:00"
         },
         {
             "name": "illuminate/bus",

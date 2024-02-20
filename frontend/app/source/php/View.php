@@ -48,7 +48,7 @@ class View
     {
         //Run view
         try {
-            $result = $blade->make(
+            $result = $blade->makeView(
                 'pages.' . $view,
                 array_merge(
                     $data, 
@@ -78,7 +78,7 @@ class View
             }
 
         } catch (\Throwable $e) {
-            echo $blade->make(
+            echo $blade->makeView(
                 'pages.e404',
                 array_merge(
                     $data,

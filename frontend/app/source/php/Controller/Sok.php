@@ -334,6 +334,38 @@ class Sok Extends BaseController {
    * @param object $data The data containing property registration history.
    * @return array|false The property data list or false if the data is invalid or empty.
    */
+  private function getCivilStatus($pnr, $relevantKey = 'civilStatus') {
+
+    $request = new Curl(MS_NAVET . '/lookUpFamilyRelations', true);
+    $request->setHeaders([
+        'X-ApiKey' => MS_NAVET_AUTH
+    ]);
+    $response = $request->post([
+      "personNumber"=> Sanitize::number($pnr),
+      "searchedBy"  => User::get()->samaccountname
+    ]);
+
+    if(!isset($response->{$relevantKey})) {
+      return false;
+    }
+
+    if(empty((array) $response->{$relevantKey})) {
+      return false;
+    }
+
+    return [
+      'code' => $response->{$relevantKey}->code,
+      'description' => $response->{$relevantKey}->description,
+      'date' => Format::date($response->{$relevantKey}->date)
+    ];
+  }
+
+  /**
+   * Creates a property data list based on the provided data.
+   *
+   * @param object $data The data containing property registration history.
+   * @return array|false The property data list or false if the data is invalid or empty.
+   */
   private function getPropertyData($pnr, $relevantKey = 'propertyRegistrationHistory') {
 
     $request = new Curl(MS_NAVET . '/lookUpFamilyRelations', true);

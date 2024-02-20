@@ -112,7 +112,8 @@ class Sok Extends BaseController {
         //Request basic data table
         $this->data['basicData']  = $this->createBasicDataList(
           $person, 
-          Format::socialSecuriyNumber($req->pnr)
+          Format::socialSecuriyNumber($req->pnr),
+          $this->getCivilStatus($this->data['searchFor'])
         );
 
         //Request the readable string
@@ -271,7 +272,7 @@ class Sok Extends BaseController {
    *
    * @return array An array representing a basic data list with key-value pairs.
    */
-  private function createBasicDataList($data, $pnr) {
+  private function createBasicDataList($data, $pnr, $civilStatus) {
     return [
       ['columns' => [
         'Personnummer:', 
@@ -280,6 +281,10 @@ class Sok Extends BaseController {
       ['columns' => [
         'Kön:', 
         Format::sex($pnr, true) ?? ''
+      ]],
+      ['columns' => [
+        'Civilstatus:', 
+        $civilStatus['description'] ? $civilStatus['description'] . ' (' . $civilStatus['date'] . ')' : ''
       ]],
       ['columns' => [
         'Förnamn:', 

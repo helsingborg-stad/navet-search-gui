@@ -130,6 +130,9 @@ class Format
    * @return string The formatted date.
    */
   public static function date($date, $format = 'Y-m-d') {
+    if(is_null($date)) {
+      return "";
+    }
     return date($format, strtotime($date));
   }
   

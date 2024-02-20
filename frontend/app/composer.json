@@ -8,7 +8,7 @@
             "email": "sebastian.thulin@helsingborg.se"
         }
     ],
-    "minimum-stability" : "dev",
+    "minimum-stability" : "stable",
     "repositories": [
         {
             "type":"composer",
@@ -20,13 +20,9 @@
         }
     ],
     "require": {
-        "helsingborg-stad/blade-engine-wrapper": "~1.0.0",
+        "php": "^8.2",
+        "helsingborg-stad/component-library": "~4.0.1",
         "predis/predis": "~2.2.2"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "sh setup.sh"
-        ]
     },
     "autoload": {
         "psr-4": {"NavetSearch\\": "source/php/"}
@@ -34,6 +30,11 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true
+        }
+    },
+    "extra": {
+        "installer-paths": {
+            "source/library/{$name}/": ["helsingborg-stad/component-library"]
         }
     }
 }

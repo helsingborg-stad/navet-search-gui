@@ -74,6 +74,8 @@ class Sok Extends BaseController {
       Sanitize::number($req->pnr)
     );
 
+
+
     //Get data
     $person = $this->searchPerson(
       $this->data['searchFor']

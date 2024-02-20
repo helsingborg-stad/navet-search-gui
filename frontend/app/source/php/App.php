@@ -50,6 +50,7 @@ class App
           'ENCRYPT_VECTOR' => getenv('ENCRYPT_VECTOR'),
           'ENCRYPT_KEY' => getenv('ENCRYPT_KEY'),
           'PREDIS' => getenv('PREDIS'),
+          'DEBUG' => getenv('DEBUG'),
         );
         
         //Fallback to default

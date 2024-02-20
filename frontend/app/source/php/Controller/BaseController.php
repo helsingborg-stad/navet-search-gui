@@ -47,10 +47,14 @@ abstract class BaseController {
     $this->data['formattedUser']   = User::getFormattedUser();
 
     //Debugging
-    $this->data['debugResponse'] = print_r(
-      Curl::$responses,
-      true
-    );
+    if(Curl::$responses && DEBUG == true) {
+      $this->data['debugResponse'] = print_r(
+        Curl::$responses,
+        true
+      );
+    } else {
+      $this->data['debugResponse'] = false;
+    }
   }
 
   /**

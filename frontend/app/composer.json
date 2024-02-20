@@ -20,8 +20,8 @@
         }
     ],
     "require": {
-        "helsingborg-stad/blade-engine-wrapper": "1.0.0",
-        "predis/predis": "v3.x-dev"
+        "helsingborg-stad/blade-engine-wrapper": "~1.0.0",
+        "predis/predis": "~2.2.2"
     },
     "scripts": {
         "post-install-cmd": [

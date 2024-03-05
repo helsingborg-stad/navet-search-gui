@@ -163,7 +163,7 @@ class Home Extends BaseController {
       if (!isset($groups[$key])) {
         $groups[$key] = [];
       }
-      $groups[$key][] = $value;
+      $groups[$key][] = trim($value);
     }
     return $groups;
   }

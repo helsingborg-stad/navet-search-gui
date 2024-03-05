@@ -123,11 +123,49 @@ class Home Extends BaseController {
    * @return bool The result indicating whether the user is authorized.
    */
   private function isAuthorized($login) {
-    return true;
-    if(isset($login->memberof) && strpos($login->memberof, 'OU=O365Writeback') !== false) {
-      return true; 
+
+    //No group lock defined
+    if(!defined('AD_GROUPS')) {
+      return true;
     }
+
+    $memberOf = $this->parseMemberOf($login->memberof);
+
+    if(array_key_exists('CN', $memberOf) && is_array(constant('AD_GROUPS')) && count(constant('AD_GROUPS'))) {
+      foreach(constant('AD_GROUPS') as $group) {
+        if(in_array($group, $memberOf['CN'])) {
+          return true;
+        }
+      }
+    }
+
     return false;
+  }
+
+  /**
+   * This PHP function parses a string representing group memberships and returns an associative array
+   * with group names as keys and an array of corresponding values.
+   * 
+   * @param memberOf The `parseMemberOf` function is designed to parse a string
+   * containing group memberships. The function splits the input string by commas and then further
+   * splits each part by the equal sign to extract the key-value pairs.
+   * 
+   * @return An associative array is being returned where the keys are extracted from the input string
+   * `` and the values are arrays of corresponding values.
+   */
+  private function parseMemberOf($memberOf) {
+    $groups = [];
+    $parts = explode(',', $memberOf);
+    foreach ($parts as $part) {
+      $group = explode('=', $part);
+      $key = $group[0];
+      $value = $group[1];
+      if (!isset($groups[$key])) {
+        $groups[$key] = [];
+      }
+      $groups[$key][] = $value;
+    }
+    return $groups;
   }
 
   /**

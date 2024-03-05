@@ -51,6 +51,7 @@ class App
           'ENCRYPT_KEY' => getenv('ENCRYPT_KEY'),
           'PREDIS' => getenv('PREDIS'),
           'DEBUG' => getenv('DEBUG'),
+          'AD_GROUPS' => getenv('AD_GROUPS')
         );
         
         //Fallback to default

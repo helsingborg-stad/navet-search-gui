@@ -24,7 +24,7 @@
           font-family: 'Material Icons';
           font-style: normal;
           font-weight: 400;
-          src: url('https://helsingborg.se/wp-content/fonts/material-icons/flUhRq6tzZclQEJ-Vdg-IuiaDsNaIhQ8tQ.woff') format('woff');
+          src: url('/assets/fonts/material-icons/862dfb9f58cbd545e33ee554d41c6ec8.woff') format('woff');
         }
         
         .material-icons {

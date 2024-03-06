@@ -3,6 +3,7 @@
 namespace NavetSearch;
 
 use \NavetSearch\View;
+use ComponentLibrary\Init as ComponentLibraryInit;
 
 /**
  * Class App
@@ -16,7 +17,7 @@ class App
      * App constructor.
      * @param $blade
      */
-    public function __construct($blade, array $config = array())
+    public function __construct(array $config = array())
     {
         //Setup constants
         $this->setUpEnvironment();
@@ -26,7 +27,6 @@ class App
 
         //Load current page
         $this->loadPage(
-            $blade, 
             $this->getCurrentPath(),
             $this->getAction()
         );
@@ -72,7 +72,7 @@ class App
 
     private function setUpEnvironment() {
         define('VIEWS_PATH', BASEPATH . 'views/');
-        define('CACHE_PATH', BASEPATH . 'cache/');
+        define('BLADE_CACHE_PATH', BASEPATH . 'cache/');
         define('LOCAL_DOMAIN', '.local');
     }
 
@@ -96,8 +96,10 @@ class App
      * Loads a page and it's navigation
      * @return bool Returns true when the page is loaded
      */
-    public function loadPage($blade, $page, $action)
+    public function loadPage($page, $action)
     {
+        $blade = (new ComponentLibraryInit([]))->getEngine();
+
         //Current page 
         $data['pageNow']                        = $page;
         $data['action']                         = $action; 

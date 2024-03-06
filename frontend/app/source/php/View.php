@@ -46,6 +46,8 @@ class View
      */
     public function show(string $view, array $data, $blade)
     {
+
+   
         //Run view
         try {
             $result = $blade->makeView(
@@ -53,7 +55,9 @@ class View
                 array_merge(
                     $data, 
                     $this->loadControllerData($view)
-                )
+                ),
+                [],
+                [VIEWS_PATH]
             )->render();
 
             $result = preg_replace('/(id|href)=""/', "", $result);

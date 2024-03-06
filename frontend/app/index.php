@@ -14,11 +14,8 @@ require_once 'Bootstrap.php';
 $configFile = __DIR__ . '/../config.json';
 if(file_exists($configFile)) {
 	new \NavetSearch\App(
-		\NavetSearch\Helper\Enviroment::loadInstalledComponentLibrary(),
 		(array) json_decode(file_get_contents($configFile))
 	);
 } else {
-	new \NavetSearch\App(
-		\NavetSearch\Helper\Enviroment::loadInstalledComponentLibrary()
-	);
+	new \NavetSearch\App();
 }

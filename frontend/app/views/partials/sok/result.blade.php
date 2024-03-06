@@ -5,7 +5,7 @@
     @if($isDeregistered)
         @notice([
             'type' => 'info',
-            'message' => [
+            'message' => (object) [
                 'text' => $deregistrationReason
             ],
             'icon' => [

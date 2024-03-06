@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "helsingborg-stad/component-library": "~4.0.2",
+        "helsingborg-stad/component-library": "~4.0.22",
         "predis/predis": "~2.2.2"
     },
     "autoload": {

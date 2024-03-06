@@ -223,7 +223,7 @@ class Sok Extends BaseController {
         $stack = [];
 
         foreach ($response->{$relevantKey} as $item) {
-
+var_dump($item);
             $item = Format::convertToArray($item);
 
             $identityNumber = $item['identityNumber'];
@@ -428,17 +428,17 @@ class Sok Extends BaseController {
    * @return array An array representing an address data list with key-value pairs.
    */
   private function createRelationsDataList($data) {
-
+var_dump($data);
     $stack = []; 
     foreach($data as $identityNumber => $relations) {
       $stack[] = [
         'columns' => [
           '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . Format::socialSecuriyNumber($identityNumber) . '</a>',
-          $relations['FA'] ? '<span class="c-icon material-icons" title="' . $relations['FA'] . '">check</span>' : '',
-          $relations['MO'] ? '<span class="c-icon material-icons" title="' . $relations['MO'] . '">check</span>' : '',
-          $relations['VF'] ? '<span class="c-icon material-icons" title="' . $relations['VF'] . '">check</span>' : '',
-          $relations['B'] ? '<span class="c-icon material-icons"  title="' . $relations['B'] . '">check</span>' : '',
-          $relations['M'] ? '<span class="c-icon material-icons"  title="' . $relations['M'] . '">check</span>' : ''
+          $relations['FA'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['FA'])) : '-',
+          $relations['MO'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['MO'])) : '-',
+          $relations['VF'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['VF'])) : '-',
+          $relations['B'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['B'])) : '-',
+          $relations['M'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['M'])) : '-'
         ] 
       ];
     }

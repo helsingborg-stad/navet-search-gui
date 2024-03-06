@@ -146,7 +146,7 @@ class Format
     if(empty($string)) {
       return "";
     }
-    return "(" . $string . ")"; 
+    return " (" . $string . ")"; 
   }
   
 }

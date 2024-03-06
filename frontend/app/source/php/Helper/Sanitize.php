@@ -10,6 +10,21 @@ class Sanitize
     return preg_replace('/[^0-9.]+/', '', $string);
   }
 
+  /** Always return a string */
+  public static function string($string) {
+    if(is_string($string)) {
+      return $string;
+    } 
+
+    // Resembles a bool
+    if($string == 1 || $string == 0) {
+      return "";
+    }
+
+    // Anything else, empty string
+    return ""; 
+  }
+
   /** Santitize password to comply with active directory issues */
   public static function password($password) {
     $password = stripslashes($password);

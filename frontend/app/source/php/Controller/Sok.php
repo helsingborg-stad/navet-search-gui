@@ -223,7 +223,7 @@ class Sok Extends BaseController {
         $stack = [];
 
         foreach ($response->{$relevantKey} as $item) {
-var_dump($item);
+
             $item = Format::convertToArray($item);
 
             $identityNumber = $item['identityNumber'];
@@ -428,7 +428,7 @@ var_dump($item);
    * @return array An array representing an address data list with key-value pairs.
    */
   private function createRelationsDataList($data) {
-var_dump($data);
+
     $stack = []; 
     foreach($data as $identityNumber => $relations) {
       $stack[] = [

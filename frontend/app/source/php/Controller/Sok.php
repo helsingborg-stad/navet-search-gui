@@ -97,17 +97,17 @@ class Sok Extends BaseController {
       $this->data['basicData'] = [];
 
       if($this->isDeregistered($person)) {
-
-        //Create deregistration state
-        $this->data['isDeregistered'] = true;
-        $this->data['deregistrationReason'] = $this->getDeristrationSentence(
-          $person->deregistrationReason
-        );
-
         $this->data['basicData']  = $this->createBasicDataList(
           $person, 
           Format::socialSecuriyNumber($req->pnr),
           $this->getCivilStatus($this->data['searchFor'])
+        );
+
+        //Create deregistration state
+        $this->data['isDeregistered'] = true;
+        $this->data['deregistrationReason'] = $this->getDeristrationSentence(
+          $person->deregistrationReason,
+          $person->deregistrationDate ?? null
         );
 
       } else {
@@ -162,7 +162,10 @@ class Sok Extends BaseController {
    * @param string $reason The reason for deregistration.
    * @return string The sentence indicating the deregistration status.
    */
-  public function getDeristrationSentence($reason) {
+  public function getDeristrationSentence($reason, $date = null) {
+    if(!is_null($date)) {
+      return "Personen är avregistrerad och har fått statusen: " . $reason . Format::addPharanthesis(Format::date($date)); 
+    }
     return "Personen är avregistrerad och har fått statusen: " . $reason; 
   }
 

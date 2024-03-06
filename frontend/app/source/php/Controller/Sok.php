@@ -434,11 +434,11 @@ var_dump($data);
       $stack[] = [
         'columns' => [
           '<a href="/sok/?action=sok&pnr='.$identityNumber.'">' . Format::socialSecuriyNumber($identityNumber) . '</a>',
-          $relations['FA'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['FA'])) : '-',
-          $relations['MO'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['MO'])) : '-',
-          $relations['VF'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['VF'])) : '-',
-          $relations['B'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['B'])) : '-',
-          $relations['M'] ? 'X' . Format::addPharanthesis(Sanitize::string($relations['M'])) : '-'
+          $relations['FA'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['FA'])) : '-',
+          $relations['MO'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['MO'])) : '-',
+          $relations['VF'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['VF'])) : '-',
+          $relations['B'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['B'])) : '-',
+          $relations['M'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['M'])) : '-'
         ] 
       ];
     }

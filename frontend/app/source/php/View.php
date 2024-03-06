@@ -87,8 +87,10 @@ class View
                 array_merge(
                     $data,
                     $this->loadControllerData("E404"),
-                    array('errorMessage' => print_r(['line' => $e->getLine(), 'file' => $e->getFile()], true))
-                )
+                    array('errorMessage' => ['line' => $e->getLine(), 'file' => $e->getFile()])
+                ),
+                [],
+                [VIEWS_PATH]
             )->render();
         }
     }

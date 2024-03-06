@@ -13,5 +13,10 @@
     ])
     @endsegment
 
-    <?php var_dump($errorMessage); ?> 
+    @if(isset($errorMessage))
+        @notice(['classList' => ['u-fixed--bottom']])
+            Ett fel inträffade på rad <strong>{{ $errorMessage['line'] }}</strong> i <strong>{{ $errorMessage['file'] }}</strong>.
+        @endnotice()
+    @endif
+   
 @endsection

@@ -74,8 +74,6 @@ class Sok Extends BaseController {
       Sanitize::number($req->pnr)
     );
 
-
-
     //Get data
     $person = $this->searchPerson(
       $this->data['searchFor']
@@ -96,12 +94,20 @@ class Sok Extends BaseController {
         $this->data['searchFor']
       );
 
+      $this->data['basicData'] = [];
+
       if($this->isDeregistered($person)) {
 
         //Create deregistration state
         $this->data['isDeregistered'] = true;
         $this->data['deregistrationReason'] = $this->getDeristrationSentence(
           $person->deregistrationReason
+        );
+
+        $this->data['basicData']  = $this->createBasicDataList(
+          $person, 
+          Format::socialSecuriyNumber($req->pnr),
+          $this->getCivilStatus($this->data['searchFor'])
         );
 
       } else {
@@ -284,7 +290,7 @@ class Sok Extends BaseController {
       ]],
       ['columns' => [
         'Civilstatus:', 
-        $civilStatus['description'] ? $civilStatus['description'] . Format::addPharanthesis($civilStatus['date']) : ''
+        $civilStatus['description'] ? $civilStatus['description'] . " " . Format::addPharanthesis($civilStatus['date']) : ''
       ]],
       ['columns' => [
         'Förnamn:', 

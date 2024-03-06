@@ -360,11 +360,11 @@ class Sok Extends BaseController {
     ]);
 
     if(!isset($response->{$relevantKey})) {
-      return false;
+      return ['code' => null,'description' => null,'date' => null];
     }
 
     if(empty((array) $response->{$relevantKey})) {
-      return false;
+      return ['code' => null,'description' => null,'date' => null];
     }
 
     return [

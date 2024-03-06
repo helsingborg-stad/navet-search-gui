@@ -284,7 +284,7 @@ class Sok Extends BaseController {
       ]],
       ['columns' => [
         'Civilstatus:', 
-        $civilStatus['description'] ? $civilStatus['description'] . ' (' . $civilStatus['date'] . ')' : ''
+        $civilStatus['description'] ? $civilStatus['description'] . Format::addPharanthesis($civilStatus['date']) : ''
       ]],
       ['columns' => [
         'Förnamn:', 

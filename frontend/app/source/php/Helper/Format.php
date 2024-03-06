@@ -135,5 +135,18 @@ class Format
     }
     return date($format, strtotime($date));
   }
+
+  /**
+   * Adds parentheses around a given string.
+   *
+   * @param string $string The string to add parentheses to.
+   * @return string The modified string with parentheses added.
+   */
+  public static function addPharanthesis($string) {
+    if(empty($string)) {
+      return "";
+    }
+    return "(" . $string . ")"; 
+  }
   
 }

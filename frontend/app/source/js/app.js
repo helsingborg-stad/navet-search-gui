@@ -5,13 +5,15 @@ function handleStringFormatting(event) {
   let   targetValue = targetNode.value;
   const firstTwo    = targetValue.substring(0, 2);
 
-  if (targetValue.length === 10 && !["19", "20"].includes(firstTwo)) {
-    const currentYear = (String(new Date().getFullYear()).substring(2));
+  if (targetValue.length === 10 || targetValue.length === 11) {
+    const currentYear = String(new Date().getFullYear()).substring(2);
 
-    if (firstTwo > currentYear) {
-      targetValue = `19${targetValue}`;
-    } else {
-      targetValue = `20${targetValue}`;
+    if (targetValue.length === 10 && !["19", "20"].includes(firstTwo)) {
+      if (firstTwo > currentYear) {
+        targetValue = `19${targetValue}`;
+      } else {
+        targetValue = `20${targetValue}`;
+      }
     }
   }
 
@@ -40,6 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isDeleting) {
       return;
     }
+    handleStringFormatting(event);
+  });
+
+  targetNode.addEventListener('blur', (event) => {
+    handleStringFormatting(event);
+  });
+
+  targetNode.addEventListener('paste', (event) => {
     handleStringFormatting(event);
   });
 });

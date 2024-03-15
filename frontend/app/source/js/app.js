@@ -8,6 +8,8 @@ function handleStringFormatting(event) {
   if (targetValue.length === 10 || targetValue.length === 11) {
     const currentYear = String(new Date().getFullYear()).substring(2);
 
+    targetValue = targetValue.replace(/[^0-9]/g, '');
+
     if (targetValue.length === 10 && !["19", "20"].includes(firstTwo)) {
       if (firstTwo > currentYear) {
         targetValue = `19${targetValue}`;

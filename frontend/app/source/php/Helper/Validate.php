@@ -7,55 +7,51 @@ use \NavetSearch\Helper\Sanitize as Sanitize;
 class Validate
 {
     public static function pnr($string)
-    {   
-        if(strlen(Sanitize::number($string)) == 12) {
-            return true; 
+    {
+        if (strlen(Sanitize::number($string)) == 12) {
+            return true;
         }
         return false;
     }
 
     public static function empty(string $string): bool
     {
-        return (bool) !empty($string); 
+        return (bool) !empty($string);
     }
 
     public static function email(string $string): bool
-    {  
+    {
         if (filter_var($string, FILTER_VALIDATE_EMAIL)) {
-            return true; 
+            return true;
         }
-        return false; 
+        return false;
     }
 
     public static function username(string $string): bool
-    {   
-        if(preg_match('/^[A-Za-z]{4}[0-9]{4}$/', $string)){
-            return true; 
+    {
+        if (preg_match('/^[A-Za-z]{4}[0-9]{4}$/', $string)) {
+            return true;
         }
         return false;
     }
 
     public static function password(string $string): bool
-    {   
+    {
         return self::empty($string);
     }
 
-    public static function isErrorResponse(object $response): bool {
-        if(isset($response->error)) {
-            return true;
-        }
-        if(isset($response->errors)) {
+    public static function isErrorResponse(object $response): bool
+    {
+        if (isset($response->error)) {
             return true;
         }
         return false;
     }
 
-    public static function getStatusCode(object $response): int {
-        if(isset($response->status)) {
+    public static function getStatusCode(object $response): int
+    {
+        if (isset($response->status)) {
             return $response->status;
-        }
-        if(isset($response->staus)) {
-            return $response->staus;
         }
         return 500;
     }

@@ -15,7 +15,6 @@ class Curl
     private $cache;
     private $cacheEnabled;
     private $cacheTTL = 300; // Cache TTL in seconds (adjust as needed)
-    public  $errors = [];
 
     public function __construct($url, $cacheEnabled = true)
     {
@@ -26,7 +25,7 @@ class Curl
         if ($this->cacheEnabled && PREDIS) {
             try {
                 $this->cache = new PredisClient(PREDIS);
-            } catch(\Predis\Connection\ConnectionException $e) {
+            } catch (\Predis\Connection\ConnectionException $e) {
                 echo $e->getMessage();
             }
         } else {
@@ -100,11 +99,11 @@ class Curl
 
         if ($this->cacheEnabled) {
             $this->cache->set(
-                $cacheKey, 
+                $cacheKey,
                 Secure::encrypt($this->response)
             );
             $this->cache->expire(
-                $cacheKey, 
+                $cacheKey,
                 $this->cacheTTL
             );
         }
@@ -121,15 +120,15 @@ class Curl
     private function convertHeaderArray($header)
     {
         return is_array($header) && !empty($header) ?
-            array_map(fn($key, $value) => "$key: $value", array_keys($header), $header) : false;
+            array_map(fn ($key, $value) => "$key: $value", array_keys($header), $header) : false;
     }
 
     private function handleResponse($statusCode, $response)
     {
         if ($statusCode >= 400) {
             return [
-                'staus' => $statusCode,
-                'error' => "Request failed with status code: $statusCode", 
+                'status' => $statusCode,
+                'error' => "Request failed with status code: $statusCode",
                 'response' => $this->response
             ];
         }

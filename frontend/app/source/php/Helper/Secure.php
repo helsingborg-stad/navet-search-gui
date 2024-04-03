@@ -1,6 +1,10 @@
 <?php
 
 namespace NavetSearch\Helper;
+
+use NavetSearch\Interfaces\AbstractSecure;
+use NavetSearch\Interfaces\AbstractConfig;
+
 /**
  * Class Secure
  *
@@ -10,11 +14,17 @@ namespace NavetSearch\Helper;
  *
  * @package NavetSearch\Helper
  */
-class Secure
+class Secure implements AbstractSecure
 {
-    private static $ciphering = "AES-128-CTR";
-    private static $vector = ENCRYPT_VECTOR; //Change to env var, only test key
-    private static $key = ENCRYPT_KEY; //Change to env var, only test key
+    private string $ciphering = "AES-128-CTR";
+    private string $vector;
+    private string $key;
+
+    public function __construct(AbstractConfig $config)
+    {
+        $this->vector = $config->get('ENCRYPT_VECTOR') ?? "";
+        $this->key = $config->get('ENCRYPT_KEY') ?? "";
+    }
 
     /**
      * Encrypts the provided data using AES-128-CTR encryption.
@@ -24,15 +34,15 @@ class Secure
      * @param mixed $data The data to be encrypted.
      * @return false|string|void The encrypted data, or false on failure.
      */
-    public static function encrypt($data)
-    {   
-        if(is_array($data) || is_object($data)) {
+    public function encrypt($data): string|false
+    {
+        if (is_array($data) || is_object($data)) {
             $data = json_encode($data);
         }
-        return openssl_encrypt($data, self::$ciphering, self::$key, 0, self::$vector);
+        return openssl_encrypt($data, $this->ciphering, $this->key, 0, $this->vector);
     }
 
-     /**
+    /**
      * Decrypts the provided encrypted data using AES-128-CTR decryption.
      *
      * If the decrypted data is a JSON string, it is converted back to an array or object.
@@ -40,10 +50,10 @@ class Secure
      * @param string $encryptedData The encrypted data to be decrypted.
      * @return mixed The decrypted data, or the original encrypted data on failure.
      */
-    public static function decrypt($encryptedData)
-    {   
-        $decrypted =  openssl_decrypt($encryptedData, self::$ciphering, self::$key, 0, self::$vector);
-        if(is_string($decrypted)) {
+    public function decrypt($encryptedData): mixed
+    {
+        $decrypted = openssl_decrypt($encryptedData, $this->ciphering, $this->key, 0, $this->vector);
+        if (is_string($decrypted)) {
             $decrypted = json_decode($decrypted);
         }
         return $decrypted;

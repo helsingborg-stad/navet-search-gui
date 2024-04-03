@@ -1,15 +1,16 @@
-<?php 
+<?php
 
 namespace NavetSearch\Controller;
 
-use \NavetSearch\Helper\Redirect as Redirect; 
-use \NavetSearch\Helper\User as User;
-use \NavetSearch\Helper\Curl as Curl;
+use \NavetSearch\Helper\Redirect as Redirect;
+use \NavetSearch\Interfaces\AbstractServices as AbstractServices;
+use \NavetSearch\Helper\Format;
 
-abstract class BaseController {
-
+abstract class BaseController
+{
   public $data = [];
   protected $action = null;
+  protected AbstractServices $services;
 
   /**
    * Constructor for the class.
@@ -22,36 +23,39 @@ abstract class BaseController {
    *
    * @return void
    */
-  public function __construct($child) {
+  public function __construct(string $child, AbstractServices $services)
+  {
+    $this->services = $services;
 
     //Listen for actions 
-    $this->action = $this->initActionListener(); 
+    $this->action = $this->initActionListener();
 
     //Trigger action 
-    if(method_exists($child, "action".ucfirst($this->action))) {
-      $this->{"action".ucfirst($this->action)}($_REQUEST); 
+    if (method_exists($child, "action" . ucfirst($this->action))) {
+      $this->{"action" . ucfirst($this->action)}($_REQUEST);
     }
 
+    $session = $this->services->getSessionService();
+
     //Trigger global action
-    if(method_exists(__CLASS__, "action".ucfirst($this->action))) {
-      $this->{"action".ucfirst($this->action)}($_REQUEST); 
+    if (method_exists(__CLASS__, "action" . ucfirst($this->action))) {
+      $this->{"action" . ucfirst($this->action)}($_REQUEST);
     }
 
     //Manifest data
     $this->data['assets'] = $this->getAssets();
 
     //Is authenticated user
-    $this->data['isAuthenticated'] = User::isAuthenticated();
+    $this->data['isAuthenticated'] = $session->isValid();
 
     //Formatted user
-    $this->data['formattedUser']   = User::getFormattedUser();
+    $this->data['formattedUser']   = Format::user($session->get());
+    //Get current user
+    $this->data['user'] = $session->get();
 
     //Debugging
-    if(Curl::$responses && DEBUG == true) {
-      $this->data['debugResponse'] = print_r(
-        Curl::$responses,
-        true
-      );
+    if ($this->services->getConfigService()->get('DEBUG') == true) {
+      $this->data['debugResponse'] = true;
     } else {
       $this->data['debugResponse'] = false;
     }
@@ -67,11 +71,12 @@ abstract class BaseController {
    *
    * @return void
    */
-  public function actionLogout() {
-    User::logout(); 
-    new Redirect('/', ['action' => 'logoutmsg']); 
+  public function actionLogout()
+  {
+    $this->services->getSessionService()->end();
+    new Redirect('/', ['action' => 'logoutmsg']);
   }
-  
+
   /**
    * Get the data as an array.
    *
@@ -79,9 +84,9 @@ abstract class BaseController {
    *
    * @return array The data as an associative array.
    */
-  public function getData() : array 
+  public function getData(): array
   {
-    return (array) $this->data; 
+    return (array) $this->data;
   }
 
   /**
@@ -95,11 +100,12 @@ abstract class BaseController {
    * @return string|false Returns the cleaned and formatted action if 'action' is set,
    *                     otherwise returns false.
    */
-  public function initActionListener() {
-    if(isset($_GET['action'])) {
+  public function initActionListener()
+  {
+    if (isset($_GET['action'])) {
       return $this->action = str_replace(' ', '', ucwords(str_replace('-', " ", $_GET['action'])));
     }
-    return $this->action = false; 
+    return $this->action = false;
   }
 
 
@@ -113,12 +119,13 @@ abstract class BaseController {
    * @return array|false Returns an associative array containing the assets from the manifest
    *                   file, or false if the file doesn't exist or cannot be decoded.
    */
-  public function getAssets() {
-    $revManifest = rtrim(BASEPATH,"/") . "/assets/dist/manifest.json";
+  public function getAssets()
+  {
+    $revManifest = rtrim(BASEPATH, "/") . "/assets/dist/manifest.json";
 
-    if(file_exists($revManifest)) {
+    if (file_exists($revManifest)) {
       $revManifestContents = file_get_contents($revManifest);
-      if($revManifestContentsDecoded = json_decode($revManifestContents)) {
+      if ($revManifestContentsDecoded = json_decode($revManifestContents)) {
         $assets = [];
         foreach ($revManifestContentsDecoded as $id => $file) {
           $fileType = pathinfo($file, PATHINFO_EXTENSION);
@@ -133,5 +140,4 @@ abstract class BaseController {
     }
     return false;
   }
-
 }

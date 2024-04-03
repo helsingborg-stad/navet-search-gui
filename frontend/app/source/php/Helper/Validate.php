@@ -2,7 +2,7 @@
 
 namespace NavetSearch\Helper;
 
-use \NavetSearch\Helper\Sanitize as Sanitize;
+use NavetSearch\Helper\Sanitize as Sanitize;
 
 class Validate
 {

@@ -65,8 +65,7 @@ class Request implements AbstractRequest
 
         curl_setopt_array($ch, $options);
 
-        $json = curl_exec($ch);
-        $response = json_decode($json);
+        $response = json_decode(curl_exec($ch));
 
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 

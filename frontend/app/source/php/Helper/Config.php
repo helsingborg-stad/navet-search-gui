@@ -13,9 +13,9 @@ class Config implements AbstractConfig
         $this->config = $this->parse($config);
     }
 
-    public function get(string $key): mixed
+    public function get(string $key, mixed $default = null): mixed
     {
-        return $this->config[$key] ?? null;
+        return $this->config[$key] ?  $this->config[$key] : $default;
     }
     /**
      * Configure the application environment variables.
@@ -35,9 +35,12 @@ class Config implements AbstractConfig
             'MS_NAVET_AUTH' => getenv('MS_NAVET_AUTH'),
             'ENCRYPT_VECTOR' => getenv('ENCRYPT_VECTOR'),
             'ENCRYPT_KEY' => getenv('ENCRYPT_KEY'),
+            'ENCRYPT_CIPHER' => getenv('ENCRYPT_CIPHER'),
             'PREDIS' => getenv('PREDIS'),
             'DEBUG' => getenv('DEBUG'),
-            'AD_GROUPS' => getenv('AD_GROUPS')
+            'AD_GROUPS' => getenv('AD_GROUPS'),
+            'SESSION_COOKIE_NAME' => getenv('SESSION_COOKIE_NAME'),
+            'SESSION_COOKIE_EXPIRES' => getenv('SESSION_COOKIE_EXPIRES'),
         );
 
         //Fallback to default

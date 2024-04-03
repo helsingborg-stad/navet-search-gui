@@ -33,12 +33,11 @@ class RuntimeServices implements AbstractServices
     {
         $this->config = new Config($config);
         $this->secure = new Secure($this->config);
-        $this->session = new Session($this->secure);
+        $this->session = new Session($this->config, $this->secure);
 
         if ($this->config->get('PREDIS')) {
             $this->cache = new RedisCache($this->config, $this->secure);
         } else {
-            echo "Using MemoryCache";
             $this->cache = new MemoryCache($this->secure);
         }
 

@@ -50,6 +50,7 @@ abstract class BaseController
 
     //Formatted user
     $this->data['formattedUser']   = Format::user($session->get());
+
     //Get current user
     $this->data['user'] = $session->get();
 

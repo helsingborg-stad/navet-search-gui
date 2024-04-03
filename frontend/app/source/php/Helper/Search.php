@@ -9,14 +9,23 @@ use NavetSearch\Interfaces\AbstractSearch;
 
 class Search implements AbstractSearch
 {
-    private AbstractConfig $config;
+    private string $baseUrl;
+    private string $apiKey;
     private AbstractRequest $request;
     private AbstractSession $session;
 
     public function __construct(AbstractConfig $config, AbstractRequest $request, AbstractSession $session)
     {
+        // Read config
+        $this->baseUrl = $config->get(
+            'MS_NAVET',
+            ""
+        );
+        $this->apiKey = $config->get(
+            'MS_NAVET_AUTH',
+            ""
+        );
         $this->request = $request;
-        $this->config = $config;
         $this->session = $session;
     }
 
@@ -131,21 +140,21 @@ class Search implements AbstractSearch
      */
     private function searchPerson($pnr)
     {
-        return $this->request->post($this->config->get('MS_NAVET') . '/lookUpAddress', [
+        return $this->request->post($this->baseUrl . '/lookUpAddress', [
             "personNumber" => Sanitize::number($pnr),
             "searchedBy"  => $this->session->getAccountName()
         ], [
-            'X-ApiKey' => $this->config->get('MS_NAVET_AUTH')
+            'X-ApiKey' => $this->apiKey
         ]);
     }
 
     private function searchRelations($pnr)
     {
-        return $this->request->post($this->config->get('MS_NAVET') . '/lookUpFamilyRelations', [
+        return $this->request->post($this->baseUrl . '/lookUpFamilyRelations', [
             "personNumber" => Sanitize::number($pnr),
             "searchedBy"  => $this->session->getAccountName()
         ], [
-            'X-ApiKey' => $this->config->get('MS_NAVET_AUTH')
+            'X-ApiKey' => $this->apiKey
         ]);
     }
 

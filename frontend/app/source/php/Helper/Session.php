@@ -3,17 +3,28 @@
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractSecure;
+use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Interfaces\AbstractSession;
 
 
 class Session implements AbstractSession
 {
-    private static $authCookieName = "navet_auth_cookie";
-    private static $authLength = 60 * 60 * 10;
+    private string $authCookieName;
+    private string $authLength;
     private AbstractSecure $secure;
 
-    public function __construct(AbstractSecure $secure)
+    public function __construct(AbstractConfig $config, AbstractSecure $secure)
     {
+        // Read config
+        $this->authCookieName = $config->get(
+            'SESSION_COOKIE_NAME',
+            "navet_auth_cookie"
+        );
+        $this->authLength = $config->get(
+            'SESSION_COOKIE_EXPIRES',
+            (string) 60 * 60 * 10
+        );
+        // Encryption/Decryption
         $this->secure = $secure;
     }
 
@@ -25,11 +36,11 @@ class Session implements AbstractSession
      */
     public function set($data): bool
     {
-        $couldSet = setcookie(
-            self::$authCookieName,
+        return setcookie(
+            $this->authCookieName,
             $this->secure->encrypt($data),
             [
-                'expires' => time() + self::$authLength,
+                'expires' => time() + $this->authLength,
                 'path' => '/',
                 'domain' => $_SERVER['SERVER_NAME'] ?? '',
                 'secure' => isset($_SERVER['HTTPS']) ? true : false,
@@ -37,11 +48,6 @@ class Session implements AbstractSession
                 'samesite' => 'None'
             ]
         );
-
-        if ($couldSet) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -61,9 +67,9 @@ class Session implements AbstractSession
      */
     public function get(): mixed
     {
-        if (isset($_COOKIE[self::$authCookieName])) {
+        if (isset($_COOKIE[$this->authCookieName])) {
             $data = $this->secure->decrypt(
-                $_COOKIE[self::$authCookieName]
+                $_COOKIE[$this->authCookieName]
             );
             return $data;
         }
@@ -76,7 +82,7 @@ class Session implements AbstractSession
     public function end(): void
     {
         setcookie(
-            self::$authCookieName,
+            $this->authCookieName,
             null,
             [
                 'expires' => -1,

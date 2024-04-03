@@ -16,14 +16,25 @@ use NavetSearch\Interfaces\AbstractConfig;
  */
 class Secure implements AbstractSecure
 {
-    private string $ciphering = "AES-128-CTR";
+    private string $ciphering;
     private string $vector;
     private string $key;
 
     public function __construct(AbstractConfig $config)
     {
-        $this->vector = $config->get('ENCRYPT_VECTOR') ?? "";
-        $this->key = $config->get('ENCRYPT_KEY') ?? "";
+        // Read config
+        $this->ciphering = $config->get(
+            'ENCRYPT_CIPHER',
+            "AES-128-CTR"
+        );
+        $this->vector = $config->get(
+            'ENCRYPT_VECTOR',
+            ""
+        );
+        $this->key = $config->get(
+            'ENCRYPT_KEY',
+            ""
+        );
     }
 
     /**

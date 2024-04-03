@@ -31,4 +31,9 @@ final class ConfigTest extends TestCase
         // Make sure the values are equals
         $this->assertEquals($this->config->get("MS_NAVET_AUTH"), null);
     }
+    public function testRetreiveDefaultForUndefinedKey(): void
+    {
+        // Make sure the values are equals
+        $this->assertEquals($this->config->get("TEST_KEY_1", "DEFAULT"), "DEFAULT");
+    }
 }

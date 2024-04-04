@@ -10,8 +10,8 @@ use NavetSearch\Interfaces\AbstractResponse;
 
 class CachableRequest implements AbstractRequest
 {
-    private AbstractCache $cache;
-    private AbstractRequest $request;
+    protected AbstractCache $cache;
+    protected AbstractRequest $request;
 
     public function __construct(AbstractCache $cache, AbstractRequest $request)
     {

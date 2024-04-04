@@ -31,6 +31,15 @@ class Search implements AbstractSearch
         $this->session = $session;
     }
 
+    public function getApiKey(): string
+    {
+        return $this->apiKey;
+    }
+    public function getEndpoint(): string
+    {
+        return $this->baseUrl;
+    }
+
     public function find(string $pnr): array
     {
         $data = [

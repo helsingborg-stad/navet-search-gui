@@ -7,6 +7,7 @@ use NavetSearch\Helper\Config;
 use NavetSearch\Helper\Request;
 use NavetSearch\Helper\Response;
 use NavetSearch\Helper\Search;
+use NavetSearch\Helper\Session;
 use NavetSearch\Interfaces\AbstractSession;
 
 final class SearchTest extends TestCase
@@ -122,11 +123,10 @@ final class SearchTest extends TestCase
         return $this->createConfiguredMock(
             AbstractSession::class,
             [
-                'isValid' => false,
+                'isValidSession' => false,
                 'getAccountName' => 'unknown',
-                'get' => false,
-                'set' => true,
-                'end' => 0
+                'getSession' => false,
+                'setSession' => true,
             ],
         );
     }
@@ -205,5 +205,24 @@ final class SearchTest extends TestCase
         // Make sure the values are equals
         $this->assertEquals($result['searchFor'], "19000101-0101");
         $this->assertEquals($result['searchResult'], false);
+    }
+    public function testConfigValuesAreRespected(): void
+    {
+        $config = new Config(array(
+            "MS_NAVET" => "MS_NAVET_VALUE",
+            "MS_NAVET_AUTH" => "MS_NAVET_AUTH_VALUE"
+        ));
+        $search = new Search($config, new Request(), $this->getInvalidSessionMock());
+
+        $this->assertEquals($search->getEndpoint(), "MS_NAVET_VALUE");
+        $this->assertEquals($search->getApiKey(), "MS_NAVET_AUTH_VALUE");
+    }
+    public function testConfigHasDefaultValues(): void
+    {
+        $config = new Config(array());
+        $search = new Search($config, new Request(), $this->getInvalidSessionMock());
+
+        $this->assertEquals($search->getEndpoint(), "");
+        $this->assertEquals($search->getApiKey(), "");
     }
 }

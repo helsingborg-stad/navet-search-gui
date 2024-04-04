@@ -22,7 +22,7 @@ class Response implements AbstractResponse
     {
         return $this->status;
     }
-    public function getHash(): string|null
+    public function getHash(): ?string
     {
         return $this->hash;
     }

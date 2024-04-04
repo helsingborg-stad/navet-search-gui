@@ -11,7 +11,7 @@ use NavetSearch\Interfaces\AbstractCookie;
  */
 class MemoryCookie implements AbstractCookie
 {
-    private $values = [];
+    protected $values = [];
 
     public function set(string $key, mixed $data = "", mixed $options = null): bool
     {

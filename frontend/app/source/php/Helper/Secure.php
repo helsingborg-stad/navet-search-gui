@@ -18,14 +18,14 @@ use NavetSearch\Interfaces\AbstractConfig;
  */
 class Secure implements AbstractSecure
 {
-    private string $ciphering;
-    private string $vector;
-    private string $key;
+    protected string $cipher;
+    protected string $vector;
+    protected string $key;
 
     public function __construct(AbstractConfig $config)
     {
         // Read config
-        $this->ciphering = $config->getValue(
+        $this->cipher = $config->getValue(
             'ENCRYPT_CIPHER',
             'AES-128-CTR'
         );
@@ -37,6 +37,19 @@ class Secure implements AbstractSecure
             'ENCRYPT_KEY',
             'ABCDEFGHIJ'
         );
+    }
+
+    public function getEncryptVector(): string
+    {
+        return $this->vector;
+    }
+    public function getEncryptCipher(): string
+    {
+        return $this->cipher;
+    }
+    public function getEncryptKey(): string
+    {
+        return $this->key;
     }
 
     /**
@@ -52,7 +65,7 @@ class Secure implements AbstractSecure
         if (is_array($data) || is_object($data)) {
             $data = json_encode($data);
         }
-        return openssl_encrypt($data, $this->ciphering, $this->key, 0, $this->vector);
+        return openssl_encrypt($data, $this->cipher, $this->key, 0, $this->vector);
     }
 
     /**
@@ -65,7 +78,7 @@ class Secure implements AbstractSecure
      */
     public function decrypt($encryptedData): mixed
     {
-        $decrypted = openssl_decrypt($encryptedData, $this->ciphering, $this->key, 0, $this->vector);
+        $decrypted = openssl_decrypt($encryptedData, $this->cipher, $this->key, 0, $this->vector);
         if (is_string($decrypted)) {
             $decrypted = json_decode($decrypted);
         }

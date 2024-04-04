@@ -13,10 +13,10 @@ use NavetSearch\Helper\AuthException;
 
 class Auth implements AbstractAuth
 {
-    private AbstractRequest $request;
-    private ?AbstractSession $session;
-    private string $MS_AUTH;
-    private string|array $AD_GROUPS;
+    protected AbstractRequest $request;
+    protected ?AbstractSession $session;
+    protected string $MS_AUTH;
+    protected string|array $AD_GROUPS;
 
     public function __construct(AbstractConfig $config, AbstractRequest $request, ?AbstractSession $session = null)
     {
@@ -58,7 +58,7 @@ class Auth implements AbstractAuth
      *
      * @return bool The result indicating whether the user is authorized.
      */
-    private function isAuthorized($login)
+    protected function isAuthorized($login)
     {
         //No group lock defined
         if (empty('AD_GROUPS')) {
@@ -89,7 +89,7 @@ class Auth implements AbstractAuth
      * @return array An associative array is being returned where the keys are extracted from the input string
      * `` and the values are arrays of corresponding values.
      */
-    private function parseMemberOf($memberOf)
+    protected function parseMemberOf($memberOf)
     {
         $groups = [];
         $parts = explode(',', $memberOf);
@@ -120,7 +120,7 @@ class Auth implements AbstractAuth
      * @return bool|null Returns true if the validation succeeds, false if it fails,
      *                   and null if the validation result is inconclusive.
      */
-    private function validateLogin($data, $username)
+    protected function validateLogin($data, $username)
     {
         if (!is_object($data)) {
             return false;

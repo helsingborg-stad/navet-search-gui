@@ -11,10 +11,10 @@ use NavetSearch\Interfaces\AbstractSearch;
 
 class Search implements AbstractSearch
 {
-    private string $baseUrl;
-    private string $apiKey;
-    private AbstractRequest $request;
-    private AbstractSession $session;
+    protected string $baseUrl;
+    protected string $apiKey;
+    protected AbstractRequest $request;
+    protected AbstractSession $session;
 
     public function __construct(AbstractConfig $config, AbstractRequest $request, AbstractSession $session)
     {
@@ -140,7 +140,7 @@ class Search implements AbstractSearch
      * @throws RedirectException If the pnr is not in the correct format or if the search is unsuccessful,
      *                           a RedirectException is thrown to redirect the user to the appropriate page.
      */
-    private function searchPerson($pnr)
+    protected function searchPerson($pnr)
     {
         return $this->request->post($this->baseUrl . '/lookUpAddress', [
             "personNumber" => Sanitize::number($pnr),
@@ -150,7 +150,7 @@ class Search implements AbstractSearch
         ]);
     }
 
-    private function searchRelations($pnr)
+    protected function searchRelations($pnr)
     {
         return $this->request->post($this->baseUrl . '/lookUpFamilyRelations', [
             "personNumber" => Sanitize::number($pnr),
@@ -170,7 +170,7 @@ class Search implements AbstractSearch
      *
      * @throws \Exception If there is an issue with the Curl request or processing the API response.
      */
-    private function searchFamilyRelations($data, $relevantKey = 'relationsToFolkbokforda')
+    protected function searchFamilyRelations($data, $relevantKey = 'relationsToFolkbokforda')
     {
         $stack = false;
         $predefinedCodes = ['FA', 'MO', 'VF', 'B', 'M'];
@@ -213,7 +213,7 @@ class Search implements AbstractSearch
      *
      * @return string The constructed readable text string with person's name, age, and address.
      */
-    private function createReadableText($data, $pnr)
+    protected function createReadableText($data, $pnr)
     {
         if (empty((array) $data->address)) {
             return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr) . " år gammal och har ingen registrerad bostadsadress.";
@@ -233,7 +233,7 @@ class Search implements AbstractSearch
      *
      * @return array An array representing a basic data list with key-value pairs.
      */
-    private function createBasicDataList($data, $pnr, $civilStatus)
+    protected function createBasicDataList($data, $pnr, $civilStatus)
     {
         return [
             ['columns' => [
@@ -274,7 +274,7 @@ class Search implements AbstractSearch
      *
      * @return array An array representing an address data list with key-value pairs.
      */
-    private function createAdressDataList($data)
+    protected function createAdressDataList($data)
     {
         if (empty((array) $data->address)) {
             return false;
@@ -302,7 +302,7 @@ class Search implements AbstractSearch
      * @param object $data The data containing property registration history.
      * @return array|false The property data list or false if the data is invalid or empty.
      */
-    private function getCivilStatus($data, $relevantKey = 'civilStatus')
+    protected function getCivilStatus($data, $relevantKey = 'civilStatus')
     {
         if (!isset($data->{$relevantKey})) {
             return ['code' => null, 'description' => null, 'date' => null];
@@ -325,7 +325,7 @@ class Search implements AbstractSearch
      * @param object $data The data containing property registration history.
      * @return array|false The property data list or false if the data is invalid or empty.
      */
-    private function getPropertyData($data, $relevantKey = 'propertyRegistrationHistory')
+    protected function getPropertyData($data, $relevantKey = 'propertyRegistrationHistory')
     {
         if (!isset($data->{$relevantKey})) {
             return false;
@@ -366,7 +366,7 @@ class Search implements AbstractSearch
      *
      * @return array An array representing an address data list with key-value pairs.
      */
-    private function createRelationsDataList($data)
+    protected function createRelationsDataList($data)
     {
         $stack = [];
         foreach ($data as $identityNumber => $relations) {

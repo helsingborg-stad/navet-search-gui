@@ -8,13 +8,16 @@ use NavetSearch\Interfaces\AbstractConfig;
 
 class Config implements AbstractConfig
 {
-    private array $config;
+    protected array $config;
 
     public function __construct(array $config)
     {
         $this->config = $this->parse($config);
     }
-
+    public function getValues(): array
+    {
+        return $this->config;
+    }
     public function getValue(string $key, mixed $default = null): mixed
     {
         return isset($this->config[$key]) && $this->config[$key] !== false ? $this->config[$key] : $default;
@@ -28,7 +31,7 @@ class Config implements AbstractConfig
      *
      * @return void
      */
-    private function parse(array $config): array
+    protected function parse(array $config): array
     {
         //Get env vars
         $env = array(

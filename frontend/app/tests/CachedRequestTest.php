@@ -12,9 +12,6 @@ use NavetSearch\Interfaces\AbstractRequest;
 
 final class CachedRequestTest extends TestCase
 {
-    protected function setUp(): void
-    {
-    }
     public function testReturnValueFromCache(): void
     {
         // Mock Requestclass

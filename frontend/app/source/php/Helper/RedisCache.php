@@ -12,8 +12,8 @@ use \NavetSearch\Interfaces\AbstractResponse;
 
 class RedisCache implements AbstractCache
 {
-    private $cache = null;
-    private $secure = null;
+    protected $cache = null;
+    protected $secure = null;
 
     public function __construct(AbstractConfig $config, ?AbstractSecure $secure = null)
     {

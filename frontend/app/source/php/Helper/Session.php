@@ -11,10 +11,10 @@ use NavetSearch\Interfaces\AbstractCookie;
 
 class Session implements AbstractSession
 {
-    private string $name;
-    private string $expires;
-    private AbstractSecure $secure;
-    private AbstractCookie $cookie;
+    protected string $name;
+    protected string $expires;
+    protected AbstractSecure $secure;
+    protected AbstractCookie $cookie;
 
     public function __construct(AbstractConfig $config, AbstractSecure $secure, AbstractCookie $cookie)
     {
@@ -31,6 +31,15 @@ class Session implements AbstractSession
         $this->secure = $secure;
         // Cookie management
         $this->cookie = $cookie;
+    }
+
+    public function getSessionName(): string
+    {
+        return $this->name;
+    }
+    public function getSessionExpiration(): int
+    {
+        return (int) $this->expires;
     }
 
     /**

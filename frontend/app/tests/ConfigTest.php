@@ -36,4 +36,26 @@ final class ConfigTest extends TestCase
         // Make sure the values are equals
         $this->assertEquals($this->config->getValue("TEST_KEY_1", "DEFAULT"), "DEFAULT");
     }
+
+    public function testConfigHasDefaultValues(): void
+    {
+        $config = new Config(array());
+
+        $this->assertEquals(
+            $config->getValues(),
+            array(
+                'MS_AUTH' => false,
+                'MS_NAVET' => false,
+                'MS_NAVET_AUTH' => false,
+                'ENCRYPT_VECTOR' => false,
+                'ENCRYPT_KEY' => false,
+                'ENCRYPT_CIPHER' => false,
+                'PREDIS' => false,
+                'DEBUG' => false,
+                'AD_GROUPS' => false,
+                'SESSION_COOKIE_NAME' => false,
+                'SESSION_COOKIE_EXPIRES' => false,
+            )
+        );
+    }
 }

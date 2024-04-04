@@ -11,4 +11,6 @@ interface AbstractSession
     public function end(): void;
     public function isValid(): bool;
     public function getAccountName(): string|false;
+    public function getSessionName(): string;
+    public function getSessionExpiration(): int;
 }

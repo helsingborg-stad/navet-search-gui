@@ -10,7 +10,7 @@ class Sanitize
   /** Make string numbers only */
   public static function number($string)
   {
-    return preg_replace('/[^0-9.]+/', '', $string);
+    return preg_replace('/[^0-9.]+/', '', (string) $string);
   }
 
   /** Always return a string */

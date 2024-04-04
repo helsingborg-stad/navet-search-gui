@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use \NavetSearch\Helper\MemoryCache;
 use \NavetSearch\Helper\Config;
 use NavetSearch\Helper\Secure;
+use NavetSearch\Helper\Response;
 
 final class MemoryCacheTest extends TestCase
 {
@@ -18,11 +19,11 @@ final class MemoryCacheTest extends TestCase
 
         $cache = new MemoryCache(null);
 
-        $cache->set('test', $value);
-        $item = $cache->get('test');
+        $cache->set(new Response(200, 'hash', (object) $value));
+        $item = $cache->get('hash');
 
         // Make sure the values are equals
-        $this->assertEquals((array)$item, $value);
+        $this->assertEquals((array) $item, $value);
     }
     public function testCanGetAndSetValueWithEncryption(): void
     {
@@ -37,8 +38,8 @@ final class MemoryCacheTest extends TestCase
 
         $cache = new MemoryCache(new Secure($config));
 
-        $cache->set('test', $value);
-        $item = $cache->get('test');
+        $cache->set(new Response(200, 'hash', (object) $value));
+        $item = $cache->get('hash');
 
         // Make sure the values are equals
         $this->assertEquals((array)$item, $value);

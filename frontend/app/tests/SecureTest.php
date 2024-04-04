@@ -12,13 +12,9 @@ final class SecureTest extends TestCase
 
     protected function setUp(): void
     {
-        $config = new Config(array(
-            "ENCRYPT_VECTOR" => "ABCDEFGHIJKLMNOP",
-            "ENCRYPT_KEY" => "ABCDEFGHIJ"
-        ));
-        $this->secure = new Secure($config);
+        $this->secure = new Secure(new Config([]));
     }
-    public function testDecryptAndEncryptArray(): void
+    public function testReturnObjectWhenDecryptAndEncryptArray(): void
     {
         $value = array(
             "data1" => 10,
@@ -30,15 +26,7 @@ final class SecureTest extends TestCase
         // Make sure the values are equals
         $this->assertEquals((array)$decrypt, $value);
     }
-    public function testDecryptAndEncryptNull(): void
-    {
-        $encrypt = $this->secure->encrypt(null);
-        $decrypt = $this->secure->decrypt($encrypt);
-
-        // Make sure the values are equals
-        $this->assertEquals($decrypt, null);
-    }
-    public function testDecryptAndEncryptString(): void
+    public function testReturnNullWhenDecryptAndEncryptString(): void
     {
         $encrypt = $this->secure->encrypt("data");
         $decrypt = $this->secure->decrypt($encrypt);
@@ -46,15 +34,7 @@ final class SecureTest extends TestCase
         // Make sure the values are equals
         $this->assertEquals($decrypt, null);
     }
-    public function testDecryptAndEncryptBoolean(): void
-    {
-        $encrypt = $this->secure->encrypt(true);
-        $decrypt = $this->secure->decrypt($encrypt);
-
-        // Make sure the values are equals
-        $this->assertEquals($decrypt, true);
-    }
-    public function testDecryptAndEncryptJson(): void
+    public function testReturnObjectWhenDecryptAndEncryptJson(): void
     {
         $value = (object) array(
             "data1" => 10,

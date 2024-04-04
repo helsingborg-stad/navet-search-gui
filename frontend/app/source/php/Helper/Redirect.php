@@ -1,18 +1,21 @@
-<?php 
+<?php
+
+declare(strict_types=1);
 
 namespace NavetSearch\Helper;
 
 class Redirect
 {
-  public function __construct($location, $query = []) {
+  public function __construct($location, $query = [])
+  {
 
-    if(is_array($query) && !empty($query)) {
-      $queryString = "?" .http_build_query($query); 
+    if (is_array($query) && !empty($query)) {
+      $queryString = "?" . http_build_query($query);
     } else {
-      $queryString = ""; 
+      $queryString = "";
     }
 
-    header("Location: " . $location . $queryString); 
-    exit; 
+    header("Location: " . $location . $queryString);
+    exit;
   }
 }

@@ -1,26 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractResponse;
 
 class Response implements AbstractResponse
 {
-    private int $status;
-    private object|null $response;
+    protected int $status;
+    protected ?string $hash;
+    protected ?object $content;
 
-    public function __construct(int $status, object|null $response)
+    public function __construct(int $status, ?string $hash, ?object $content)
     {
         $this->status = $status;
-        $this->response = $response;
+        $this->hash = $hash;
+        $this->content = $content;
     }
-    public function getStatus(): int
+    public function getStatusCode(): int
     {
         return $this->status;
     }
-    public function getBody(): object|null
+    public function getHash(): string|null
     {
-        return $this->response;
+        return $this->hash;
+    }
+    public function getContent(): ?object
+    {
+        return $this->content;
     }
     public function isErrorResponse(): bool
     {

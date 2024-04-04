@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Enums\AuthErrorReason;

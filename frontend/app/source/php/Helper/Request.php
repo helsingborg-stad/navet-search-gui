@@ -1,21 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractRequest;
-use NavetSearch\Interfaces\AbstractCache;
 use NavetSearch\Interfaces\AbstractResponse;
 
 class Request implements AbstractRequest
 {
-    private AbstractCache $cache;
-
-    public function __construct(AbstractCache $cache = null)
+    public function get(string $url, $queryParams = [], $headers = []): AbstractResponse
     {
-        $this->cache = $cache;
+        // Use GET
+        return $this->send('GET', $this->setQueryParams($url, $queryParams));
     }
 
-    private function setHeaders($headers)
+    public function post(string $url, $data = [], $headers = []): AbstractResponse
+    {
+        // Use POST
+        return $this->send('POST', $url, $data, $headers);
+    }
+
+    protected function setHeaders($headers)
     {
         if (is_array($headers) && !empty($headers)) {
             return array_map(fn ($key, $value) => "$key: $value", array_keys($headers), $headers);
@@ -23,29 +29,16 @@ class Request implements AbstractRequest
         return [];
     }
 
-    public function get($url, $queryParams = [], $headers = []): AbstractResponse
+    protected function setQueryParams(string $url, $queryParams = [])
     {
         if (!empty($queryParams)) {
-            $url .= '?' . http_build_query($queryParams);
+            return $url .= '?' . http_build_query($queryParams);
         }
-        return $this->sendRequest('GET', $url);
+        return $url;
     }
 
-    public function post($url, $data = [], $headers = []): AbstractResponse
+    protected function send($method, $url, $data = null, $headers = null): AbstractResponse
     {
-        return $this->sendRequest('POST', $url, $data, $headers);
-    }
-
-    private function sendRequest($method, $url, $data = null, $headers = null): AbstractResponse
-    {
-        // Format cache-key
-        $key = $method . $url . json_encode($data);
-
-        // Fetch from cache
-        if ($this->cache && $cached = $this->cache->get($key)) {
-            return new Response(200, $cached);
-        }
-        // Fetch from http
         $ch = curl_init();
 
         $options = [
@@ -65,26 +58,26 @@ class Request implements AbstractRequest
 
         curl_setopt_array($ch, $options);
 
-        $response = json_decode(curl_exec($ch));
-
+        $response = null;
+        if (($json = curl_exec($ch)) !== false) {
+            $response = json_decode($json);
+        }
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
 
-        // Save to cache
-        $this->cache && $this->cache->set($key, $response);
-        return $this->handleResponse($statusCode, $response);
+        return $this->createResponse($statusCode, $response);
     }
 
-    private function handleResponse($statusCode, $response)
+    protected function createResponse(int $statusCode, mixed $content): AbstractResponse
     {
         if ($statusCode >= 400) {
-            return new Response($statusCode, (object)[
+            return new Response($statusCode, null, (object)[
                 'status' => $statusCode,
                 'error' => "Request failed with status code: $statusCode",
-                'response' => $response
+                'response' => (object) $content
             ]);
         }
-        return new Response(200, (object)$response);
+        return new Response(200, null, (object) $content);
     }
 }

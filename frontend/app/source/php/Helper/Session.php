@@ -1,31 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractSecure;
 use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Interfaces\AbstractSession;
-
+use NavetSearch\Interfaces\AbstractCookie;
 
 class Session implements AbstractSession
 {
-    private string $authCookieName;
-    private string $authLength;
+    private string $name;
+    private string $expires;
     private AbstractSecure $secure;
+    private AbstractCookie $cookie;
 
-    public function __construct(AbstractConfig $config, AbstractSecure $secure)
+    public function __construct(AbstractConfig $config, AbstractSecure $secure, AbstractCookie $cookie)
     {
         // Read config
-        $this->authCookieName = $config->get(
+        $this->name = $config->getValue(
             'SESSION_COOKIE_NAME',
             "navet_auth_cookie"
         );
-        $this->authLength = $config->get(
+        $this->expires = (string) $config->getValue(
             'SESSION_COOKIE_EXPIRES',
             (string) 60 * 60 * 10
         );
         // Encryption/Decryption
         $this->secure = $secure;
+        // Cookie management
+        $this->cookie = $cookie;
     }
 
     /**
@@ -34,19 +39,15 @@ class Session implements AbstractSession
      * @param mixed $data The user data to be encrypted and stored in the authentication cookie.
      * @return bool Returns true if the cookie is successfully set, false otherwise.
      */
-    public function set($data): bool
+    public function set(mixed $data): bool
     {
-        return setcookie(
-            $this->authCookieName,
+        $options = [
+            'expires' => (time() + (int) $this->expires)
+        ];
+        return $this->cookie->set(
+            $this->name,
             $this->secure->encrypt($data),
-            [
-                'expires' => time() + $this->authLength,
-                'path' => '/',
-                'domain' => $_SERVER['SERVER_NAME'] ?? '',
-                'secure' => isset($_SERVER['HTTPS']) ? true : false,
-                'httponly' => false,
-                'samesite' => 'None'
-            ]
+            $options
         );
     }
 
@@ -67,11 +68,10 @@ class Session implements AbstractSession
      */
     public function get(): mixed
     {
-        if (isset($_COOKIE[$this->authCookieName])) {
-            $data = $this->secure->decrypt(
-                $_COOKIE[$this->authCookieName]
-            );
-            return $data;
+        $value = $this->cookie->get($this->name);
+
+        if (isset($value)) {
+            return $this->secure->decrypt($value);
         }
         return false;
     }
@@ -81,25 +81,19 @@ class Session implements AbstractSession
      */
     public function end(): void
     {
-        setcookie(
-            $this->authCookieName,
-            null,
-            [
-                'expires' => -1,
-                'path' => '/',
-                'domain' => $_SERVER['SERVER_NAME'] ?? '',
-                'secure' => isset($_SERVER['HTTPS']) ? true : false,
-                'httponly' => false,
-                'samesite' => 'None'
-            ]
-        );
+        $this->cookie->set($this->name);
     }
 
-    public function getAccountName(): string
+    /**
+     * Returns the account name as stored in the cookie data
+     * 
+     * @return string The accountname of the userdata
+     */
+    public function getAccountName(): string|false
     {
         if ($session = $this->get()) {
             return $session->samaccountname;
         }
-        return 'unknown';
+        return false;
     }
 }

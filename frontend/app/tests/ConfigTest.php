@@ -16,24 +16,24 @@ final class ConfigTest extends TestCase
             "TEST_KEY_1" => "ABCDEF"
         ));
     }
-    public function testRetreiveKnownKeySuccessfully(): void
+    public function testReturnsValueOfKnownKeySuccessfully(): void
     {
         // Make sure the values are equals
-        $this->assertEquals($this->config->get("ENCRYPT_VECTOR"), "ABCDEFGHIJKLMNOP");
+        $this->assertEquals($this->config->getValue("ENCRYPT_VECTOR"), "ABCDEFGHIJKLMNOP");
     }
-    public function testRetreiveNullForUnknownKey(): void
+    public function testReturnsNullForUnknownKey(): void
     {
         // Make sure the values are equals
-        $this->assertEquals($this->config->get("TEST_KEY_1"), null);
+        $this->assertEquals($this->config->getValue("TEST_KEY_1"), null);
     }
-    public function testRetreiveNullForUndefinedKey(): void
+    public function testReturnsNullForUndefinedKey(): void
     {
         // Make sure the values are equals
-        $this->assertEquals($this->config->get("MS_NAVET_AUTH"), null);
+        $this->assertEquals($this->config->getValue("MS_NAVET_AUTH"), null);
     }
-    public function testRetreiveDefaultForUndefinedKey(): void
+    public function testReturnsDefaultForUndefinedKey(): void
     {
         // Make sure the values are equals
-        $this->assertEquals($this->config->get("TEST_KEY_1", "DEFAULT"), "DEFAULT");
+        $this->assertEquals($this->config->getValue("TEST_KEY_1", "DEFAULT"), "DEFAULT");
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractConfig;
@@ -13,9 +15,9 @@ class Config implements AbstractConfig
         $this->config = $this->parse($config);
     }
 
-    public function get(string $key, mixed $default = null): mixed
+    public function getValue(string $key, mixed $default = null): mixed
     {
-        return $this->config[$key] ?  $this->config[$key] : $default;
+        return isset($this->config[$key]) && $this->config[$key] !== false ? $this->config[$key] : $default;
     }
     /**
      * Configure the application environment variables.

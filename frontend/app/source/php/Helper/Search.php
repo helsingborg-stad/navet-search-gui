@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractRequest;
@@ -17,11 +19,11 @@ class Search implements AbstractSearch
     public function __construct(AbstractConfig $config, AbstractRequest $request, AbstractSession $session)
     {
         // Read config
-        $this->baseUrl = $config->get(
+        $this->baseUrl = $config->getValue(
             'MS_NAVET',
             ""
         );
-        $this->apiKey = $config->get(
+        $this->apiKey = $config->getValue(
             'MS_NAVET_AUTH',
             ""
         );
@@ -44,28 +46,28 @@ class Search implements AbstractSearch
 
             //Get family relations
             $data['searchResultFamilyRelations'] = $this->searchFamilyRelations(
-                $relations->getBody()
+                $relations->getContent()
             );
 
             //Get property data
             $data['searchResultPropertyData'] = $this->getPropertyData(
-                $relations->getBody()
+                $relations->getContent()
             );
 
             $data['basicData'] = [];
 
-            if ($this->isDeregistered($person->getBody())) {
+            if ($this->isDeregistered($person->getContent())) {
                 $data['basicData']  = $this->createBasicDataList(
-                    $person->getBody(),
+                    $person->getContent(),
                     Format::socialSecuriyNumber($pnr),
-                    $this->getCivilStatus($relations->getBody())
+                    $this->getCivilStatus($relations->getContent())
                 );
 
                 //Create deregistration state
                 $data['isDeregistered'] = true;
                 $data['deregistrationReason'] = $this->getDeristrationSentence(
-                    $person->getBody()->deregistrationReason,
-                    $person->getBody()->deregistrationDate ?? null
+                    $person->getContent()->deregistrationReason,
+                    $person->getContent()->deregistrationDate ?? null
                 );
             } else {
 
@@ -74,20 +76,20 @@ class Search implements AbstractSearch
 
                 //Request basic data table
                 $data['basicData']  = $this->createBasicDataList(
-                    $person->getBody(),
+                    $person->getContent(),
                     Format::socialSecuriyNumber($pnr),
-                    $this->getCivilStatus($relations->getBody())
+                    $this->getCivilStatus($relations->getContent())
                 );
 
                 //Request the readable string
                 $data['readableResult'] = $this->createReadableText(
-                    $person->getBody(),
+                    $person->getContent(),
                     $pnr
                 );
 
                 //Request adress data table
                 $data['adressData'] = $this->createAdressDataList(
-                    $person->getBody()
+                    $person->getContent()
                 );
             }
         }
@@ -370,7 +372,7 @@ class Search implements AbstractSearch
         foreach ($data as $identityNumber => $relations) {
             $stack[] = [
                 'columns' => [
-                    '<a href="/sok/?action=sok&pnr=' . $identityNumber . '">' . Format::socialSecuriyNumber($identityNumber) . '</a>',
+                    '<a href="/sok/?action=sok&pnr=' . $identityNumber . '">' . Format::socialSecuriyNumber((string)$identityNumber) . '</a>',
                     $relations['FA'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['FA'])) : '-',
                     $relations['MO'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['MO'])) : '-',
                     $relations['VF'] ? '✕' . Format::addPharanthesis(Sanitize::string($relations['VF'])) : '-',

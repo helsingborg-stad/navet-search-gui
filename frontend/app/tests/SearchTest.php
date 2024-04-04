@@ -174,8 +174,8 @@ final class SearchTest extends TestCase
         $request = $this->createPartialMock(Request::class, ['post']);
         $request->expects($this->any())
             ->method('post')->willReturnOnConsecutiveCalls(
-                new Response(200, json_decode($this->person)),
-                new Response(200, json_decode($this->relations)),
+                new Response(200, null, json_decode($this->person)),
+                new Response(200, null, json_decode($this->relations)),
             );
         // Set auhtorized groups
         $config = new Config(array());
@@ -193,8 +193,8 @@ final class SearchTest extends TestCase
         $mock = $this->createConfiguredMock(
             Request::class,
             [
-                'get' => new Response(200, null),
-                'post' => new Response(404, new stdClass()),
+                'get' => new Response(200, null, null),
+                'post' => new Response(404, null, new stdClass()),
             ],
         );
         // Set auhtorized groups

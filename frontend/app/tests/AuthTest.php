@@ -39,8 +39,8 @@ final class AuthTest extends TestCase
         $mock = $this->createConfiguredMock(
             AbstractRequest::class,
             [
-                'get' => new Response(200, null),
-                'post' => new Response(200, $this->data),
+                'get' => new Response(200, null, null),
+                'post' => new Response(200, null, $this->data),
             ],
         );
         // Set auhtorized groups
@@ -60,8 +60,8 @@ final class AuthTest extends TestCase
         $mock = $this->createConfiguredMock(
             AbstractRequest::class,
             [
-                'get' => new Response(200, null),
-                'post' => new Response(200, $this->data),
+                'get' => new Response(200, null, null),
+                'post' => new Response(200, null, $this->data),
             ],
         );
         // Set auhtorized groups
@@ -82,8 +82,8 @@ final class AuthTest extends TestCase
         $mock = $this->createConfiguredMock(
             AbstractRequest::class,
             [
-                'get' => new Response(200, null),
-                'post' => new Response(200, new stdClass()),
+                'get' => new Response(200, null, null),
+                'post' => new Response(200, null, new stdClass()),
             ],
         );
         // Set auhtorized groups
@@ -104,8 +104,8 @@ final class AuthTest extends TestCase
         $mock = $this->createConfiguredMock(
             AbstractRequest::class,
             [
-                'get' => new Response(200, null),
-                'post' => new Response(401, null),
+                'get' => new Response(200, null, null),
+                'post' => new Response(401, null, null),
             ],
         );
         // Set auhtorized groups

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Enums\AuthErrorReason;
@@ -16,12 +18,12 @@ class Auth implements AbstractAuth
     private string $MS_AUTH;
     private string|array $AD_GROUPS;
 
-    public function __construct(AbstractConfig $config, AbstractRequest $request, AbstractSession $session = null)
+    public function __construct(AbstractConfig $config, AbstractRequest $request, ?AbstractSession $session = null)
     {
         $this->request = $request;
         $this->session = $session;
-        $this->MS_AUTH = rtrim($config->get('MS_AUTH') ?? "", "/");
-        $this->AD_GROUPS = $config->get('AD_GROUPS') ?? "";
+        $this->MS_AUTH = rtrim($config->getValue('MS_AUTH', ""), "/");
+        $this->AD_GROUPS = $config->getValue('AD_GROUPS', "");
     }
 
     public function authenticate(string $name, string $password): object
@@ -35,7 +37,7 @@ class Auth implements AbstractAuth
             throw new AuthException(AuthErrorReason::HttpError);
         }
         // Check response data
-        $data = $response->getBody()->{0};
+        $data = $response->getContent()->{0};
         if (!$this->validateLogin($data, $name)) {
             throw new AuthException(AuthErrorReason::InvalidCredentials);
         }

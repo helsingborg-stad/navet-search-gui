@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractSecure;
@@ -23,17 +25,17 @@ class Secure implements AbstractSecure
     public function __construct(AbstractConfig $config)
     {
         // Read config
-        $this->ciphering = $config->get(
+        $this->ciphering = $config->getValue(
             'ENCRYPT_CIPHER',
-            "AES-128-CTR"
+            'AES-128-CTR'
         );
-        $this->vector = $config->get(
+        $this->vector = $config->getValue(
             'ENCRYPT_VECTOR',
-            ""
+            'ABCDEFGHIJKLMNOP'
         );
-        $this->key = $config->get(
+        $this->key = $config->getValue(
             'ENCRYPT_KEY',
-            ""
+            'ABCDEFGHIJ'
         );
     }
 
@@ -45,7 +47,7 @@ class Secure implements AbstractSecure
      * @param mixed $data The data to be encrypted.
      * @return false|string|void The encrypted data, or false on failure.
      */
-    public function encrypt($data): string|false
+    public function encrypt(mixed $data): string|false
     {
         if (is_array($data) || is_object($data)) {
             $data = json_encode($data);

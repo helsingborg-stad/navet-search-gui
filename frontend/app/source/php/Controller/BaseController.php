@@ -55,7 +55,7 @@ abstract class BaseController
     $this->data['user'] = $session->get();
 
     //Debugging
-    if ($this->services->getConfigService()->get('DEBUG') == true) {
+    if ($this->services->getConfigService()->getValue('DEBUG') == true) {
       $this->data['debugResponse'] = true;
     } else {
       $this->data['debugResponse'] = false;

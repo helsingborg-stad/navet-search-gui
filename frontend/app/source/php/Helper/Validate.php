@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Helper\Sanitize as Sanitize;
@@ -38,21 +40,5 @@ class Validate
     public static function password(string $string): bool
     {
         return self::empty($string);
-    }
-
-    public static function isErrorResponse(object $response): bool
-    {
-        if (isset($response->error)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function getStatusCode(object $response): int
-    {
-        if (isset($response->status)) {
-            return $response->status;
-        }
-        return 500;
     }
 }

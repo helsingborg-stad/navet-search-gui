@@ -1,55 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractCache;
 use NavetSearch\Interfaces\AbstractSecure;
+use NavetSearch\Interfaces\AbstractResponse;
 
 class MemoryCache implements AbstractCache
 {
     private $cache = null;
-    private $secure = null;
+    private ?AbstractSecure $secure = null;
 
-    public function __construct(AbstractSecure $secure = null)
+    public function __construct(?AbstractSecure $secure = null)
     {
         $this->secure = $secure;
         $this->cache = array();
     }
-    public function set(string $key, mixed $data, int $ttl = 300): void
+    public function set(AbstractResponse $response, int $ttl = 300): void
     {
-        // Hash key
-        $key = $this->hashKey($key);
-
-        // Encrypt data
-        if ($this->secure) {
-            $data = $this->secure->encrypt($data);
-        } else {
-            if (!is_string($data)) {
-                $data = json_encode($data);
+        if ($key = $response->getHash()) {
+            // Get content
+            $content = $response->getContent();
+            if ($this->secure) {
+                // Encrypt
+                $content = $this->secure->encrypt($content);
+            } else {
+                // Convert objects to string
+                if (!is_string($content)) {
+                    $content = json_encode($content);
+                }
             }
+            // Push to array
+            $this->cache += [$key => $content];
         }
-        // Push to array
-        $this->cache += [$key => $data];
     }
 
     public function get(string $key): mixed
     {
-        // Get from cache
-        $key = $this->hashKey($key);
-
         if (isset($this->cache[$key])) {
-            $data = $this->cache[$key];
+            $content = $this->cache[$key];
             // Decrypt
             if ($this->secure) {
-                return $this->secure->decrypt($data);
+                return $this->secure->decrypt($content);
             }
             // Return (decrypted) data
-            return json_decode($data);
+            return json_decode($content);
         }
         return null;
-    }
-    private function hashKey(string $key): string
-    {
-        return "data:" . md5($key);
     }
 }

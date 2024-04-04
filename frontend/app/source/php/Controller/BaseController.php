@@ -46,13 +46,13 @@ abstract class BaseController
     $this->data['assets'] = $this->getAssets();
 
     //Is authenticated user
-    $this->data['isAuthenticated'] = $session->isValid();
+    $this->data['isAuthenticated'] = $session->isValidSession();
 
     //Formatted user
-    $this->data['formattedUser']   = Format::user($session->get());
+    $this->data['formattedUser']   = Format::user($session->getSession());
 
     //Get current user
-    $this->data['user'] = $session->get();
+    $this->data['user'] = $session->getSession();
 
     //Debugging
     if ($this->services->getConfigService()->getValue('DEBUG') == true) {
@@ -74,7 +74,7 @@ abstract class BaseController
    */
   public function actionLogout()
   {
-    $this->services->getSessionService()->end();
+    $this->services->getSessionService()->endSession();
     new Redirect('/', ['action' => 'logoutmsg']);
   }
 

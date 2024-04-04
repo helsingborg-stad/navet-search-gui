@@ -157,16 +157,12 @@ final class SearchTest extends TestCase
         return $this->createConfiguredMock(
             AbstractSession::class,
             [
-                'isValid' => true,
+                'isValidSession' => true,
                 'getAccountName' => 'samaccountname',
-                'get' => json_decode($json),
-                'set' => true,
+                'getSession' => json_decode($json),
+                'setSession' => true,
             ],
         );
-    }
-
-    protected function setUp(): void
-    {
     }
 
     public function testSuccessfullSearch(): void

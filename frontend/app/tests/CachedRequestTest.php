@@ -53,7 +53,7 @@ final class CachedRequestTest extends TestCase
 
         $response = $cachedRequest->post('url');
 
-        // Make sure the values are equals
+        // Expect response to not be cached
         $this->assertEquals($cache->get($response->getHash()), null);
     }
 }

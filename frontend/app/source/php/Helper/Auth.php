@@ -26,6 +26,15 @@ class Auth implements AbstractAuth
         $this->AD_GROUPS = $config->getValue('AD_GROUPS', "");
     }
 
+    public function getEndpoint(): string
+    {
+        return $this->MS_AUTH;
+    }
+    public function getGroups(): string
+    {
+        return $this->AD_GROUPS;
+    }
+
     public function authenticate(string $name, string $password): object
     {
         $response = $this->request->post($this->MS_AUTH . '/user/current', [
@@ -47,7 +56,7 @@ class Auth implements AbstractAuth
         }
         // Save to session
         if ($this->session) {
-            $this->session->set($data);
+            $this->session->setSession($data);
         }
         return $data;
     }
@@ -61,7 +70,7 @@ class Auth implements AbstractAuth
     protected function isAuthorized($login)
     {
         //No group lock defined
-        if (empty('AD_GROUPS')) {
+        if (empty($this->AD_GROUPS)) {
             return true;
         }
 

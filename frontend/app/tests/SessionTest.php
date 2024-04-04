@@ -10,7 +10,7 @@ use NavetSearch\Helper\Session;
 
 final class SessionTest extends TestCase
 {
-    private $session;
+    protected $session;
 
     protected function setUp(): void
     {
@@ -24,10 +24,17 @@ final class SessionTest extends TestCase
     }
     public function testRetreiveKnownKeySuccessfully(): void
     {
-        $this->session->set([
+        $this->session->setSession([
             "samaccountname" => "hardy"
         ]);
-        $this->assertEquals($this->session->isValid(), true);
+        $this->assertEquals($this->session->isValidSession(), true);
+    }
+    public function testRetreiveAccountNameSuccessfully(): void
+    {
+        $this->session->setSession([
+            "samaccountname" => "hardy"
+        ]);
+        $this->assertEquals($this->session->getAccountName(), "hardy");
     }
     public function testConfigValuesAreRespected(): void
     {

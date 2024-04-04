@@ -7,4 +7,5 @@ namespace NavetSearch\Interfaces;
 interface AbstractConfig
 {
     public function getValue(string $key, mixed $default = null): mixed;
+    public function getValues(): array;
 }

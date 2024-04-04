@@ -48,7 +48,7 @@ class Session implements AbstractSession
      * @param mixed $data The user data to be encrypted and stored in the authentication cookie.
      * @return bool Returns true if the cookie is successfully set, false otherwise.
      */
-    public function set(mixed $data): bool
+    public function setSession(mixed $data): bool
     {
         $options = [
             'expires' => (time() + (int) $this->expires)
@@ -65,9 +65,9 @@ class Session implements AbstractSession
      *
      * @return bool Returns true if the user is authenticated, false otherwise.
      */
-    public function isValid(): bool
+    public function isValidSession(): bool
     {
-        return (bool) $this->get();
+        return (bool) $this->getSession();
     }
 
     /**
@@ -75,7 +75,7 @@ class Session implements AbstractSession
      *
      * @return mixed|false The decrypted user data if the authentication cookie is present, false otherwise.
      */
-    public function get(): mixed
+    public function getSession(): mixed
     {
         $value = $this->cookie->get($this->name);
 
@@ -88,7 +88,7 @@ class Session implements AbstractSession
     /**
      * Logs out the user by deleting the authentication cookie.
      */
-    public function end(): void
+    public function endSession(): void
     {
         $this->cookie->set($this->name);
     }
@@ -100,7 +100,7 @@ class Session implements AbstractSession
      */
     public function getAccountName(): string|false
     {
-        if ($session = $this->get()) {
+        if ($session = $this->getSession()) {
             return $session->samaccountname;
         }
         return false;

@@ -15,7 +15,7 @@ class Home extends BaseController
     parent::__construct(__CLASS__, $services);
 
     //You shall pass
-    if ($services->getSessionService()->isValid()) {
+    if ($services->getSessionService()->isValidSession()) {
       new Redirect('/sok');
     }
   }

@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 use NavetSearch\Helper\Auth;
 use NavetSearch\Enums\AuthErrorReason;
 use NavetSearch\Helper\Config;
+use NavetSearch\Helper\MemoryCookie;
+use NavetSearch\Helper\Request;
 use NavetSearch\Helper\Response;
+use NavetSearch\Helper\Session;
 use NavetSearch\Interfaces\AbstractRequest;
 
 final class AuthTest extends TestCase
@@ -120,5 +123,24 @@ final class AuthTest extends TestCase
         $this->expectExceptionCode($error);
 
         $auth->authenticate("samaccountname", "samaccountname");
+    }
+    public function testConfigValuesAreRespected(): void
+    {
+        $config = new Config(array(
+            "MS_AUTH" => "MS_AUTH_VALUE/",
+            "AD_GROUPS" => "AD_GROUPS_VALUE"
+        ));
+        $auth = new Auth($config, new Request());
+
+        $this->assertEquals($auth->getEndpoint(), "MS_AUTH_VALUE");
+        $this->assertEquals($auth->getGroups(), "AD_GROUPS_VALUE");
+    }
+    public function testConfigHasDefaultValues(): void
+    {
+        $config = new Config(array());
+        $auth = new Auth($config, new Request());
+
+        $this->assertEquals($auth->getEndpoint(), "");
+        $this->assertEquals($auth->getGroups(), "");
     }
 }

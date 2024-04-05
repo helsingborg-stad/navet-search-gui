@@ -54,7 +54,7 @@ abstract class BaseController
       $this->data['formattedUser']   = $user->format();
 
       //Get current user
-      $this->data['user'] = (object)$user->jsonSerialize();
+      $this->data['user'] = $user;
     }
     //Debugging
     if ($this->services->getConfigService()->getValue('DEBUG') == true) {

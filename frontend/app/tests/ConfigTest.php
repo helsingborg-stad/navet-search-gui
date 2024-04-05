@@ -36,10 +36,19 @@ final class ConfigTest extends TestCase
         // Make sure the values are equals
         $this->assertEquals($this->config->getValue("TEST_KEY_1", "DEFAULT"), "DEFAULT");
     }
+    public function testReturnsArrays(): void
+    {
+        $config = new Config(array(
+            "AD_GROUPS" => ["a", "b"],
+        ));
+
+        // Make sure the values are equals
+        $this->assertEquals($config->getValue("AD_GROUPS"), ["a", "b"]);
+    }
 
     public function testConfigHasDefaultValues(): void
     {
-        $config = new Config(array());
+        $config = new Config();
 
         $this->assertEquals(
             $config->getValues(),

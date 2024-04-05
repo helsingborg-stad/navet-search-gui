@@ -6,6 +6,7 @@ namespace NavetSearch\Helper;
 
 use JsonSerializable;
 use NavetSearch\Interfaces\AbstractUser;
+use stdClass;
 
 class User implements AbstractUser, JsonSerializable
 {
@@ -16,15 +17,15 @@ class User implements AbstractUser, JsonSerializable
     private string $sn;
     private string $mail;
 
-    public function __construct(object $user)
+    public function __construct(object $user = new stdClass)
     {
-        // Map from response
-        $this->account = $user->samaccountname ?? "";
-        $this->groups = $user->memberof ?? "";
-        $this->company = $user->company ?? "";
-        $this->displayname = $user->displayname ?? "";
-        $this->sn = $user->sn ?? "";
-        $this->mail = $user->mail ?? "";
+        // Map from json
+        $this->account = Sanitize::string($user->samaccountname);
+        $this->groups = Sanitize::string($user->memberof);
+        $this->company = Sanitize::string($user->company);
+        $this->displayname = Sanitize::string($user->displayname);
+        $this->sn = Sanitize::string($user->sn);
+        $this->mail = Sanitize::string($user->mail);
     }
     public function getAccountName(): string
     {

@@ -20,27 +20,27 @@ final class UserTest extends TestCase
             "mail" => "mail_value",
         ]);
     }
-    public function testReturnAccountNameSuccessfully(): void
+    public function testReturnsAccountNameSuccessfully(): void
     {
         $this->assertEquals($this->user->getAccountName(), "samaccountname_value");
     }
-    public function testReturnLastNameSuccessfully(): void
+    public function testReturnsLastNameSuccessfully(): void
     {
         $this->assertEquals($this->user->getLastName(), "sn_value");
     }
-    public function testReturnDisplayNameSuccessfully(): void
+    public function testReturnsDisplayNameSuccessfully(): void
     {
         $this->assertEquals($this->user->getDisplayName(), "displayname_value");
     }
-    public function testReturnCompanyNameSuccessfully(): void
+    public function testReturnsCompanyNameSuccessfully(): void
     {
         $this->assertEquals($this->user->getCompanyName(), "company_value");
     }
-    public function testReturnMailAddressSuccessfully(): void
+    public function testReturnsMailAddressSuccessfully(): void
     {
         $this->assertEquals($this->user->getMailAddress(), "mail_value");
     }
-    public function testReturnGroupsSuccessfully(): void
+    public function testReturnsGroupsSuccessfully(): void
     {
         $this->assertEquals($this->user->getGroups(), [
             "A" => [0 => "a", 1 => "b"],
@@ -57,15 +57,14 @@ final class UserTest extends TestCase
             "administration" => "company_value",
         ]);
     }
-    public function testReturnDefaultValuesSuccessfully(): void
+    public function testReturnsDefaultValuesSuccessfully(): void
     {
-        $user = new User((object) []);
-
-        $this->assertEquals($user->getAccountName(), "");
-        $this->assertEquals($user->getLastName(), "");
-        $this->assertEquals($user->getDisplayName(), "");
-        $this->assertEquals($user->getCompanyName(), "");
-        $this->assertEquals($user->getMailAddress(), "");
-        $this->assertEquals($user->getGroups(), []);
+        $user = new User();
+        $this->assertEmpty($user->getAccountName());
+        $this->assertEmpty($user->getLastName());
+        $this->assertEmpty($user->getDisplayName());
+        $this->assertEmpty($user->getCompanyName());
+        $this->assertEmpty($user->getMailAddress());
+        $this->assertEmpty($user->getGroups());
     }
 }

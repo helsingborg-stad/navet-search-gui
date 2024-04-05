@@ -172,7 +172,7 @@ final class SearchTest extends TestCase
                 new Response(200, null, json_decode($this->relations)),
             );
         // Set auhtorized groups
-        $config = new Config(array());
+        $config = new Config();
 
         // Create auth module
         $search = new Search($config, $request, $this->getValidSessionMock());
@@ -192,7 +192,7 @@ final class SearchTest extends TestCase
             ],
         );
         // Set auhtorized groups
-        $config = new Config(array());
+        $config = new Config();
 
         // Create auth module
         $search = new Search($config, $mock, $this->getValidSessionMock());
@@ -217,7 +217,7 @@ final class SearchTest extends TestCase
     }
     public function testConfigHasDefaultValues(): void
     {
-        $config = new Config(array());
+        $config = new Config();
         $search = new Search($config, new Request(), $this->getInvalidSessionMock());
 
         $this->assertEquals($search->getEndpoint(), "");

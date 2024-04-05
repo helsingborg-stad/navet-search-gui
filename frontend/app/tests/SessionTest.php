@@ -15,7 +15,7 @@ final class SessionTest extends TestCase
 
     protected function setUp(): void
     {
-        $config = new Config(array());
+        $config = new Config();
         $secure = new Secure($config);
 
         $this->session = new Session($config, $secure, new MemoryCookie());
@@ -45,7 +45,7 @@ final class SessionTest extends TestCase
     }
     public function testConfigHasDefaultValues(): void
     {
-        $config = new Config(array());
+        $config = new Config();
         $session = new Session($config, new Secure($config), new MemoryCookie());
 
         $this->assertEquals($session->getSessionName(), "navet_auth_cookie");

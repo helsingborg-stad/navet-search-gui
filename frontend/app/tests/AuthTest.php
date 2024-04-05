@@ -88,7 +88,7 @@ final class AuthTest extends TestCase
             ],
         );
         // Set auhtorized groups
-        $config = new Config(array());
+        $config = new Config();
 
         // Create auth module
         $auth = new Auth($config, $mock);
@@ -110,7 +110,7 @@ final class AuthTest extends TestCase
             ],
         );
         // Set auhtorized groups
-        $config = new Config(array());
+        $config = new Config();
 
         // Create auth module
         $auth = new Auth($config, $mock);
@@ -135,7 +135,7 @@ final class AuthTest extends TestCase
     }
     public function testConfigHasDefaultValues(): void
     {
-        $config = new Config(array());
+        $config = new Config();
         $auth = new Auth($config, new Request());
 
         $this->assertEquals($auth->getEndpoint(), "");

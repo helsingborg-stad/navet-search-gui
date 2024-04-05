@@ -12,7 +12,7 @@ final class SecureTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->secure = new Secure(new Config([]));
+        $this->secure = new Secure(new Config());
     }
     public function testReturnObjectWhenDecryptAndEncryptArray(): void
     {
@@ -61,7 +61,7 @@ final class SecureTest extends TestCase
     }
     public function testConfigHasDefaultValues(): void
     {
-        $config = new Config(array());
+        $config = new Config();
         $session = new Secure($config);
 
         $this->assertEquals($session->getEncryptCipher(), "AES-128-CTR");

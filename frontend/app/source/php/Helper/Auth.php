@@ -47,7 +47,7 @@ class Auth implements AbstractAuth
             throw new AuthException(AuthErrorReason::HttpError);
         }
         // Check response data
-        $data = $response->getContent()->{0} ?? new stdClass();
+        $data = $response->getContent()->{0} ?? new stdClass;
         $user = new User($data);
 
         if (strtolower($user->getAccountName()) !== strtolower($name)) {

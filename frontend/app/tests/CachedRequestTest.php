@@ -25,7 +25,7 @@ final class CachedRequestTest extends TestCase
             ],
         );
         // Create a memory cache with encryption
-        $cache = new MemoryCache(new Secure(new Config(array())));
+        $cache = new MemoryCache(new Secure(new Config()));
 
         // Create an instance of CachableRequest
         $cachedRequest = new CachableRequest($cache, $request);
@@ -47,7 +47,7 @@ final class CachedRequestTest extends TestCase
                 ]),
             ],
         );
-        $cache = new MemoryCache(new Secure(new Config(array())));
+        $cache = new MemoryCache(new Secure(new Config()));
 
         $cachedRequest = new CachableRequest($cache, $request);
 

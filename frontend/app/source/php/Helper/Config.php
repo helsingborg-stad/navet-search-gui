@@ -10,7 +10,7 @@ class Config implements AbstractConfig
 {
     protected array $config;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
         $this->config = $this->parse($config);
     }
@@ -20,7 +20,8 @@ class Config implements AbstractConfig
     }
     public function getValue(string $key, mixed $default = null): mixed
     {
-        return isset($this->config[$key]) && $this->config[$key] !== false ? $this->config[$key] : $default;
+        return isset($this->config[$key]) &&
+            $this->config[$key] !== false ? $this->config[$key] : $default;
     }
     /**
      * Configure the application environment variables.

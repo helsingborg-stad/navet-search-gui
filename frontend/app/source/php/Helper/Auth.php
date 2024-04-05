@@ -5,39 +5,40 @@ declare(strict_types=1);
 namespace NavetSearch\Helper;
 
 use NavetSearch\Enums\AuthErrorReason;
-use NavetSearch\Interfaces\AbstractSession;
+use NavetSearch\Interfaces\AbstractUser;
 use NavetSearch\Interfaces\AbstractRequest;
 use NavetSearch\Interfaces\AbstractAuth;
 use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Helper\AuthException;
+use stdClass;
 
 class Auth implements AbstractAuth
 {
     protected AbstractRequest $request;
-    protected ?AbstractSession $session;
-    protected string $MS_AUTH;
-    protected string|array $AD_GROUPS;
+    protected string $endpoint;
+    protected string|array $allowedGroups;
 
-    public function __construct(AbstractConfig $config, AbstractRequest $request, ?AbstractSession $session = null)
+    public function __construct(AbstractConfig $config, AbstractRequest $request)
     {
         $this->request = $request;
-        $this->session = $session;
-        $this->MS_AUTH = rtrim($config->getValue('MS_AUTH', ""), "/");
-        $this->AD_GROUPS = $config->getValue('AD_GROUPS', "");
+        $this->endpoint = rtrim($config->getValue('MS_AUTH', ""), "/");
+        $this->allowedGroups = $config->getValue('AD_GROUPS', []);
     }
 
     public function getEndpoint(): string
     {
-        return $this->MS_AUTH;
-    }
-    public function getGroups(): string
-    {
-        return $this->AD_GROUPS;
+        return $this->endpoint;
     }
 
-    public function authenticate(string $name, string $password): object
+    public function getAllowedGroups(): string|array
     {
-        $response = $this->request->post($this->MS_AUTH . '/user/current', [
+        return $this->allowedGroups;
+    }
+
+    public function authenticate(string $name, string $password): AbstractUser
+    {
+        // Execute request
+        $response = $this->request->post($this->endpoint . '/user/current', [
             'username' => $name,
             'password' => Sanitize::password($password)
         ]);
@@ -46,19 +47,17 @@ class Auth implements AbstractAuth
             throw new AuthException(AuthErrorReason::HttpError);
         }
         // Check response data
-        $data = $response->getContent()->{0};
-        if (!$this->validateLogin($data, $name)) {
+        $data = $response->getContent()->{0} ?? new stdClass();
+        $user = new User($data);
+
+        if (strtolower($user->getAccountName()) !== strtolower($name)) {
             throw new AuthException(AuthErrorReason::InvalidCredentials);
         }
         // Check groups
-        if (!$this->isAuthorized($data)) {
+        if (!$this->isAuthorized($user->getGroups())) {
             throw new AuthException(AuthErrorReason::Unauthorized);
         }
-        // Save to session
-        if ($this->session) {
-            $this->session->setSession($data);
-        }
-        return $data;
+        return $user;
     }
     /**
      * Checks if the user is authorized to access the application.
@@ -67,76 +66,20 @@ class Auth implements AbstractAuth
      *
      * @return bool The result indicating whether the user is authorized.
      */
-    protected function isAuthorized($login)
+    protected function isAuthorized($groups)
     {
         //No group lock defined
-        if (empty($this->AD_GROUPS)) {
+        if (empty($this->allowedGroups)) {
             return true;
         }
 
-        $memberOf = $this->parseMemberOf($login->memberof);
-
-        if (array_key_exists('CN', $memberOf) && is_array($this->AD_GROUPS) && count($this->AD_GROUPS)) {
-            foreach ($this->AD_GROUPS as $group) {
-                if (in_array($group, $memberOf['CN'])) {
+        if (array_key_exists('CN', $groups) && is_array($this->allowedGroups) && count($this->allowedGroups)) {
+            foreach ($this->allowedGroups as $group) {
+                if (in_array($group, $groups['CN'])) {
                     return true;
                 }
             }
         }
-
         return false;
-    }
-
-    /**
-     * This PHP function parses a string representing group memberships and returns an associative array
-     * with group names as keys and an array of corresponding values.
-     * 
-     * @param memberOf The `parseMemberOf` function is designed to parse a string
-     * containing group memberships. The function splits the input string by commas and then further
-     * splits each part by the equal sign to extract the key-value pairs.
-     * 
-     * @return array An associative array is being returned where the keys are extracted from the input string
-     * `` and the values are arrays of corresponding values.
-     */
-    protected function parseMemberOf($memberOf)
-    {
-        $groups = [];
-        $parts = explode(',', $memberOf);
-        foreach ($parts as $part) {
-            $group = explode('=', $part);
-            $key = $group[0];
-            $value = $group[1];
-            if (!isset($groups[$key])) {
-                $groups[$key] = [];
-            }
-            $groups[$key][] = trim($value);
-        }
-        return $groups;
-    }
-
-    /**
-     * Validates the login response data.
-     *
-     * This private method validates the login response data by checking if it is an object,
-     * if it contains an error, and if the 'samaccountname' matches the provided username.
-     * If the response data is not an object or contains an error, the validation fails.
-     * If the 'samaccountname' matches the provided username, the validation succeeds.
-     * If none of these conditions are met, the validation result is null.
-     *
-     * @param mixed $data The response data received from the authentication server.
-     * @param string $username The username used for authentication.
-     *
-     * @return bool|null Returns true if the validation succeeds, false if it fails,
-     *                   and null if the validation result is inconclusive.
-     */
-    protected function validateLogin($data, $username)
-    {
-        if (!is_object($data)) {
-            return false;
-        }
-        if (isset($data->samaccountname) && strtolower($data->samaccountname) == strtolower($username)) {
-            return true;
-        }
-        return null;
     }
 }

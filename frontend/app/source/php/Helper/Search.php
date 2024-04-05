@@ -153,7 +153,7 @@ class Search implements AbstractSearch
     {
         return $this->request->post($this->baseUrl . '/lookUpAddress', [
             "personNumber" => Sanitize::number($pnr),
-            "searchedBy"  => $this->session->getAccountName()
+            "searchedBy"  => $this->session->getUser()->getAccountName()
         ], [
             'X-ApiKey' => $this->apiKey
         ]);
@@ -163,7 +163,7 @@ class Search implements AbstractSearch
     {
         return $this->request->post($this->baseUrl . '/lookUpFamilyRelations', [
             "personNumber" => Sanitize::number($pnr),
-            "searchedBy"  => $this->session->getAccountName()
+            "searchedBy"  => $this->session->getUser()->getAccountName()
         ], [
             'X-ApiKey' => $this->apiKey
         ]);

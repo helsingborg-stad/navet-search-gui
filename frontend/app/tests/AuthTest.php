@@ -6,10 +6,8 @@ use PHPUnit\Framework\TestCase;
 use NavetSearch\Helper\Auth;
 use NavetSearch\Enums\AuthErrorReason;
 use NavetSearch\Helper\Config;
-use NavetSearch\Helper\MemoryCookie;
 use NavetSearch\Helper\Request;
 use NavetSearch\Helper\Response;
-use NavetSearch\Helper\Session;
 use NavetSearch\Interfaces\AbstractRequest;
 
 final class AuthTest extends TestCase
@@ -53,10 +51,10 @@ final class AuthTest extends TestCase
         $auth = new Auth($config, $mock);
 
         // Try authenticate
-        $result = $auth->authenticate("samaccountname", "samaccountname");
+        $user = $auth->authenticate("samaccountname", "samaccountname");
 
         // Make sure the values are equals
-        $this->assertEquals($result, $this->data->{0});
+        $this->assertEquals($user->getAccountName(), "samaccountname");
     }
     public function testUnauthorizedException(): void
     {
@@ -133,7 +131,7 @@ final class AuthTest extends TestCase
         $auth = new Auth($config, new Request());
 
         $this->assertEquals($auth->getEndpoint(), "MS_AUTH_VALUE");
-        $this->assertEquals($auth->getGroups(), "AD_GROUPS_VALUE");
+        $this->assertEquals($auth->getAllowedGroups(), "AD_GROUPS_VALUE");
     }
     public function testConfigHasDefaultValues(): void
     {
@@ -141,6 +139,6 @@ final class AuthTest extends TestCase
         $auth = new Auth($config, new Request());
 
         $this->assertEquals($auth->getEndpoint(), "");
-        $this->assertEquals($auth->getGroups(), "");
+        $this->assertEquals($auth->getAllowedGroups(), []);
     }
 }

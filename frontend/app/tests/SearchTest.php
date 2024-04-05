@@ -8,6 +8,7 @@ use NavetSearch\Helper\Request;
 use NavetSearch\Helper\Response;
 use NavetSearch\Helper\Search;
 use NavetSearch\Helper\Session;
+use NavetSearch\Helper\User;
 use NavetSearch\Interfaces\AbstractSession;
 
 final class SearchTest extends TestCase
@@ -124,8 +125,7 @@ final class SearchTest extends TestCase
             AbstractSession::class,
             [
                 'isValidSession' => false,
-                'getAccountName' => 'unknown',
-                'getSession' => false,
+                'getUser' => false,
                 'setSession' => true,
             ],
         );
@@ -158,9 +158,7 @@ final class SearchTest extends TestCase
             AbstractSession::class,
             [
                 'isValidSession' => true,
-                'getAccountName' => 'samaccountname',
-                'getSession' => json_decode($json),
-                'setSession' => true,
+                'getUser' => new User(json_decode($json)),
             ],
         );
     }

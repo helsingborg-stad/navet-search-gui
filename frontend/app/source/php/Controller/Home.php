@@ -59,7 +59,11 @@ class Home extends BaseController
 
     //Fetch user
     try {
-      $this->services->getAuthService()->authenticate($req->username, $req->password);
+      $user = $this->services->getAuthService()->authenticate(
+        $req->username,
+        $req->password
+      );
+      $this->services->getSessionService()->setSession($user);
     } catch (AuthException $e) {
       match (AuthErrorReason::from($e->getCode())) {
         AuthErrorReason::Unauthorized => new Redirect('/', ['action' => 'login-error-no-access']),

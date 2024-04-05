@@ -8,6 +8,7 @@ use NavetSearch\Interfaces\AbstractSecure;
 use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Interfaces\AbstractSession;
 use NavetSearch\Interfaces\AbstractCookie;
+use NavetSearch\Interfaces\AbstractUser;
 
 class Session implements AbstractSession
 {
@@ -48,14 +49,14 @@ class Session implements AbstractSession
      * @param mixed $data The user data to be encrypted and stored in the authentication cookie.
      * @return bool Returns true if the cookie is successfully set, false otherwise.
      */
-    public function setSession(mixed $data): bool
+    public function setSession(AbstractUser $user): bool
     {
         $options = [
             'expires' => (time() + (int) $this->expires)
         ];
         return $this->cookie->set(
             $this->name,
-            $this->secure->encrypt($data),
+            $this->secure->encrypt($user),
             $options
         );
     }
@@ -67,7 +68,7 @@ class Session implements AbstractSession
      */
     public function isValidSession(): bool
     {
-        return (bool) $this->getSession();
+        return (bool) $this->getUser();
     }
 
     /**
@@ -75,12 +76,12 @@ class Session implements AbstractSession
      *
      * @return mixed|false The decrypted user data if the authentication cookie is present, false otherwise.
      */
-    public function getSession(): mixed
+    public function getUser(): AbstractUser|false
     {
         $value = $this->cookie->get($this->name);
 
         if (isset($value)) {
-            return $this->secure->decrypt($value);
+            return new User((object) $this->secure->decrypt($value));
         }
         return false;
     }
@@ -91,18 +92,5 @@ class Session implements AbstractSession
     public function endSession(): void
     {
         $this->cookie->set($this->name);
-    }
-
-    /**
-     * Returns the account name as stored in the cookie data
-     * 
-     * @return string The accountname of the userdata
-     */
-    public function getAccountName(): string|false
-    {
-        if ($session = $this->getSession()) {
-            return $session->samaccountname;
-        }
-        return false;
     }
 }

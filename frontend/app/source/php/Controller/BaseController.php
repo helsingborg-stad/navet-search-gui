@@ -4,7 +4,6 @@ namespace NavetSearch\Controller;
 
 use \NavetSearch\Helper\Redirect as Redirect;
 use \NavetSearch\Interfaces\AbstractServices as AbstractServices;
-use \NavetSearch\Helper\Format;
 
 abstract class BaseController
 {
@@ -42,18 +41,21 @@ abstract class BaseController
       $this->{"action" . ucfirst($this->action)}($_REQUEST);
     }
 
+    $user = $session->getUser();
+
     //Manifest data
     $this->data['assets'] = $this->getAssets();
 
     //Is authenticated user
     $this->data['isAuthenticated'] = $session->isValidSession();
 
-    //Formatted user
-    $this->data['formattedUser']   = Format::user($session->getSession());
+    if ($user) {
+      //Formatted user
+      $this->data['formattedUser']   = $user->format();
 
-    //Get current user
-    $this->data['user'] = $session->getSession();
-
+      //Get current user
+      $this->data['user'] = (object)$user->jsonSerialize();
+    }
     //Debugging
     if ($this->services->getConfigService()->getValue('DEBUG') == true) {
       $this->data['debugResponse'] = true;

@@ -7,6 +7,7 @@ use NavetSearch\Helper\Config;
 use NavetSearch\Helper\MemoryCookie;
 use NavetSearch\Helper\Secure;
 use NavetSearch\Helper\Session;
+use NavetSearch\Helper\User;
 
 final class SessionTest extends TestCase
 {
@@ -14,27 +15,22 @@ final class SessionTest extends TestCase
 
     protected function setUp(): void
     {
-        $config = new Config(array(
-            "ENCRYPT_VECTOR" => "ABCDEFGHIJKLMNOP",
-            "TEST_KEY_1" => "ABCDEF"
-        ));
+        $config = new Config(array());
         $secure = new Secure($config);
 
         $this->session = new Session($config, $secure, new MemoryCookie());
     }
-    public function testRetreiveKnownKeySuccessfully(): void
+    public function testReturnsInvalidSession(): void
     {
-        $this->session->setSession([
-            "samaccountname" => "hardy"
-        ]);
-        $this->assertEquals($this->session->isValidSession(), true);
+        $this->assertEquals($this->session->isValidSession(), false);
     }
-    public function testRetreiveAccountNameSuccessfully(): void
+    public function testReturnsValidSession(): void
     {
-        $this->session->setSession([
+        $user = new User((object) [
             "samaccountname" => "hardy"
         ]);
-        $this->assertEquals($this->session->getAccountName(), "hardy");
+        $this->session->setSession($user);
+        $this->assertEquals($this->session->isValidSession(), true);
     }
     public function testConfigValuesAreRespected(): void
     {

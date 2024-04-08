@@ -24,31 +24,42 @@ class Cookie implements AbstractCookie
             return setcookie($key, $data, $options);
         };
     }
-    public function setCookie(string $key, mixed $data = "", mixed $options = null): bool
+    protected function getOptions(int $expires): mixed
     {
-        // Default values are set to remove a cookie, these values could
-        // be overriden with the options parameter.
-        $merge = array_merge([
-            'expires' => -1,
+        return [
+            'expires' => $expires,
             'path' => '/',
             'domain' => $this->server['SERVER_NAME'],
             'secure' => isset($this->server['HTTPS']) ? true : false,
             'httponly' => false,
             'samesite' => 'None'
-        ], $options ?? array());
-
-        // Set native cookie
-        return ($this->setcookie)($key, $data, $merge);
+        ];
+    }
+    public function setCookie(string $key, mixed $data = "", int $expires = -1): bool
+    {
+        return ($this->setcookie)(
+            $key,
+            $data,
+            $this->getOptions($expires)
+        );
     }
     public function getCookie(string $key): string|null
     {
         return isset($this->cookie[$key]) ? $this->cookie[$key] : null;
     }
+    public function removeCookie(string $key): bool
+    {
+        return ($this->setcookie)(
+            $key,
+            null,
+            -1
+        );
+    }
     public function getCookies(): array
     {
         return $this->cookie;
     }
-    public function getServer(): array
+    public function getServerVars(): array
     {
         return $this->server;
     }

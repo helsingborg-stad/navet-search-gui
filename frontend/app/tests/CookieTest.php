@@ -18,26 +18,24 @@ final class CookieTest extends TestCase
     public function testReturnsValueWhenSetWithOptions(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->setCookie(self::name, 'data', [
-            "expires" => 100
-        ]);
+        $cookie->setCookie(self::name, 'data', 100);
 
         // Make sure the values are equals
         $this->assertEquals($cookie->getCookie(self::name), 'data');
     }
-    public function testRemovesValueWhenSetWithoutOptions(): void
+    public function testRemovesCookieWhenDeleted(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->setCookie(self::name, 'data', array());
-        $cookie->setCookie(self::name);
+        $cookie->setCookie(self::name, 'data', 100);
+        $cookie->removeCookie(self::name);
 
         // Make sure the values are equals
         $this->assertEquals($cookie->getCookie(self::name), null);
     }
-    public function testDoesNothingWhenSetWithoutOptions(): void
+    public function testDoesNothingWhenRemoving(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->setCookie(self::name);
+        $cookie->removeCookie(self::name);
 
         // Make sure the values are equals
         $this->assertEquals($cookie->getCookie(self::name), null);
@@ -45,7 +43,7 @@ final class CookieTest extends TestCase
     public function testReturnsServerNameOption(): void
     {
         $cookie = new MemoryCookie();
-        $server = $cookie->getServer();
+        $server = $cookie->getServerVars();
 
         // Make sure the values are equals
         $this->assertEquals($server["SERVER_NAME"], "Memory");
@@ -53,7 +51,7 @@ final class CookieTest extends TestCase
     public function testReturnsHttpsOption(): void
     {
         $cookie = new MemoryCookie();
-        $server = $cookie->getServer();
+        $server = $cookie->getServerVars();
 
         // Make sure the values are equals
         $this->assertEquals($server["HTTPS"], false);

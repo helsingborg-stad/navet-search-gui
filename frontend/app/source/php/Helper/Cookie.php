@@ -20,11 +20,11 @@ class Cookie implements AbstractCookie
     {
         $this->server = $_SERVER;
         $this->cookie = $_COOKIE;
-        $this->setcookie = function (string $key, mixed $data, mixed $options) {
+        $this->setcookie = function (string $key, mixed $data, mixed $options): bool {
             return setcookie($key, $data, $options);
         };
     }
-    public function set(string $key, mixed $data = "", mixed $options = null): bool
+    public function setCookie(string $key, mixed $data = "", mixed $options = null): bool
     {
         // Default values are set to remove a cookie, these values could
         // be overriden with the options parameter.
@@ -40,7 +40,7 @@ class Cookie implements AbstractCookie
         // Set native cookie
         return ($this->setcookie)($key, $data, $merge);
     }
-    public function get(string $key): string|null
+    public function getCookie(string $key): string|null
     {
         return isset($this->cookie[$key]) ? $this->cookie[$key] : null;
     }

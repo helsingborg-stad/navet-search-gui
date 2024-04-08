@@ -54,7 +54,7 @@ class Session implements AbstractSession
         $options = [
             'expires' => (time() + (int) $this->expires)
         ];
-        return $this->cookie->set(
+        return $this->cookie->setCookie(
             $this->name,
             $this->secure->encrypt($user),
             $options
@@ -78,7 +78,7 @@ class Session implements AbstractSession
      */
     public function getUser(): AbstractUser|false
     {
-        $value = $this->cookie->get($this->name);
+        $value = $this->cookie->getCookie($this->name);
 
         if (isset($value)) {
             return new User((object) $this->secure->decrypt($value));
@@ -91,6 +91,6 @@ class Session implements AbstractSession
      */
     public function endSession(): void
     {
-        $this->cookie->set($this->name);
+        $this->cookie->setCookie($this->name);
     }
 }

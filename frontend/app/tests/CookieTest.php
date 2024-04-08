@@ -13,34 +13,34 @@ final class CookieTest extends TestCase
     {
         $cookie = new MemoryCookie();
         // Make sure the values are equals
-        $this->assertEquals($cookie->get(self::name), null);
+        $this->assertEquals($cookie->getCookie(self::name), null);
     }
     public function testReturnsValueWhenSetWithOptions(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->set(self::name, 'data', [
+        $cookie->setCookie(self::name, 'data', [
             "expires" => 100
         ]);
 
         // Make sure the values are equals
-        $this->assertEquals($cookie->get(self::name), 'data');
+        $this->assertEquals($cookie->getCookie(self::name), 'data');
     }
     public function testRemovesValueWhenSetWithoutOptions(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->set(self::name, 'data', array());
-        $cookie->set(self::name);
+        $cookie->setCookie(self::name, 'data', array());
+        $cookie->setCookie(self::name);
 
         // Make sure the values are equals
-        $this->assertEquals($cookie->get(self::name), null);
+        $this->assertEquals($cookie->getCookie(self::name), null);
     }
     public function testDoesNothingWhenSetWithoutOptions(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->set(self::name);
+        $cookie->setCookie(self::name);
 
         // Make sure the values are equals
-        $this->assertEquals($cookie->get(self::name), null);
+        $this->assertEquals($cookie->getCookie(self::name), null);
     }
     public function testReturnsServerNameOption(): void
     {

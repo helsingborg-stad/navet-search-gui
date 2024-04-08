@@ -19,7 +19,7 @@ class MemoryCookie extends Cookie implements AbstractCookie
             "HTTPS" => false
         ];
         $this->cookie = array();
-        $this->setcookie = function (string $key, mixed $data, mixed $options) {
+        $this->setcookie = function (string $key, mixed $data, mixed $options): bool {
             if ($options["expires"] === -1) {
                 unset($this->cookie[$key]);
             } else {

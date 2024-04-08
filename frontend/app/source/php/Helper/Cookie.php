@@ -42,7 +42,14 @@ class Cookie implements AbstractCookie
     }
     public function get(string $key): string|null
     {
-        // Return native cookie
         return isset($this->cookie[$key]) ? $this->cookie[$key] : null;
+    }
+    public function getCookies(): array
+    {
+        return $this->cookie;
+    }
+    public function getServer(): array
+    {
+        return $this->server;
     }
 }

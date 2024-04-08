@@ -5,7 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 use \NavetSearch\Helper\MemoryCookie;
 
-final class MemoryCookieTest extends TestCase
+final class CookieTest extends TestCase
 {
     const name = 'dummy';
 
@@ -41,5 +41,21 @@ final class MemoryCookieTest extends TestCase
 
         // Make sure the values are equals
         $this->assertEquals($cookie->get(self::name), null);
+    }
+    public function testReturnsServerNameOption(): void
+    {
+        $cookie = new MemoryCookie();
+        $server = $cookie->getServer();
+
+        // Make sure the values are equals
+        $this->assertEquals($server["SERVER_NAME"], "Memory");
+    }
+    public function testReturnsHttpsOption(): void
+    {
+        $cookie = new MemoryCookie();
+        $server = $cookie->getServer();
+
+        // Make sure the values are equals
+        $this->assertEquals($server["HTTPS"], false);
     }
 }

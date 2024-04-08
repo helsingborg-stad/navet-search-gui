@@ -18,7 +18,9 @@ final class MemoryCookieTest extends TestCase
     public function testReturnsValueWhenSetWithOptions(): void
     {
         $cookie = new MemoryCookie();
-        $cookie->set(self::name, 'data', array());
+        $cookie->set(self::name, 'data', [
+            "expires" => 100
+        ]);
 
         // Make sure the values are equals
         $this->assertEquals($cookie->get(self::name), 'data');

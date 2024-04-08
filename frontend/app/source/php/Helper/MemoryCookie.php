@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace NavetSearch\Helper;
 
 use NavetSearch\Interfaces\AbstractCookie;
+use NavetSearch\Helper\Cookie;
 
 /**
  * Wrapper class to allow cookie management during tests
  */
-class MemoryCookie implements AbstractCookie
+class MemoryCookie extends Cookie implements AbstractCookie
 {
-    protected $values = [];
-
-    public function set(string $key, mixed $data = "", mixed $options = null): bool
+    public function __construct()
     {
-        // Remove "cookie" if options is missing. This simulates the default
-        // behaviour of the real "cookie" class
-        if (!isset($options)) {
-            unset($this->values[$key]);
-        }
-        $this->values[$key] = $data;
-        return true;
-    }
-    public function get(string $key): string|null
-    {
-        return isset($this->values[$key]) ? $this->values[$key] : null;
+        $this->server = [
+            "SERVER_NAME" => "Memory",
+            "HTTPS" => false
+        ];
+        $this->cookie = array();
+        $this->setcookie = function (string $key, mixed $data, mixed $options) {
+            if ($options["expires"] === -1) {
+                unset($this->cookie[$key]);
+            } else {
+                $this->cookie[$key] = $data;
+            }
+            return true;
+        };
     }
 }

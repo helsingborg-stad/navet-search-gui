@@ -28,8 +28,10 @@ final class FormatTest extends TestCase
     }
     public function testCanFormatMunicipalityCode(): void
     {
+        // Predefined
         $this->assertSame(Format::municipalityCode('25'), 'Helsingborg (25)');
         $this->assertSame(Format::municipalityCode('84'), 'Höganäs (84)');
+        // Others
         $this->assertSame(Format::municipalityCode('44'), '44');
     }
 }

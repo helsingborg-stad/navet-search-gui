@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
 
 use HelsingborgStad\GlobalBladeService\GlobalBladeService;
@@ -8,6 +10,7 @@ use ComponentLibrary\Init as ComponentLibraryInit;
 /* The `class Enviroment` in the provided PHP code is a helper class that contains methods related to
 checking and loading a component library using the Blade template engine. Here is a summary of what
 the class is doing: */
+
 class Enviroment
 {
     private static $loader = BASEPATH . "vendor/helsingborg-stad/component-library/load.php";
@@ -22,7 +25,7 @@ class Enviroment
     public static function componentLibraryIsInstalled(): bool
     {
         if (file_exists(self::$loader)) {
-            return true; 
+            return true;
         }
         return false;
     }

@@ -2,8 +2,16 @@
 
 namespace NavetSearch;
 
+use \NavetSearch\Interfaces\AbstractServices as AbstractServices;
+
 class View
 {
+    protected AbstractServices $services;
+
+    public function __construct(AbstractServices $services)
+    {
+        $this->services = $services;
+    }
 
     /**
      * Loads additional data from a controller associated with the specified view.
@@ -18,14 +26,15 @@ class View
      * @return array An associative array of additional data from the controller, or an empty array
      *               if the controller or file does not exist.
      */
-    public function loadControllerData($view) {
-        $view = ucfirst(trim(str_replace(' ', '', ucwords(str_replace(array("-","/"), ' ', $view))), "/"));
-        if(file_exists(__DIR__ . "/Controller/" . $view . ".php")) {
-            $class = "NavetSearch\\Controller\\".$view; 
-            $obj = new $class;
-            return $obj->data; 
+    public function loadControllerData($view)
+    {
+        $view = ucfirst(trim(str_replace(' ', '', ucwords(str_replace(array("-", "/"), ' ', $view))), "/"));
+        if (file_exists(__DIR__ . "/Controller/" . $view . ".php")) {
+            $class = "NavetSearch\\Controller\\" . $view;
+            $obj = new $class($this->services);
+            return $obj->data;
         }
-        return []; 
+        return [];
     }
 
     /**
@@ -46,14 +55,12 @@ class View
      */
     public function show(string $view, array $data, $blade)
     {
-
-   
         //Run view
         try {
             $result = $blade->makeView(
                 'pages.' . $view,
                 array_merge(
-                    $data, 
+                    $data,
                     $this->loadControllerData($view)
                 ),
                 [],
@@ -62,7 +69,7 @@ class View
 
             $result = preg_replace('/(id|href)=""/', "", $result);
 
-            if(class_exists("tidy")) {
+            if (class_exists("tidy")) {
                 $tidy = new \tidy;
                 $tidy->parseString($result, array(
                     'indent'         => true,
@@ -70,17 +77,15 @@ class View
                     'wrap'           => 5000,
                     'show-body-only' => false
                 ), 'utf8');
-                
+
                 $tidy->cleanRepair();
 
-                if(isset($tidy->value)) {
+                if (isset($tidy->value)) {
                     echo $tidy->value;
                 }
-
             } else {
-                echo $result; 
+                echo $result;
             }
-
         } catch (\Throwable $e) {
             echo $blade->makeView(
                 'pages.e404',

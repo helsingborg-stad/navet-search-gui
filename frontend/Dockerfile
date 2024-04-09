@@ -1,2 +1,3 @@
-FROM webdevops/php-nginx
+FROM webdevops/php-nginx:8.2-alpine
+
 COPY . ./

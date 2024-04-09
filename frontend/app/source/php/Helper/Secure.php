@@ -1,6 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NavetSearch\Helper;
+
+use NavetSearch\Interfaces\AbstractSecure;
+use NavetSearch\Interfaces\AbstractConfig;
+
 /**
  * Class Secure
  *
@@ -10,11 +16,41 @@ namespace NavetSearch\Helper;
  *
  * @package NavetSearch\Helper
  */
-class Secure
+class Secure implements AbstractSecure
 {
-    private static $ciphering = "AES-128-CTR";
-    private static $vector = ENCRYPT_VECTOR; //Change to env var, only test key
-    private static $key = ENCRYPT_KEY; //Change to env var, only test key
+    protected string $cipher;
+    protected string $vector;
+    protected string $key;
+
+    public function __construct(AbstractConfig $config)
+    {
+        // Read config
+        $this->cipher = $config->getValue(
+            'ENCRYPT_CIPHER',
+            'AES-128-CTR'
+        );
+        $this->vector = $config->getValue(
+            'ENCRYPT_VECTOR',
+            'ABCDEFGHIJKLMNOP'
+        );
+        $this->key = $config->getValue(
+            'ENCRYPT_KEY',
+            'ABCDEFGHIJ'
+        );
+    }
+
+    public function getEncryptVector(): string
+    {
+        return $this->vector;
+    }
+    public function getEncryptCipher(): string
+    {
+        return $this->cipher;
+    }
+    public function getEncryptKey(): string
+    {
+        return $this->key;
+    }
 
     /**
      * Encrypts the provided data using AES-128-CTR encryption.
@@ -24,15 +60,15 @@ class Secure
      * @param mixed $data The data to be encrypted.
      * @return false|string|void The encrypted data, or false on failure.
      */
-    public static function encrypt($data)
-    {   
-        if(is_array($data) || is_object($data)) {
+    public function encrypt(mixed $data): string|false
+    {
+        if (is_array($data) || is_object($data)) {
             $data = json_encode($data);
         }
-        return openssl_encrypt($data, self::$ciphering, self::$key, 0, self::$vector);
+        return openssl_encrypt($data, $this->cipher, $this->key, 0, $this->vector);
     }
 
-     /**
+    /**
      * Decrypts the provided encrypted data using AES-128-CTR decryption.
      *
      * If the decrypted data is a JSON string, it is converted back to an array or object.
@@ -40,10 +76,10 @@ class Secure
      * @param string $encryptedData The encrypted data to be decrypted.
      * @return mixed The decrypted data, or the original encrypted data on failure.
      */
-    public static function decrypt($encryptedData)
-    {   
-        $decrypted =  openssl_decrypt($encryptedData, self::$ciphering, self::$key, 0, self::$vector);
-        if(is_string($decrypted)) {
+    public function decrypt($encryptedData): mixed
+    {
+        $decrypted = openssl_decrypt($encryptedData, $this->cipher, $this->key, 0, $this->vector);
+        if (is_string($decrypted)) {
             $decrypted = json_decode($decrypted);
         }
         return $decrypted;

@@ -44,7 +44,7 @@ class Search implements AbstractSearch
         return $this->baseUrl;
     }
 
-    public function find(string $pnr): array
+    public function findPerson(string $pnr): array
     {
         $data = [
             "searchFor" => Format::socialSecuriyNumber($pnr)

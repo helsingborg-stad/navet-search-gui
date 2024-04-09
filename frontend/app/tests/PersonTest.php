@@ -82,17 +82,17 @@ final class PersonTest extends TestCase
     {
         $person = new Person((object) []);
 
-        $this->assertSame($person->getDeregistrationCode(), "");
-        $this->assertSame($person->getDeregistrationDate(), "");
-        $this->assertSame($person->getDeregistrationReason(), "");
-        $this->assertSame($person->getGivenName(), "");
-        $this->assertSame($person->getFamilyName(), "");
-        $this->assertSame($person->getAdditionalName(), "");
-        $this->assertSame($person->getAddressLocality(), "");
-        $this->assertSame($person->getPostalCode(), "");
-        $this->assertSame($person->getStreetAddress(), "");
-        $this->assertSame($person->getProvinceCode(), "");
-        $this->assertSame($person->getMunicipalityCode(), "");
+        $this->assertEmpty($person->getDeregistrationCode());
+        $this->assertEmpty($person->getDeregistrationDate());
+        $this->assertEmpty($person->getDeregistrationReason());
+        $this->assertEmpty($person->getGivenName());
+        $this->assertEmpty($person->getFamilyName());
+        $this->assertEmpty($person->getAdditionalName());
+        $this->assertEmpty($person->getAddressLocality());
+        $this->assertEmpty($person->getPostalCode());
+        $this->assertEmpty($person->getStreetAddress());
+        $this->assertEmpty($person->getProvinceCode());
+        $this->assertEmpty($person->getMunicipalityCode());
     }
     public function testReturnsDeregisteredSuccessfully(): void
     {

@@ -11,22 +11,24 @@ use stdClass;
 
 class User implements AbstractUser, JsonSerializable
 {
-    private string $account;
-    private string $groups;
-    private string $company;
-    private string $displayname;
-    private string $sn;
-    private string $mail;
+    private string $account = "";
+    private string $groups = "";
+    private string $company = "";
+    private string $displayname = "";
+    private string $sn = "";
+    private string $mail = "";
 
     public function __construct(object $user = new stdClass)
     {
-        // Map from json
-        $this->account = Sanitize::string(@$user->samaccountname);
-        $this->groups = Sanitize::string(@$user->memberof);
-        $this->company = Sanitize::string(@$user->company);
-        $this->displayname = Sanitize::string(@$user->displayname);
-        $this->sn = Sanitize::string(@$user->sn);
-        $this->mail = Sanitize::string(@$user->mail);
+        if (is_object($user)) {
+            // Map from json
+            $this->account = Sanitize::string(@$user->samaccountname);
+            $this->groups = Sanitize::string(@$user->memberof);
+            $this->company = Sanitize::string(@$user->company);
+            $this->displayname = Sanitize::string(@$user->displayname);
+            $this->sn = Sanitize::string(@$user->sn);
+            $this->mail = Sanitize::string(@$user->mail);
+        }
     }
     public function getAccountName(): string
     {

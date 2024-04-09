@@ -12,30 +12,32 @@ use stdClass;
 
 class PropertyRegistrationHistory implements AbstractPropertyRegistrationHistory, JsonSerializable
 {
-    private string $registrationDate;
-    private string $countyCode;
-    private string $municipalityCode;
-    private ?string $parishCode;
-    private string $designation;
-    private ?string $key;
-    private string $code;
-    private string $description;
+    private string $registrationDate = "";
+    private string $countyCode = "";
+    private string $municipalityCode = "";
+    private string $parishCode = "";
+    private string $designation = "";
+    private string $key = "";
+    private string $code = "";
+    private string $description = "";
 
-    public function __construct(object $history = new stdClass)
+    public function __construct(object $history)
     {
-        // Map from json
-        $this->registrationDate = Sanitize::string(@$history->registrationDate);
-        $this->countyCode = Sanitize::string(@$history->countyCode);
-        $this->municipalityCode = Sanitize::string(@$history->municipalityCode);
-        $this->parishCode = Sanitize::string(@$history->parishCode);
+        if (is_object($history)) {
+            // Map from json
+            $this->registrationDate = Sanitize::string(@$history->registrationDate);
+            $this->countyCode = Sanitize::string(@$history->countyCode);
+            $this->municipalityCode = Sanitize::string(@$history->municipalityCode);
+            $this->parishCode = Sanitize::string(@$history->parishCode);
 
-        $property = @$history->property ?? new stdClass;
-        $this->designation = Sanitize::string(@$property->designation);
-        $this->key = Sanitize::string(@$property->key);
+            $property = @$history->property ?? new stdClass;
+            $this->designation = Sanitize::string(@$property->designation);
+            $this->key = Sanitize::string(@$property->key);
 
-        $type = @$history->type ?? new stdClass;
-        $this->code = Sanitize::string(@$type->code);
-        $this->description = Sanitize::string(@$type->description);
+            $type = @$history->type ?? new stdClass;
+            $this->code = Sanitize::string(@$type->code);
+            $this->description = Sanitize::string(@$type->description);
+        }
     }
 
     public function getRegistrationDate(): string

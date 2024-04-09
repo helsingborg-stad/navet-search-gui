@@ -12,33 +12,35 @@ use stdClass;
 
 class Person implements AbstractPerson, JsonSerializable
 {
-    private ?string $deregistrationCode;
-    private ?string $deregistrationReason;
-    private ?string $deregistrationDate;
-    private string $givenName;
-    private string $familyName;
-    private string $additionalName;
-    private string $addressLocality;
-    private string $postalCode;
-    private string $streetAddress;
-    private string $provinceCode;
-    private string $municipalityCode;
+    private string $deregistrationCode = "";
+    private string $deregistrationReason = "";
+    private string $deregistrationDate = "";
+    private string $givenName = "";
+    private string $familyName = "";
+    private string $additionalName = "";
+    private string $addressLocality = "";
+    private string $postalCode = "";
+    private string $streetAddress = "";
+    private string $provinceCode = "";
+    private string $municipalityCode = "";
 
-    public function __construct(object $person = new stdClass)
+    public function __construct(object $person)
     {
-        // Map from json
-        $this->deregistrationCode = Sanitize::string(@$person->deregistrationCode);
-        $this->deregistrationReason = Sanitize::string(@$person->deregistrationReason);
-        $this->deregistrationDate = Sanitize::string(@$person->deregistrationDate);
-        $this->givenName = Sanitize::string(@$person->givenName);
-        $this->familyName = Sanitize::string(@$person->familyName);
-        $this->additionalName = Sanitize::string(@$person->additionalName);
-        $address = @$person->address ?? new stdClass;
-        $this->addressLocality = Sanitize::string(@$address->addressLocality);
-        $this->postalCode = Sanitize::string(@$address->postalCode);
-        $this->streetAddress = Sanitize::string(@$address->streetAddress);
-        $this->provinceCode = Sanitize::string(@$address->provinceCode);
-        $this->municipalityCode = Sanitize::string(@$address->municipalityCode);
+        if (is_object($person)) {
+            // Map from json
+            $this->deregistrationCode = Sanitize::string(@$person->deregistrationCode);
+            $this->deregistrationReason = Sanitize::string(@$person->deregistrationReason);
+            $this->deregistrationDate = Sanitize::string(@$person->deregistrationDate);
+            $this->givenName = Sanitize::string(@$person->givenName);
+            $this->familyName = Sanitize::string(@$person->familyName);
+            $this->additionalName = Sanitize::string(@$person->additionalName);
+            $address = @$person->address ?? new stdClass;
+            $this->addressLocality = Sanitize::string(@$address->addressLocality);
+            $this->postalCode = Sanitize::string(@$address->postalCode);
+            $this->streetAddress = Sanitize::string(@$address->streetAddress);
+            $this->provinceCode = Sanitize::string(@$address->provinceCode);
+            $this->municipalityCode = Sanitize::string(@$address->municipalityCode);
+        }
     }
     public function isDeregistered(): bool
     {

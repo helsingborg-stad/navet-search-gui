@@ -6,7 +6,7 @@ namespace NavetSearch\Interfaces;
 
 interface AbstractSearch
 {
-    public function find(string $pnr): array;
+    public function findPerson(string $pnr): array;
     public function getApiKey(): string;
     public function getEndpoint(): string;
 }

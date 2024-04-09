@@ -67,7 +67,7 @@ class Sok extends BaseController
       );
     }
     //Get data
-    $this->data = $this->services->getSearchService()->find(
+    $this->data = $this->services->getSearchService()->findPerson(
       $req->pnr
     );
 

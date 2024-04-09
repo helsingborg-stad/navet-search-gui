@@ -34,9 +34,9 @@ final class CivilStatusTest extends TestCase
     {
         $status = new CivilStatus((object) []);
 
-        $this->assertSame($status->getCivilStatusCode(), "");
-        $this->assertSame($status->getCivilStatusDescription(), "");
-        $this->assertSame($status->getCivilStatusDate(), "");
+        $this->assertEmpty($status->getCivilStatusCode());
+        $this->assertEmpty($status->getCivilStatusDescription());
+        $this->assertEmpty($status->getCivilStatusDate());
     }
     public function testSerializeJsonCorrectly(): void
     {

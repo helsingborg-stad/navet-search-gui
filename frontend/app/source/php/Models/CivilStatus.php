@@ -12,16 +12,18 @@ use stdClass;
 
 class CivilStatus implements AbstractCivilStatus, JsonSerializable
 {
-    private string $code;
-    private string $description;
-    private string $date;
+    private string $code = "";
+    private string $description = "";
+    private string $date = "";
 
-    public function __construct(object $status = new stdClass)
+    public function __construct(object $status)
     {
-        // Map from json
-        $this->code = Sanitize::string(@$status->code);
-        $this->description = Sanitize::string(@$status->description);
-        $this->date = Sanitize::string(@$status->date);
+        if (is_object($status)) {
+            // Map from json
+            $this->code = Sanitize::string(@$status->code);
+            $this->description = Sanitize::string(@$status->description);
+            $this->date = Sanitize::string(@$status->date);
+        }
     }
 
     public function getCivilStatusCode(): string

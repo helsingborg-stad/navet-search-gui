@@ -65,14 +65,14 @@ final class PropertyRegistrationHistoryTest extends TestCase
     {
         $history = new PropertyRegistrationHistory((object) []);
 
-        $this->assertSame($history->getRegistrationDate(), "");
-        $this->assertSame($history->getCountyCode(), "");
-        $this->assertSame($history->getMunicipalityCode(), "");
-        $this->assertSame($history->getParishCode(), "");
-        $this->assertSame($history->getPropertyDesignation(), "");
-        $this->assertSame($history->getPropertyKey(), "");
-        $this->assertSame($history->getTypeCode(), "");
-        $this->assertSame($history->getTypeDescription(), "");
+        $this->assertEmpty($history->getRegistrationDate());
+        $this->assertEmpty($history->getCountyCode());
+        $this->assertEmpty($history->getMunicipalityCode());
+        $this->assertEmpty($history->getParishCode());
+        $this->assertEmpty($history->getPropertyDesignation());
+        $this->assertEmpty($history->getPropertyKey());
+        $this->assertEmpty($history->getTypeCode());
+        $this->assertEmpty($history->getTypeDescription());
     }
     public function testSerializeJsonCorrectly(): void
     {

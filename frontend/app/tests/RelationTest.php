@@ -62,13 +62,13 @@ final class RelationTest extends TestCase
     {
         $relation = new Relation((object) []);
 
-        $this->assertSame($relation->getIdentityNumber(), "");
-        $this->assertSame($relation->getCustodyDate(), "");
-        $this->assertSame($relation->getTypeCode(), "");
-        $this->assertSame($relation->getTypeDescription(), "");
-        $this->assertSame($relation->getDeregistrationReasonCode(), "");
-        $this->assertSame($relation->getDeregistrationReasonDescription(), "");
-        $this->assertSame($relation->getDeregistrationDate(), "");
+        $this->assertEmpty($relation->getIdentityNumber());
+        $this->assertEmpty($relation->getCustodyDate());
+        $this->assertEmpty($relation->getTypeCode());
+        $this->assertEmpty($relation->getTypeDescription());
+        $this->assertEmpty($relation->getDeregistrationReasonCode());
+        $this->assertEmpty($relation->getDeregistrationReasonDescription());
+        $this->assertEmpty($relation->getDeregistrationDate());
     }
     public function testSerializeJsonCorrectly(): void
     {

@@ -12,26 +12,28 @@ use stdClass;
 
 class Relation implements AbstractRelation, AbstractDeregistration, JsonSerializable
 {
-    private string $identityNumber;
-    private string $code;
-    private string $description;
-    private string $custodyDate;
-    private string $reasonCode;
-    private string $reasonDescription;
-    private string $deregistrationDate;
+    private string $identityNumber = "";
+    private string $code = "";
+    private string $description = "";
+    private string $custodyDate = "";
+    private string $reasonCode = "";
+    private string $reasonDescription = "";
+    private string $deregistrationDate = "";
 
-    public function __construct(object $relation = new stdClass)
+    public function __construct(object $relation)
     {
-        // Map from json
-        $this->identityNumber = Sanitize::string(@$relation->identityNumber);
-        $this->custodyDate = Sanitize::string(@$relation->custodyDate);
-        $type = @$relation->type ?? new stdClass;
-        $this->code = Sanitize::string(@$type->code);
-        $this->description = Sanitize::string(@$type->description);
-        $deregistration = @$relation->deregistration ?? new stdClass;
-        $this->reasonCode = Sanitize::string(@$deregistration->reasonCode);
-        $this->reasonDescription = Sanitize::string(@$deregistration->reasonDescription);
-        $this->deregistrationDate = Sanitize::string(@$deregistration->deregistrationDate);
+        if (is_object($relation)) {
+            // Map from json
+            $this->identityNumber = Sanitize::string(@$relation->identityNumber);
+            $this->custodyDate = Sanitize::string(@$relation->custodyDate);
+            $type = @$relation->type ?? new stdClass;
+            $this->code = Sanitize::string(@$type->code);
+            $this->description = Sanitize::string(@$type->description);
+            $deregistration = @$relation->deregistration ?? new stdClass;
+            $this->reasonCode = Sanitize::string(@$deregistration->reasonCode);
+            $this->reasonDescription = Sanitize::string(@$deregistration->reasonDescription);
+            $this->deregistrationDate = Sanitize::string(@$deregistration->deregistrationDate);
+        }
     }
     public function isDeregistered(): bool
     {

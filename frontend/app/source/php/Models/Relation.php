@@ -28,7 +28,7 @@ class Relation implements AbstractRelation, AbstractDeregistration, JsonSerializ
             $type = $relation->type ?? new stdClass;
             $this->code = $type->code ?? "";
             $this->description = $type->description ?? "";
-            $deregistration = @$relation->deregistration ?? new stdClass;
+            $deregistration = $relation->deregistration ?? new stdClass;
             $this->reasonCode = $deregistration->reasonCode ?? "";
             $this->reasonDescription = $deregistration->reasonDescription ?? "";
             $this->deregistrationDate = $deregistration->deregistrationDate ?? "";

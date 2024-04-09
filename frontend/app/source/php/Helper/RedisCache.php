@@ -35,8 +35,7 @@ class RedisCache implements AbstractCache
             if ($this->secure) {
                 $content = $this->secure->encrypt($content);
             }
-            // Set (encrypted) data
-            $this->cache->set($key, $content, null, $ttl);
+            $this->cache->set($key, $content, "ex", $ttl);
         }
     }
 

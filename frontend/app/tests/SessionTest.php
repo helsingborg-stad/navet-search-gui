@@ -7,7 +7,7 @@ use NavetSearch\Helper\Config;
 use NavetSearch\Helper\MemoryCookie;
 use NavetSearch\Helper\Secure;
 use NavetSearch\Helper\Session;
-use NavetSearch\Helper\User;
+use NavetSearch\Models\User;
 
 final class SessionTest extends TestCase
 {

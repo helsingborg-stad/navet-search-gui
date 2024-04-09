@@ -14,7 +14,7 @@ class Sanitize
   }
 
   /** Always return a string */
-  public static function string($string)
+  public static function string(mixed $string)
   {
     if (is_string($string)) {
       return $string;

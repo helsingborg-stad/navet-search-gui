@@ -8,6 +8,10 @@ use NavetSearch\Interfaces\AbstractRequest;
 use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Interfaces\AbstractSession;
 use NavetSearch\Interfaces\AbstractSearch;
+use NavetSearch\Models\Person;
+use NavetSearch\Models\CivilStatus;
+use NavetSearch\Models\PropertyRegistrationHistory;
+use NavetSearch\Models\Relation;
 
 class Search implements AbstractSearch
 {
@@ -51,6 +55,8 @@ class Search implements AbstractSearch
 
         //Validate, if ok. Parse data
         if ($data['searchResult'] = !$person->isErrorResponse()) {
+            $personData = new Person($person->getContent());
+
             $relations = $this->searchRelations($pnr);
 
             //Get family relations
@@ -64,19 +70,19 @@ class Search implements AbstractSearch
             );
 
             $data['basicData'] = [];
+            $civilStatus = new CivilStatus($relations->getContent()->civilStatus);
 
-            if ($this->isDeregistered($person->getContent())) {
-                $data['basicData']  = $this->createBasicDataList(
-                    $person->getContent(),
+            if ($personData->isDeregistered()) {
+                $data['basicData'] = $this->createBasicDataList(
+                    $personData,
                     Format::socialSecuriyNumber($pnr),
-                    $this->getCivilStatus($relations->getContent())
+                    $civilStatus
                 );
 
                 //Create deregistration state
                 $data['isDeregistered'] = true;
-                $data['deregistrationReason'] = $this->getDeristrationSentence(
-                    $person->getContent()->deregistrationReason,
-                    $person->getContent()->deregistrationDate ?? null
+                $data['deregistrationReason'] = $this->getDeregistrationSentence(
+                    $personData
                 );
             } else {
 
@@ -85,37 +91,24 @@ class Search implements AbstractSearch
 
                 //Request basic data table
                 $data['basicData']  = $this->createBasicDataList(
-                    $person->getContent(),
+                    $personData,
                     Format::socialSecuriyNumber($pnr),
-                    $this->getCivilStatus($relations->getContent())
+                    $civilStatus
                 );
 
                 //Request the readable string
                 $data['readableResult'] = $this->createReadableText(
-                    $person->getContent(),
+                    $personData,
                     $pnr
                 );
 
                 //Request adress data table
                 $data['adressData'] = $this->createAdressDataList(
-                    $person->getContent()
+                    $personData
                 );
             }
         }
         return $data;
-    }
-    /**
-     * Checks if a person is deregistered.
-     *
-     * @param object $person The person object to check.
-     * @return bool Returns true if the person is deregistered, false otherwise.
-     */
-    public function isDeregistered($person)
-    {
-        if (isset($person->deregistrationCode)) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -124,12 +117,12 @@ class Search implements AbstractSearch
      * @param string $reason The reason for deregistration.
      * @return string The sentence indicating the deregistration status.
      */
-    public function getDeristrationSentence($reason, $date = null)
+    public function getDeregistrationSentence(Person $person)
     {
-        if (!is_null($date)) {
-            return "Personen är avregistrerad och har fått statusen: " . $reason . Format::addPharanthesis(Format::date($date));
+        if (!empty($person->getDeregistrationDate())) {
+            return "Personen är avregistrerad och har fått statusen: " . $person->getDeregistrationReason() . Format::addPharanthesis($person->getDeregistrationDate());
         }
-        return "Personen är avregistrerad och har fått statusen: " . $reason;
+        return "Personen är avregistrerad och har fått statusen: " . $person->getDeregistrationReason();
     }
 
     /**
@@ -189,17 +182,15 @@ class Search implements AbstractSearch
 
             foreach ($data->{$relevantKey} as $item) {
 
-                $item = Format::convertToArray($item);
-
-                $identityNumber = $item['identityNumber'];
+                $item = new Relation($item);
 
                 // Initialize an empty array for the identity number
-                if (!isset($stack[$identityNumber])) {
-                    $stack[$identityNumber] = array_fill_keys($predefinedCodes, false);
+                if (!isset($stack[$item->getIdentityNumber()])) {
+                    $stack[$item->getIdentityNumber()] = array_fill_keys($predefinedCodes, false);
                 }
 
                 // Set the value to true for the corresponding code
-                $stack[$identityNumber][$item['type']['code']] = !empty($item['custodyDate']) ? Format::date($item['custodyDate']) : true;
+                $stack[$item->getIdentityNumber()][$item->getTypeCode()] = !empty($item->getCustodyDate()) ? Format::date($item->getCustodyDate()) : true;
             }
         }
 
@@ -222,12 +213,12 @@ class Search implements AbstractSearch
      *
      * @return string The constructed readable text string with person's name, age, and address.
      */
-    protected function createReadableText($data, $pnr)
+    protected function createReadableText(Person $person, $pnr)
     {
-        if (empty((array) $data->address)) {
-            return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr) . " år gammal och har ingen registrerad bostadsadress.";
+        if (empty($person->getStreetAddress())) {
+            return $person->getGivenName() . " " . $person->getFamilyName() . " är " . Format::getCurrentAge($pnr) . " år gammal och har ingen registrerad bostadsadress.";
         }
-        return $data->givenName . " " . $data->familyName . " är " . Format::getCurrentAge($pnr) . " år gammal och är bosatt på " . Format::capitalize($data->address->streetAddress) . " i " . Format::capitalize($data->address->addressLocality) . ".";
+        return $person->getGivenName() . " " . $person->getFamilyName() . " är " . Format::getCurrentAge($pnr) . " år gammal och är bosatt på " . $person->getStreetAddress() . " i " . $person->getAddressLocality() . ".";
     }
 
     /**
@@ -242,7 +233,7 @@ class Search implements AbstractSearch
      *
      * @return array An array representing a basic data list with key-value pairs.
      */
-    protected function createBasicDataList($data, $pnr, $civilStatus)
+    protected function createBasicDataList(Person $person, $pnr, CivilStatus $civilStatus)
     {
         return [
             ['columns' => [
@@ -255,19 +246,19 @@ class Search implements AbstractSearch
             ]],
             ['columns' => [
                 'Civilstatus:',
-                $civilStatus['description'] ? $civilStatus['description'] . " " . Format::addPharanthesis($civilStatus['date']) : ''
+                !empty($civilStatus->getCivilStatusDescription()) ? $civilStatus->getCivilStatusDescription() . " " . Format::addPharanthesis(Format::date($civilStatus->getCivilStatusDate())) : ''
             ]],
             ['columns' => [
                 'Förnamn:',
-                $data->givenName ?? ''
+                $person->getGivenName()
             ]],
             ['columns' => [
                 'Efternamn:',
-                $data->familyName ?? ''
+                $person->getFamilyName()
             ]],
             ['columns' => [
                 'Övriga namn:',
-                $data->additionalName ?? ''
+                $person->getAdditionalName()
             ]],
         ];
     }
@@ -283,51 +274,23 @@ class Search implements AbstractSearch
      *
      * @return array An array representing an address data list with key-value pairs.
      */
-    protected function createAdressDataList($data)
+    protected function createAdressDataList(Person $person)
     {
-        if (empty((array) $data->address)) {
-            return false;
-        }
-
         return [
             ['columns' => [
                 'Postort:',
-                Format::capitalize($data->address->addressLocality) ?? ''
+                $person->getAddressLocality()
             ]],
             ['columns' => [
                 'Postnummer:',
-                Format::postalCode($data->address->postalCode) ?? ''
+                $person->getPostalCode()
             ]],
             ['columns' => [
                 'Gatuadress:',
-                Format::capitalize($data->address->streetAddress) ?? ''
+                $person->getStreetAddress()
             ]]
         ];
     }
-
-    /**
-     * Creates a property data list based on the provided data.
-     *
-     * @param object $data The data containing property registration history.
-     * @return array|false The property data list or false if the data is invalid or empty.
-     */
-    protected function getCivilStatus($data, $relevantKey = 'civilStatus')
-    {
-        if (!isset($data->{$relevantKey})) {
-            return ['code' => null, 'description' => null, 'date' => null];
-        }
-
-        if (empty((array) $data->{$relevantKey})) {
-            return ['code' => null, 'description' => null, 'date' => null];
-        }
-
-        return [
-            'code' => $data->{$relevantKey}->code,
-            'description' => $data->{$relevantKey}->description,
-            'date' => Format::date($data->{$relevantKey}->date)
-        ];
-    }
-
     /**
      * Creates a property data list based on the provided data.
      *
@@ -346,13 +309,15 @@ class Search implements AbstractSearch
 
         $list = [];
         foreach ($data->{$relevantKey} as $property) {
+            $item = new PropertyRegistrationHistory($property);
+
             $list[] = [
                 'columns' => [
-                    $property->property->designation ?? '',
-                    $property->type->description ?? '',
-                    Format::date($property->registrationDate) ?? '',
-                    $property->municipalityCode ?? '',
-                    $property->countyCode ?? '',
+                    $item->getPropertyDesignation(),
+                    $item->getTypeDescription(),
+                    $item->getRegistrationDate(),
+                    $item->getMunicipalityCode(),
+                    $item->getCountyCode(),
                 ]
             ];
         }

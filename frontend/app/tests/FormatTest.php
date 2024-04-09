@@ -34,4 +34,9 @@ final class FormatTest extends TestCase
         // Others
         $this->assertSame(Format::municipalityCode('44'), '44');
     }
+    public function testCanFormatUnicodeTitle(): void
+    {
+        // Predefined
+        $this->assertSame(Format::capitalize("åran är ö"), 'Åran Är Ö');
+    }
 }

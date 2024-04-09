@@ -10,6 +10,7 @@ use NavetSearch\Interfaces\AbstractRequest;
 use NavetSearch\Interfaces\AbstractAuth;
 use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Helper\AuthException;
+use NavetSearch\Models\User;
 use stdClass;
 
 class Auth implements AbstractAuth

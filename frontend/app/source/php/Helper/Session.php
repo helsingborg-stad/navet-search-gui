@@ -9,6 +9,7 @@ use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Interfaces\AbstractSession;
 use NavetSearch\Interfaces\AbstractCookie;
 use NavetSearch\Interfaces\AbstractUser;
+use NavetSearch\Models\User;
 
 class Session implements AbstractSession
 {

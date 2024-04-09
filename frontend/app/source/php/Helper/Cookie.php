@@ -51,8 +51,8 @@ class Cookie implements AbstractCookie
     {
         return ($this->setcookie)(
             $key,
-            null,
-            -1
+            "",
+            $this->getOptions(-1)
         );
     }
     public function getCookies(): array

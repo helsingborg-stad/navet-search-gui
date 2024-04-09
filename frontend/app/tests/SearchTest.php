@@ -7,8 +7,7 @@ use NavetSearch\Helper\Config;
 use NavetSearch\Helper\Request;
 use NavetSearch\Helper\Response;
 use NavetSearch\Helper\Search;
-use NavetSearch\Helper\Session;
-use NavetSearch\Helper\User;
+use NavetSearch\Models\User;
 use NavetSearch\Interfaces\AbstractSession;
 
 final class SearchTest extends TestCase

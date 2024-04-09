@@ -40,7 +40,7 @@ class Format
   /* PostalCode */
   public static function postalCode($postalCode)
   {
-    return substr($postalCode, 0, 3) . " " . substr($postalCode, 3, 2);
+    return trim(substr($postalCode, 0, 3) . " " . substr($postalCode, 3, 2));
   }
 
   /* MunicipalityCode */
@@ -62,7 +62,7 @@ class Format
   /* Capitalized Word */
   public static function capitalize($string)
   {
-    return ucwords(mb_strtolower($string));
+    return mb_convert_case(mb_strtolower($string), MB_CASE_TITLE, "UTF-8");
   }
 
   /**
@@ -91,7 +91,7 @@ class Format
    */
   public static function date($date, $format = 'Y-m-d')
   {
-    if (is_null($date)) {
+    if (is_null($date) || empty($date) || !is_numeric($date)) {
       return "";
     }
     return date($format, strtotime($date));

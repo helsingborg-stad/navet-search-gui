@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use NavetSearch\Helper\User;
+use NavetSearch\Models\User;
 
 final class UserTest extends TestCase
 {
@@ -66,5 +66,9 @@ final class UserTest extends TestCase
         $this->assertEmpty($user->getCompanyName());
         $this->assertEmpty($user->getMailAddress());
         $this->assertEmpty($user->getGroups());
+    }
+    public function testSerializeJsonCorrectly(): void
+    {
+        $this->assertSame(json_encode($this->user), '{"samaccountname":"samaccountname_value","memberof":"A=a,A=b,B=b,C=c,D=d","company":"company_value","displayname":"displayname_value","sn":"sn_value","mail":"mail_value"}');
     }
 }

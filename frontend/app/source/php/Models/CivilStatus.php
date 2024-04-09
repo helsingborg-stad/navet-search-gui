@@ -7,8 +7,6 @@ namespace NavetSearch\Models;
 use JsonSerializable;
 use NavetSearch\Helper\Format;
 use NavetSearch\Interfaces\AbstractCivilStatus;
-use NavetSearch\Helper\Sanitize;
-use stdClass;
 
 class CivilStatus implements AbstractCivilStatus, JsonSerializable
 {
@@ -20,9 +18,9 @@ class CivilStatus implements AbstractCivilStatus, JsonSerializable
     {
         if (is_object($status)) {
             // Map from json
-            $this->code = Sanitize::string(@$status->code);
-            $this->description = Sanitize::string(@$status->description);
-            $this->date = Sanitize::string(@$status->date);
+            $this->code = $status->code ?? "";
+            $this->description = $status->description ?? "";
+            $this->date = $status->date ?? "";
         }
     }
 

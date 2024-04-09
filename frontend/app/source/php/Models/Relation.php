@@ -6,7 +6,6 @@ namespace NavetSearch\Models;
 
 use JsonSerializable;
 use NavetSearch\Interfaces\AbstractRelation;
-use NavetSearch\Helper\Sanitize;
 use NavetSearch\Interfaces\AbstractDeregistration;
 use stdClass;
 
@@ -24,15 +23,15 @@ class Relation implements AbstractRelation, AbstractDeregistration, JsonSerializ
     {
         if (is_object($relation)) {
             // Map from json
-            $this->identityNumber = Sanitize::string(@$relation->identityNumber);
-            $this->custodyDate = Sanitize::string(@$relation->custodyDate);
+            $this->identityNumber = $relation->identityNumber ?? "";
+            $this->custodyDate = $relation->custodyDate ?? "";
             $type = @$relation->type ?? new stdClass;
-            $this->code = Sanitize::string(@$type->code);
-            $this->description = Sanitize::string(@$type->description);
+            $this->code = $type->code ?? "";
+            $this->description = $type->description ?? "";
             $deregistration = @$relation->deregistration ?? new stdClass;
-            $this->reasonCode = Sanitize::string(@$deregistration->reasonCode);
-            $this->reasonDescription = Sanitize::string(@$deregistration->reasonDescription);
-            $this->deregistrationDate = Sanitize::string(@$deregistration->deregistrationDate);
+            $this->reasonCode = $deregistration->reasonCode ?? "";
+            $this->reasonDescription = $deregistration->reasonDescription ?? "";
+            $this->deregistrationDate = $deregistration->deregistrationDate ?? "";
         }
     }
     public function isDeregistered(): bool

@@ -7,7 +7,6 @@ namespace NavetSearch\Models;
 use JsonSerializable;
 use NavetSearch\Helper\Format;
 use NavetSearch\Interfaces\AbstractPerson;
-use NavetSearch\Helper\Sanitize;
 use stdClass;
 
 class Person implements AbstractPerson, JsonSerializable
@@ -28,18 +27,18 @@ class Person implements AbstractPerson, JsonSerializable
     {
         if (is_object($person)) {
             // Map from json
-            $this->deregistrationCode = Sanitize::string(@$person->deregistrationCode);
-            $this->deregistrationReason = Sanitize::string(@$person->deregistrationReason);
-            $this->deregistrationDate = Sanitize::string(@$person->deregistrationDate);
-            $this->givenName = Sanitize::string(@$person->givenName);
-            $this->familyName = Sanitize::string(@$person->familyName);
-            $this->additionalName = Sanitize::string(@$person->additionalName);
-            $address = @$person->address ?? new stdClass;
-            $this->addressLocality = Sanitize::string(@$address->addressLocality);
-            $this->postalCode = Sanitize::string(@$address->postalCode);
-            $this->streetAddress = Sanitize::string(@$address->streetAddress);
-            $this->provinceCode = Sanitize::string(@$address->provinceCode);
-            $this->municipalityCode = Sanitize::string(@$address->municipalityCode);
+            $this->deregistrationCode = $person->deregistrationCode ?? "";
+            $this->deregistrationReason = $person->deregistrationReason ?? "";
+            $this->deregistrationDate = $person->deregistrationDate ?? "";
+            $this->givenName = $person->givenName ?? "";
+            $this->familyName = $person->familyName ?? "";
+            $this->additionalName = $person->additionalName ?? "";
+            $address = $person->address ?? new stdClass;
+            $this->addressLocality = $address->addressLocality ?? "";
+            $this->postalCode = $address->postalCode ?? "";
+            $this->streetAddress = $address->streetAddress ?? "";
+            $this->provinceCode = $address->provinceCode ?? "";
+            $this->municipalityCode = $address->municipalityCode ?? "";
         }
     }
     public function isDeregistered(): bool

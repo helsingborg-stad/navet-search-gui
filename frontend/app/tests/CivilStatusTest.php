@@ -14,7 +14,7 @@ final class CivilStatusTest extends TestCase
         $this->status = new CivilStatus((object) [
             "code" => "code_value",
             "description" => "description_value",
-            "date" => "date_value"
+            "date" => "20010101"
         ]);
     }
 
@@ -28,7 +28,7 @@ final class CivilStatusTest extends TestCase
     }
     public function testReturnsCivilStatusDateSuccessfully(): void
     {
-        $this->assertSame($this->status->getCivilStatusDate(), "date_value");
+        $this->assertSame($this->status->getCivilStatusDate(), "2001-01-01");
     }
     public function testReturnsDefaultValuesSuccessfully(): void
     {
@@ -40,6 +40,6 @@ final class CivilStatusTest extends TestCase
     }
     public function testSerializeJsonCorrectly(): void
     {
-        $this->assertSame(json_encode($this->status), '{"code":"code_value","description":"description_value","date":"date_value"}');
+        $this->assertSame(json_encode($this->status), '{"code":"code_value","description":"description_value","date":"20010101"}');
     }
 }

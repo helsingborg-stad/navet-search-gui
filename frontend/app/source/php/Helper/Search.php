@@ -246,7 +246,7 @@ class Search implements AbstractSearch
             ]],
             ['columns' => [
                 'Civilstatus:',
-                !empty($civilStatus->getCivilStatusDescription()) ? $civilStatus->getCivilStatusDescription() . " " . Format::addPharanthesis(Format::date($civilStatus->getCivilStatusDate())) : ''
+                !empty($civilStatus->getCivilStatusDescription()) ? $civilStatus->getCivilStatusDescription() . " " . Format::addPharanthesis($civilStatus->getCivilStatusDate()) : ''
             ]],
             ['columns' => [
                 'Förnamn:',

@@ -73,6 +73,10 @@ final class PersonTest extends TestCase
     {
         $this->assertSame($this->person->getMunicipalityCode(), "municipalityCode_value");
     }
+    public function testReturnsIsDeregistered(): void
+    {
+        $this->assertSame($this->person->isDeregistered(), true);
+    }
 
     public function testReturnsDefaultValuesSuccessfully(): void
     {

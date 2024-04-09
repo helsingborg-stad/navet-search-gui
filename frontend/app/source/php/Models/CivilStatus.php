@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NavetSearch\Models;
 
 use JsonSerializable;
+use NavetSearch\Helper\Format;
 use NavetSearch\Interfaces\AbstractCivilStatus;
 use NavetSearch\Helper\Sanitize;
 use stdClass;
@@ -33,7 +34,7 @@ class CivilStatus implements AbstractCivilStatus, JsonSerializable
     }
     public function getCivilStatusDate(): string
     {
-        return $this->date;
+        return Format::date($this->date);
     }
     public function jsonSerialize(): mixed
     {

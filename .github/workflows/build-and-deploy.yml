@@ -26,6 +26,10 @@ jobs:
       run: | 
         echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ./frontend/app/.npmrc
 
+    - name: Run tests
+      run: |
+        cd ./frontend/app && npm run test
+
     - name: Execute buildscript.
       run: cd ./frontend/app/ && php ./build.php --cleanup
 

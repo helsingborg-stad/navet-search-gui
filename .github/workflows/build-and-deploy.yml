@@ -31,7 +31,7 @@ jobs:
 
     - name: Run tests
       run: |
-        cd ./frontend/app && /vendor/bin/phpunit --testdox tests
+        cd ./frontend/app && ./vendor/bin/phpunit --testdox tests
 
     - name: rsync deploy files and set www-data user.
       uses: burnett01/rsync-deployments@4.1

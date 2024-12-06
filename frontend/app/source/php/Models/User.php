@@ -56,12 +56,15 @@ class User implements AbstractUser, JsonSerializable
             $parts = explode(',', $this->groups);
             foreach ($parts as $part) {
                 $group = explode('=', $part);
-                $key = $group[0];
-                $value = $group[1];
+                $key = trim($group[0]);
+                $value = trim($group[1]);
                 if (!isset($groups[$key])) {
                     $groups[$key] = [];
                 }
-                $groups[$key][] = trim($value);
+                if(in_array($value, $groups[$key])){
+                    continue;
+                }
+                $groups[$key][] = $value;
             }
         }
         return $groups;

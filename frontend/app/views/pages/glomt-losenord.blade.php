@@ -18,9 +18,9 @@
     @endtypography
 
     @typography(['element' => 'p'])
-        Du kan begära åtkomst till tjänsten genom att maila till 
-        @link(['href' => 'mailto:supportcenter@helsingborg.se'])
-            supportcenter@helsingborg.se 
+        Du kan begära åtkomst till tjänsten genom att skapa ett ärende i 
+        @link(['href' => 'https://itportalen.helsingborg.se/'])
+            it-portalen
         @endlink.
         Beställ tillgång till AD-gruppen "HBGADMA-Navet uppslag" för hela enheter, eller "HBGADMR-SLFNavet" till enskilda användare.
     @endtypography

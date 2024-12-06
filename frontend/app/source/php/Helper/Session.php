@@ -18,7 +18,7 @@ class Session implements AbstractSession
     protected AbstractSecure $secure;
     protected AbstractCookie $cookie;
 
-    public function __construct(AbstractConfig $config, AbstractSecure $secure, AbstractCookie $cookie)
+    public function __construct(private AbstractConfig $config, AbstractSecure $secure, AbstractCookie $cookie)
     {
         // Read config
         $this->name = $config->getValue(
@@ -79,7 +79,7 @@ class Session implements AbstractSession
         $value = $this->cookie->getCookie($this->name);
 
         if (isset($value)) {
-            return new User((object) $this->secure->decrypt($value));
+            return new User($this->config, (object) $this->secure->decrypt($value));
         }
         return false;
     }

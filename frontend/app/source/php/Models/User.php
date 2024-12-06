@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NavetSearch\Models;
 
 use JsonSerializable;
+use NavetSearch\Interfaces\AbstractConfig;
 use NavetSearch\Interfaces\AbstractUser;
 use stdClass;
 
@@ -17,7 +18,7 @@ class User implements AbstractUser, JsonSerializable
     private string $sn = "";
     private string $mail = "";
 
-    public function __construct(object $user = new stdClass)
+    public function __construct(private AbstractConfig $config, object $user = new stdClass)
     {
         if (is_object($user)) {
             // Map from json
@@ -27,6 +28,9 @@ class User implements AbstractUser, JsonSerializable
             $this->displayname = $user->displayname ?? "";
             $this->sn = $user->sn ?? "";
             $this->mail = $user->mail ?? "";
+
+            //Sanitize groups (filters out groups that are inrellavant)
+            $this->groups = $this->getGroupsString();
         }
     }
     public function getAccountName(): string
@@ -64,10 +68,25 @@ class User implements AbstractUser, JsonSerializable
                 if(in_array($value, $groups[$key])){
                     continue;
                 }
-                $groups[$key][] = $value;
+                //Only include groups of interest
+                //This is to prevent overflowing of cookie size
+                if (in_array($value, $this->config->getValue('AD_GROUPS', []))) {
+                    $groups[$key][] = $value;
+                }
             }
         }
         return $groups;
+    }
+    public function getGroupsString(): string
+    {
+        $carry = "";
+        foreach ($this->getGroups() as $key => $value) {
+            if(empty($value)){
+                continue;
+            }
+            $carry .= "$key=" . implode(',', $value) . ',';
+        }
+        return rtrim($carry, ',');
     }
     public function format(): object
     {

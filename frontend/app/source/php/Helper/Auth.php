@@ -19,7 +19,7 @@ class Auth implements AbstractAuth
     protected string $endpoint;
     protected string|array $allowedGroups;
 
-    public function __construct(AbstractConfig $config, AbstractRequest $request)
+    public function __construct(private AbstractConfig $config, AbstractRequest $request)
     {
         $this->request = $request;
         $this->endpoint = rtrim($config->getValue('MS_AUTH', ""), "/");
@@ -49,8 +49,8 @@ class Auth implements AbstractAuth
         }
         // Check response data
         $data = $response->getContent()->{0} ?? new stdClass;
-        $user = new User($data);
-
+        $user = new User($this->config, $data);
+        
         if (strtolower($user->getAccountName()) !== strtolower($name)) {
             throw new AuthException(AuthErrorReason::InvalidCredentials);
         }

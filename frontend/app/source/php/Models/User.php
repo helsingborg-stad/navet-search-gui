@@ -18,7 +18,7 @@ class User implements AbstractUser, JsonSerializable
     private string $sn = "";
     private string $mail = "";
 
-    public function __construct(private AbstractConfig $config, object $user = new stdClass)
+    public function __construct(private ?AbstractConfig $config, object $user = new stdClass)
     {
         if (is_object($user)) {
             // Map from json
@@ -60,8 +60,8 @@ class User implements AbstractUser, JsonSerializable
             $parts = explode(',', $this->groups);
             foreach ($parts as $part) {
                 $group = explode('=', $part);
-                $key = trim($group[0]);
-                $value = trim($group[1]);
+                $key = trim($group[0] ?? "");
+                $value = trim($group[1] ?? "");
                 if (!isset($groups[$key])) {
                     $groups[$key] = [];
                 }
@@ -70,7 +70,7 @@ class User implements AbstractUser, JsonSerializable
                 }
                 //Only include groups of interest
                 //This is to prevent overflowing of cookie size
-                if (in_array($value, $this->config->getValue('AD_GROUPS', []))) {
+                if (is_null($this->config) || in_array($value, $this->config->getValue('AD_GROUPS', []))) {
                     $groups[$key][] = $value;
                 }
             }

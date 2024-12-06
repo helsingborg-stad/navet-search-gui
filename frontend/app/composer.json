@@ -8,6 +8,9 @@
             "email": "sebastian.thulin@helsingborg.se"
         }
     ],
+    "scripts": {
+        "test": "./vendor/bin/phpunit --testdox tests"
+    },
     "minimum-stability": "stable",
     "repositories": [
         {

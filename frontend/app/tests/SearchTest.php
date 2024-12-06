@@ -157,7 +157,7 @@ final class SearchTest extends TestCase
             AbstractSession::class,
             [
                 'isValidSession' => true,
-                'getUser' => new User(json_decode($json)),
+                'getUser' => new User(null, json_decode($json)),
             ],
         );
     }

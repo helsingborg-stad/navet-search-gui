@@ -26,7 +26,7 @@ final class SessionTest extends TestCase
     }
     public function testReturnsValidSession(): void
     {
-        $user = new User((object) [
+        $user = new User(null, (object) [
             "samaccountname" => "hardy"
         ]);
         $this->session->setSession($user);

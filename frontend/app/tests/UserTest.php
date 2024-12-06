@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use NavetSearch\Models\User;
+use NavetSearch\Helper\Config;
+use NavetSearch\Interfaces\AbstractConfig;
 
 final class UserTest extends TestCase
 {
     protected $user;
+    protected $config;
 
     protected function setUp(): void
     {
-        $this->user = new User((object) [
+        $this->user = new User(null, (object) [
             "samaccountname" => "samaccountname_value",
             "memberof" => "A=a,A=b,B=b,C=c,D=d",
             "sn" => "sn_value",
@@ -43,7 +46,8 @@ final class UserTest extends TestCase
     public function testReturnsGroupsSuccessfully(): void
     {
         $this->assertEquals($this->user->getGroups(), [
-            "A" => [0 => "a", 1 => "b"],
+            "A" => [0 => "a"],
+            "b" => [0 => ""],
             "B" => ["b"],
             "C" => ["c"],
             "D" => ["d"],
@@ -59,7 +63,7 @@ final class UserTest extends TestCase
     }
     public function testReturnsDefaultValuesSuccessfully(): void
     {
-        $user = new User();
+        $user = new User(null);
         $this->assertEmpty($user->getAccountName());
         $this->assertEmpty($user->getLastName());
         $this->assertEmpty($user->getDisplayName());
@@ -69,6 +73,6 @@ final class UserTest extends TestCase
     }
     public function testSerializeJsonCorrectly(): void
     {
-        $this->assertSame(json_encode($this->user), '{"samaccountname":"samaccountname_value","memberof":"A=a,A=b,B=b,C=c,D=d","company":"company_value","displayname":"displayname_value","sn":"sn_value","mail":"mail_value"}');
+        $this->assertSame(json_encode($this->user), '{"samaccountname":"samaccountname_value","memberof":"A=a,b,B=b,C=c,D=d","company":"company_value","displayname":"displayname_value","sn":"sn_value","mail":"mail_value"}');
     }
 }

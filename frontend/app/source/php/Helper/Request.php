@@ -104,7 +104,7 @@ class Request implements AbstractRequest
             $errorMessage = mb_substr($response->error->message, 0, 500);
         }
 
-        error_log('navet curl debug ' . json_encode([
+        file_put_contents('php://stderr', 'navet curl debug ' . json_encode([
             'method' => $method,
             'url' => preg_replace('/\?.*/', '', $url),
             'http_status' => $statusCode,
@@ -114,7 +114,7 @@ class Request implements AbstractRequest
             'json_valid' => !$malformedResponse,
             'json_error' => $malformedResponse ? json_last_error_msg() : null,
             'api_error' => $errorMessage,
-        ], JSON_UNESCAPED_SLASHES));
+        ], JSON_UNESCAPED_SLASHES) . PHP_EOL);
     }
 
     protected function createResponse(int $statusCode, mixed $content, bool $malformedResponse = false): AbstractResponse

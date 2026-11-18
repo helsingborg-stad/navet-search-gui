@@ -63,4 +63,17 @@ final class CachedRequestTest extends TestCase
         $this->assertTrue($response->isErrorResponse());
         $this->assertTrue($response->isMalformedResponse());
     }
+    public function testPreservesMalformedResponseFromRequest(): void
+    {
+        $request = $this->createConfiguredMock(
+            AbstractRequest::class,
+            ['post' => new Response(502, null, null, true)],
+        );
+        $cache = new MemoryCache(new Secure(new Config()));
+        $cachedRequest = new CachableRequest($cache, $request);
+
+        $response = $cachedRequest->post('url');
+
+        $this->assertTrue($response->isMalformedResponse());
+    }
 }

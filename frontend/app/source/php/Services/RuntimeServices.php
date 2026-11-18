@@ -45,7 +45,10 @@ class RuntimeServices implements AbstractServices
             $this->cache = new MemoryCache($this->secure);
         }
 
-        $this->request = new CachableRequest($this->cache, new Request());
+        $this->request = new CachableRequest(
+            $this->cache,
+            new Request($this->config->getValue('DEBUG') === true)
+        );
         $this->auth = new Auth($this->config, $this->request, $this->session);
         $this->search = new Search($this->config, $this->request, $this->session);
     }

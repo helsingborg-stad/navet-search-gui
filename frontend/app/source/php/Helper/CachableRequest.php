@@ -35,7 +35,12 @@ class CachableRequest implements AbstractRequest
         // Execute request
         $response = $this->request->get($url, $queryParams, $headers);
 
-        $cachable = new Response($response->getStatusCode(), $key, $response->getContent());
+        $cachable = new Response(
+            $response->getStatusCode(),
+            $key,
+            $response->getContent(),
+            $response->isMalformedResponse()
+        );
         // Save to cache
         if (!$cachable->isErrorResponse()) {
             $this->cache->set($cachable);
@@ -55,7 +60,12 @@ class CachableRequest implements AbstractRequest
         // Execute request
         $response = $this->request->post($url, $data, $headers);
 
-        $cachable = new Response($response->getStatusCode(), $key, $response->getContent());
+        $cachable = new Response(
+            $response->getStatusCode(),
+            $key,
+            $response->getContent(),
+            $response->isMalformedResponse()
+        );
         // Save to cache
         if (!$cachable->isErrorResponse()) {
             $this->cache->set($cachable);

@@ -9,6 +9,10 @@ use NavetSearch\Interfaces\AbstractResponse;
 
 class Request implements AbstractRequest
 {
+    public function __construct(private bool $debug = false)
+    {
+    }
+
     public function get(string $url, $queryParams = [], $headers = []): AbstractResponse
     {
         return $this->send('GET', $this->setQueryParams($url, $queryParams));
@@ -58,17 +62,59 @@ class Request implements AbstractRequest
 
         $json = curl_exec($ch);
         $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        $curlErrorNumber = curl_errno($ch);
+        $curlError = curl_error($ch);
 
         curl_close($ch);
 
         if ($json === false) {
+            $this->logDebug($method, $url, $statusCode ?: 502, $contentType, $curlErrorNumber, $curlError, null, false);
             return $this->createResponse($statusCode ?: 502, null);
         }
 
         $response = json_decode($json);
         $malformedResponse = json_last_error() !== JSON_ERROR_NONE || !is_object($response);
+        $this->logDebug($method, $url, $statusCode, $contentType, $curlErrorNumber, $curlError, $response, $malformedResponse);
 
         return $this->createResponse($statusCode, $response, $malformedResponse);
+    }
+
+    /**
+     * Emit safe request diagnostics when DEBUG is enabled. Never log request data:
+     * authentication requests contain passwords and successful API responses may
+     * contain personal data.
+     */
+    private function logDebug(
+        string $method,
+        string $url,
+        int $statusCode,
+        string|false $contentType,
+        int $curlErrorNumber,
+        string $curlError,
+        mixed $response,
+        bool $malformedResponse
+    ): void {
+        if (!$this->debug) {
+            return;
+        }
+
+        $errorMessage = null;
+        if (is_object($response) && isset($response->error->message) && is_string($response->error->message)) {
+            $errorMessage = mb_substr($response->error->message, 0, 500);
+        }
+
+        error_log('navet curl debug ' . json_encode([
+            'method' => $method,
+            'url' => preg_replace('/\?.*/', '', $url),
+            'http_status' => $statusCode,
+            'content_type' => $contentType,
+            'curl_errno' => $curlErrorNumber,
+            'curl_error' => $curlError ?: null,
+            'json_valid' => !$malformedResponse,
+            'json_error' => $malformedResponse ? json_last_error_msg() : null,
+            'api_error' => $errorMessage,
+        ], JSON_UNESCAPED_SLASHES));
     }
 
     protected function createResponse(int $statusCode, mixed $content, bool $malformedResponse = false): AbstractResponse

@@ -29,7 +29,6 @@ class Cookie implements AbstractCookie
         return [
             'expires' => $expires,
             'path' => '/',
-            'domain' => $this->server['SERVER_NAME'],
             'secure' => isset($this->server['HTTPS']) ? true : false,
             'httponly' => false,
             'samesite' => 'None'

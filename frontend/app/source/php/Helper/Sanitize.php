@@ -29,11 +29,14 @@ class Sanitize
     return "";
   }
 
-  /** Santitize password to comply with active directory issues */
-  public static function password($password)
+  /**
+   * Preserve a password verbatim.
+   *
+   * Request::post() JSON-encodes the payload, so escaping or stripping
+   * characters here changes the credential received by Active Directory.
+   */
+  public static function password(string $password): string
   {
-    $password = stripslashes($password);
-    $password = preg_replace('/(["\/\\\])/', '\\\\$1', $password);
     return $password;
   }
 }

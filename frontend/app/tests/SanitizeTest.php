@@ -25,9 +25,8 @@ final class SanitizeTest extends TestCase
     }
     public function testCanSanitizePassword(): void
     {
-        // Escape slash
-        $this->assertSame(Sanitize::password('pwd/pwd'), 'pwd\/pwd');
-        // Remove backslash
-        $this->assertSame(Sanitize::password('pwd\pwd'), 'pwdpwd');
+        $this->assertSame(Sanitize::password('pwd/pwd'), 'pwd/pwd');
+        $this->assertSame(Sanitize::password('pwd\\pwd'), 'pwd\\pwd');
+        $this->assertSame(Sanitize::password('pwd"pwd'), 'pwd"pwd');
     }
 }

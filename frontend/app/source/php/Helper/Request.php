@@ -74,7 +74,12 @@ class Request implements AbstractRequest
         }
 
         $response = json_decode($json);
-        $malformedResponse = json_last_error() !== JSON_ERROR_NONE || !is_object($response);
+        $malformedResponse = json_last_error() !== JSON_ERROR_NONE || (!is_object($response) && !is_array($response));
+        if (is_array($response)) {
+            // The AD API returns successful users as a JSON list. Response keeps
+            // object content, so retain its numeric keys as object properties.
+            $response = (object) $response;
+        }
         $this->logDebug($method, $url, $statusCode, $contentType, $curlErrorNumber, $curlError, $response, $malformedResponse);
 
         return $this->createResponse($statusCode, $response, $malformedResponse);

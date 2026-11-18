@@ -56,4 +56,11 @@ final class CachedRequestTest extends TestCase
         // Expect response to not be cached
         $this->assertEquals($cache->get($response->getHash()), null);
     }
+    public function testRecognizesMalformedResponse(): void
+    {
+        $response = new Response(502, null, null, true);
+
+        $this->assertTrue($response->isErrorResponse());
+        $this->assertTrue($response->isMalformedResponse());
+    }
 }

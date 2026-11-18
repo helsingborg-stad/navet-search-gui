@@ -122,6 +122,22 @@ final class AuthTest extends TestCase
 
         $auth->authenticate("samaccountname", "samaccountname");
     }
+    public function testMalformedResponseException(): void
+    {
+        $mock = $this->createConfiguredMock(
+            AbstractRequest::class,
+            [
+                'get' => new Response(200, null, null),
+                'post' => new Response(502, null, null, true),
+            ],
+        );
+        $auth = new Auth(new Config(), $mock);
+
+        $this->expectException("NavetSearch\\Helper\\AuthException");
+        $this->expectExceptionCode(AuthErrorReason::MalformedResponse->value);
+
+        $auth->authenticate("samaccountname", "samaccountname");
+    }
     public function testConfigValuesAreRespected(): void
     {
         $config = new Config(array(

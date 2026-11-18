@@ -10,4 +10,5 @@ interface AbstractResponse
     public function getContent(): ?object;
     public function getHash(): ?string;
     public function isErrorResponse(): bool;
+    public function isMalformedResponse(): bool;
 }

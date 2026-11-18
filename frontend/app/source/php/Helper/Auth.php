@@ -43,6 +43,9 @@ class Auth implements AbstractAuth
             'username' => $name,
             'password' => Sanitize::password($password)
         ]);
+        if ($response->isMalformedResponse()) {
+            throw new AuthException(AuthErrorReason::MalformedResponse);
+        }
         //Check http response
         if ($response->isErrorResponse()) {
             throw new AuthException(AuthErrorReason::HttpError);

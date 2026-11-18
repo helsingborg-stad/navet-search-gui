@@ -23,6 +23,10 @@ class AuthException extends \Exception
                 "Ej auktoriserad",
                 AuthErrorReason::Unauthorized->value
             ),
+            AuthErrorReason::MalformedResponse => parent::__construct(
+                "Authenticeringsservern svarade med ett felaktigt format",
+                AuthErrorReason::MalformedResponse->value
+            ),
         };
     }
 }

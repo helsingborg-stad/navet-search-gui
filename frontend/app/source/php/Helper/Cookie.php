@@ -26,10 +26,13 @@ class Cookie implements AbstractCookie
     }
     protected function getOptions(int $expires): mixed
     {
+        $isHttps = isset($this->server['HTTPS'])
+            || (($this->server['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+
         return [
             'expires' => $expires,
             'path' => '/',
-            'secure' => isset($this->server['HTTPS']) ? true : false,
+            'secure' => $isHttps,
             'httponly' => false,
             'samesite' => 'None'
         ];

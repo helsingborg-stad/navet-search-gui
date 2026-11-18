@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use NavetSearch\Helper\Config;
+use NavetSearch\Helper\Format;
 use NavetSearch\Helper\Request;
 use NavetSearch\Helper\Response;
 use NavetSearch\Helper\Search;
@@ -179,7 +180,9 @@ final class SearchTest extends TestCase
         // Try authenticate
         $result = $search->findPerson("190001010101");
         // Make sure the values are equals
-        $this->assertEquals(json_encode($result), '{"searchFor":"19000101-0101","searchResult":true,"searchResultFamilyRelations":{"0":{"columns":["<a href=\"\/sok\/?action=sok&pnr=2000101010101\"><\/a>","\u2715","\u2715","\u2715 (2012-02-01)","\u2715","\u2715"]}},"searchResultPropertyData":{"title":"Adresshistorik","headings":["Fastighetsbeteckning","H\u00e4ndelse","Datum","Kommunkod","L\u00e4n"],"list":[{"columns":["Bl\u00e5kulla","Folkbokf\u00f6rd","2000-01-01","83","12"]},{"columns":["Bl\u00e5kulla II","Folkbokf\u00f6rd","2012-07-01","83","12"]}]},"basicData":[{"columns":["Personnummer:","19000101-0101"]},{"columns":["K\u00f6n:","Kvinna"]},{"columns":["Civilstatus:","Gift  (2000-01-01)"]},{"columns":["F\u00f6rnamn:","givenName"]},{"columns":["Efternamn:","familyName"]},{"columns":["\u00d6vriga namn:",""]}],"isDeregistered":false,"readableResult":"givenName familyName \u00e4r 124 \u00e5r gammal och \u00e4r bosatt p\u00e5 Streetaddress i Addresslocality.","adressData":[{"columns":["Postort:","Addresslocality"]},{"columns":["Postnummer:","254 50"]},{"columns":["Gatuadress:","Streetaddress"]}]}');
+        $expected = '{"searchFor":"19000101-0101","searchResult":true,"searchResultFamilyRelations":{"0":{"columns":["<a href=\"\/sok\/?action=sok&pnr=2000101010101\"><\/a>","\u2715","\u2715","\u2715 (2012-02-01)","\u2715","\u2715"]}},"searchResultPropertyData":{"title":"Adresshistorik","headings":["Fastighetsbeteckning","H\u00e4ndelse","Datum","Kommunkod","L\u00e4n"],"list":[{"columns":["Bl\u00e5kulla","Folkbokf\u00f6rd","2000-01-01","83","12"]},{"columns":["Bl\u00e5kulla II","Folkbokf\u00f6rd","2012-07-01","83","12"]}]},"basicData":[{"columns":["Personnummer:","19000101-0101"]},{"columns":["K\u00f6n:","Kvinna"]},{"columns":["Civilstatus:","Gift  (2000-01-01)"]},{"columns":["F\u00f6rnamn:","givenName"]},{"columns":["Efternamn:","familyName"]},{"columns":["\u00d6vriga namn:",""]}],"isDeregistered":false,"readableResult":"givenName familyName \u00e4r ' . Format::getCurrentAge('190001010101') . ' \u00e5r gammal och \u00e4r bosatt p\u00e5 Streetaddress i Addresslocality.","adressData":[{"columns":["Postort:","Addresslocality"]},{"columns":["Postnummer:","254 50"]},{"columns":["Gatuadress:","Streetaddress"]}]}';
+
+        $this->assertSame($expected, json_encode($result));
     }
     public function testNoHits(): void
     {

@@ -71,7 +71,10 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v4.7.0
       with:
-        versionSpec: '6.8.x'
+        versionSpec: '7.x'
+
+    - name: Validate GitVersion configuration
+      run: dotnet-gitversion config validate --config GitVersion.yml
 
     - name: Determine semantic version
       id: version

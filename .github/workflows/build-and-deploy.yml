@@ -69,7 +69,7 @@ jobs:
       run: cd ./frontend/app && ./vendor/bin/phpunit --testdox tests
 
     - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v4.7.0
+      uses: gittools/actions/gitversion/setup@v5.0.0
       with:
         versionSpec: '7.x'
 
@@ -78,7 +78,7 @@ jobs:
 
     - name: Determine semantic version
       id: version
-      uses: gittools/actions/gitversion/execute@v4.7.0
+      uses: gittools/actions/gitversion/execute@v5.0.0
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3

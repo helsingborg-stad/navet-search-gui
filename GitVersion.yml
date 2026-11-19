@@ -10,4 +10,4 @@ calculation:
   patch-version-bump-message: "^(build|chore|ci|docs|fix|perf|refactor|revert|style|test)(\\([\\w\\s-]*\\))?:"
   branches:
     main:
-      mode: MainLine
+      mode: Mainline

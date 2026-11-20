@@ -2,6 +2,13 @@ workflow: GitHubFlow/v1
 
 calculation:
   next-version: 1.0.0
+  branches:
+    main:
+      # main is the production release channel. Emit stable X.Y.Z tags so
+      # Argo CD Image Updater's semver strategy can select each immutable
+      # image tag without needing prerelease opt-in.
+      label: ''
+      mode: ContinuousDeployment
   strategies:
     - ConfiguredNextVersion
     - Mainline

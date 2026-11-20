@@ -1,0 +1,21 @@
+{
+	# ingress-nginx terminates TLS before requests reach this container.
+	auto_https off
+	admin off
+
+	# Do not size PHP workers from the Kubernetes node's CPU count. Navet has a
+	# small pod allocation, so retain a small, fixed classic-mode pool.
+	frankenphp {
+		num_threads 2
+		max_threads 2
+	}
+}
+
+:8080 {
+	root * /app/app
+	encode zstd gzip
+
+	# php_server serves existing files and falls back to the front controller.
+	# This replaces app/.htaccess, which Caddy does not read.
+	php_server
+}

@@ -8,6 +8,14 @@
 	frankenphp {
 		num_threads 2
 		max_threads 2
+
+		# Keep diagnostic details in the container log, never in HTTP responses.
+		php_ini display_errors Off
+		php_ini display_startup_errors Off
+		php_ini html_errors Off
+		php_ini log_errors On
+		php_ini error_log /proc/self/fd/1
+		php_ini error_reporting E_ALL
 	}
 }
 
